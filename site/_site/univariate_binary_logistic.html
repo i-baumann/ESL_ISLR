@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Univariate Logistic Regression with a Binary Outcome</title>
+
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="site_libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="site_libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Univariate Logistic Regression with a Binary Outcome</h1>
+
+</div>
+
+
+<p>This example walks through fitting a logistic regression model to (idealized) generated data. It assumes some prior knowledge of <a href="https://en.wikipedia.org/wiki/Logistic_regression" target="_blank">logistic regression</a> and <a href="https://en.wikipedia.org/wiki/Logit" target="_blank">log-odds</a> (or see <a href="https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf#%5B%7B%22num%22%3A212%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22Fit%22%7D%5D" target="_blank">Elements of Statistical Learning</a>).</p>
+<p>We’ll skip doing a train/test split and comparison in this example and focus solely on implementing logistic regression from scratch.</p>
+<p>Though not shown here, this example uses the <a href="https://cran.r-project.org/web/packages/tidyverse/index.html" target="_blank"><code>tidyverse</code></a> and <a href="https://cran.r-project.org/web/packages/latex2exp/latex2exp.pdf" target="_blank"><code>latex2exp</code></a> packages.</p>
+<div id="data-generation" class="section level2">
+<h2>Data Generation</h2>
+<p>We’ll generate data with 1,000 observations from a simple case: a binary (0/1) balanced outcome…</p>
+<pre class="r"><code>y &lt;- append(rep(0, each = 500), 
+            rep(1, each = 500))</code></pre>
+<p>…and a Gaussian independent variable. To ensure some overlap between the <span class="math inline">\(y = 0\)</span> and <span class="math inline">\(y = 1\)</span> observations we’ll draw from two normal distributions with offset means. To include an intercept term we’ll augment our independent variable vectors with a one-vector.</p>
+<pre class="r"><code>means &lt;- sample.int(6, 2, replace = FALSE)
+
+x &lt;- append(rnorm(500, mean = means[1], sd = 1), 
+                  rnorm(500, mean = means[2], sd = 1))
+
+x &lt;- cbind(1, x)
+
+colnames(x) &lt;- c(&quot;Int&quot;, &quot;X1&quot;)</code></pre>
+</div>
+<div id="the-log-likelihood-surface" class="section level2">
+<h2>The Log-Likelihood Surface</h2>
+<p>Like linear regression, logistic regression is simply an optimization problem. In the logistic case, the function we maximize is the <a href="https://en.wikipedia.org/wiki/Likelihood_function" target="_blank">log-likelihood</a> function</p>
+<center>
+<span class="math display">\[\ell (\vec{\beta}) = \sum_{i = 1}^N \left[ \vec{y}_i \vec{\beta}^T \vec{x}_i - \log(1 + e^{\vec{\beta}^T \vec{x}_i}) \right]\]</span>
+</center>
+<p>This function is strictly concave, so it will have one maximum and our <span class="math inline">\(\beta\)</span>s (<span class="math inline">\(\beta_0\)</span> for the intercept and <span class="math inline">\(\beta_1\)</span> for our single independent variable) will (hopefully!) maximize this function.</p>
+<p>In this case we can easily visualize a log-likelihood surface by evaluating the function over some set of values for our two <span class="math inline">\(\beta\)</span>s. First we’ll create our set of <span class="math inline">\(\beta\)</span> values and then use those vectors to create a tibble of coordinates for our plot as well as put our <span class="math inline">\(y\)</span> vector and <a href="https://en.wikipedia.org/wiki/Design_matrix" target="_blank">design matrix</a> together to form a data matrix for easier evaluation.</p>
+<pre class="r"><code>b0_vec &lt;- seq(-20, 20, .25)
+b1_vec &lt;- seq(-20, 20, .25)
+
+surface &lt;- expand_grid(b0_vec, b1_vec)
+data_matrix &lt;- cbind(y, x)</code></pre>
+<p>Since we’re evaluating the log-likelihood function over the data for all combinations of <span class="math inline">\(\beta\)</span> values in our set, we’ll write two functions. The first handles the interior of the sum of the log-likelihood</p>
+<pre class="r"><code>log_like_interior &lt;- function(data, b_0, b_1){
+  
+  b_vec &lt;- c(b_0, b_1)
+  
+  data[1] %*% t(b_vec) %*% data[2:3] -
+    log(1 + exp(t(b_vec) %*% data[2:3]))
+
+}</code></pre>
+<p>and the second handles the summation, <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply" target="_blank"><code>apply</code></a>ing over the data matrix.</p>
+<pre class="r"><code>log_like_sum &lt;- function(b_vec){
+  
+  sum(apply(data_matrix, 1, log_like_interior, b_0 = b_vec[1], b_1 = b_vec[2]))
+  
+}</code></pre>
+<p>Then we can <code>apply</code> the summation function over the <span class="math inline">\(\beta\)</span>-value coordinated in our surface tibble and add the appropriate log-likelihood to that tibble.</p>
+<pre class="r"><code>surface$l &lt;- apply(surface, 1, log_like_sum)</code></pre>
+<p>Now that we have our <span class="math inline">\(\beta\)</span> coordinates and their corresponding log-likelihoods for our data, we can plot the log-likelihood surface.</p>
+<pre class="r"><code>likelihood_surface_plot &lt;- ggplot(surface, aes(x = b0_vec, y = b1_vec, z = l)) +
+  geom_contour_filled(bins = 50) +
+  labs(title = &quot;Surface Plot of Log-Likelihood Function&quot;,
+       subtitle = &quot;Evaluated Across Range of Beta Coefficients&quot;,
+       x = TeX(&quot;$\\beta_0$&quot;),
+       y = TeX(&quot;$\\beta_1$&quot;)) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="univariate_binary_logistic_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Our <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> coordinates estimated by our logistic regression should be in the bright yellow area, representing our highest-valued bin of log-likelihoods, at the maximum of the log-likelihood surface.</p>
+</div>
+<div id="estimating-hatbetas" class="section level2">
+<h2>Estimating <span class="math inline">\(\hat{\beta}\)</span>s</h2>
+<p>To fit the logistic regression model to the data and find the optimal <span class="math inline">\(\hat{\beta}\)</span> vector we set the derivative of the log-likelihood function (or <a href="https://en.wikipedia.org/wiki/Score_(statistics)%7Btarget=%22_blank%22%7D">score equations</a> with respect to <span class="math inline">\(\vec{\hat{\beta}}\)</span> to zero:</p>
+<center>
+<span class="math display">\[\frac{\partial \ell(\vec{\beta})}{\partial \vec{\beta}} = \sum_{i = 1}^N x_i (y_i - \Pr (Y = 1 | X = x_i; \vec{\beta})) = 0\]</span>
+</center>
+<div id="method-1-newton-raphsonirls" class="section level3">
+<h3>Method 1: Newton-Raphson/IRLS</h3>
+<p>The method Hastie et al. use in <a href="https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf#%5B%7B%22num%22%3A202%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22Fit%22%7D%5D" target="_blank">Elements of Statistical Learning</a> is the <a href="https://en.wikipedia.org/wiki/Newton%27s_method" target="_blank">Newton-Raphson method</a> (which is re-written to be a <a href="https://en.wikipedia.org/wiki/Iteratively_reweighted_least_squares" target="_blank">iteratively re-weighted least squares</a> problem), which iteratively updates <span class="math inline">\(\vec{\hat{\beta}}\)</span> to find the maximum likelihood. We will use a stopping criteria that checks how the score equations for <span class="math inline">\(\vec{\hat{\beta}}_0\)</span> and <span class="math inline">\(\vec{\hat{\beta}}_1\)</span> evaluate and stops iterating when they are within a tolerable distance from zero.</p>
+<p>This method uses a diagonal matrix <span class="math inline">\(W\)</span> which contains the weights derived from <span class="math inline">\(\Pr (Y = 1 | X = x_i; \vec{\hat{\beta}})\)</span> where <span class="math inline">\(\vec{\hat{\beta}}\)</span> contains the estimated coefficients from the previous iteration. These weights are then used to solve a <a href="https://en.wikipedia.org/wiki/Weighted_least_squares" target="_blank">weighted least squares</a> problem, which produces a vector <span class="math inline">\(z\)</span> of “adjusted” responses that are used to update the coefficients.</p>
+<p>In each iteration <span class="math inline">\(i\)</span> we will solve</p>
+<center>
+<span class="math display">\[\vec{\hat{\beta^i}} = (X^T W X)^{-1} X^T W \vec{z}\]</span>
+</center>
+<p>where</p>
+<center>
+<span class="math display">\[z = X \overrightarrow{\widehat{\beta^{i - 1}}} + W^{-1} (\vec{y} - \vec{p})\]</span>
+</center>
+<p>and <span class="math inline">\(\vec{p}\)</span> are the fitted probabilities given <span class="math inline">\(\overrightarrow{\widehat{\beta^{i - 1}}}\)</span>.</p>
+<pre class="r"><code>beta_vec_newton &lt;- c(0,0)
+max_check &lt;- FALSE
+islr_iterations &lt;- 0
+
+while (max_check != TRUE) {
+  
+  p &lt;- exp(x %*% beta_vec_newton) / 
+    (1 + exp(x %*% beta_vec_newton))
+
+  W &lt;- diag(as.vector(p))
+  
+  z &lt;- x %*% beta_vec_newton + solve(W) %*% (y - p)
+  
+  beta_vec_newton &lt;- solve(t(x) %*% W %*% x) %*% 
+    t(x) %*% W %*% z
+  
+  # Check that we are actually maximizing the likelihood function by checking
+  # if the score functions are evaluating to zero
+  
+  score &lt;- t(x) %*% (y - p)
+  score &lt;- c(score[1], score[2])
+  max_check &lt;- all.equal(c(0,0), score, 
+                         tolerance = .Machine$double.eps ^ 0.5)
+  islr_iterations &lt;- islr_iterations + 1
+  
+}</code></pre>
+<p>Our <span class="math inline">\(\vec{\hat{\beta}}\)</span> for this example from Newton-Raphson/IRLS is:</p>
+<pre><code>##          [,1]
+## Int  3.649338
+## X1  -1.064335</code></pre>
+</div>
+<div id="method-2-modified-irls" class="section level3">
+<h3>Method 2: Modified IRLS</h3>
+<p>Because <span class="math inline">\(W\)</span> is a <span class="math inline">\(N \times N\)</span> matrix, the bare-bones IRLS loop above is not exactly the quickest thing to ever run. We can side-step the large <span class="math inline">\(W\)</span> matrix and matrix operations involving it by instead multiplying the rows of the <span class="math inline">\(X\)</span> matrix by the predicted probability of <span class="math inline">\(Y = 1\)</span> for the observation corresponding to that row (given the “old” <span class="math inline">\(\beta\)</span> from the previous iteration) using the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sweep" target="_blank"><code>sweep</code></a> function; see <a href="http://personal.psu.edu/jol2/course/stat597e/notes2/logit.pdf#page=23" target="_blank">pseudo-code</a>.</p>
+<pre class="r"><code>beta_vec_mod &lt;- c(0,0)
+max_check &lt;- FALSE
+mod_iterations &lt;- 0
+
+while (max_check != TRUE) {
+  
+  p &lt;- exp(x %*% beta_vec_mod) / 
+    (1 + exp(x %*% beta_vec_mod))
+  
+  # Use `sweep` to multiply each row of x by scalar vector
+  
+  x_tilde &lt;- sweep(x, MARGIN = 2, p * (1 - p), `*`)
+  
+  beta_vec_mod &lt;- beta_vec_mod + solve(t(x) %*% x_tilde) %*%
+    t(x) %*%
+    (y - p)
+  
+  # Check that we are actually maximizing the likelihood function by checking
+  # if the score functions are evaluating to zero
+  
+  score &lt;- t(x) %*% (y - p)
+  score &lt;- c(score[1], score[2])
+  max_check &lt;- all.equal(c(0,0), score, 
+                         tolerance = .Machine$double.eps ^ 0.5)
+  mod_iterations &lt;- mod_iterations + 1
+  
+}</code></pre>
+<p>Generally this will converge much more quickly. The number of iterations for this particular example were</p>
+<pre><code>## [1] &quot;ISLR iterations: 99&quot;</code></pre>
+<pre><code>## [1] &quot;Modified ISLR iterations: 21&quot;</code></pre>
+<p>Our <span class="math inline">\(\vec{\hat{\beta}}\)</span> for this example from the modified algorithm is:</p>
+<pre><code>##          [,1]
+## Int  3.649338
+## X1  -1.064335</code></pre>
+</div>
+</div>
+<div id="testing" class="section level2">
+<h2>Testing</h2>
+<div id="comparing-to-glm" class="section level3">
+<h3>Comparing to <code>glm</code></h3>
+<p>We can easily check the coefficients we’ve calculated against those produced by R’s <code>glm</code>:</p>
+<pre class="r"><code>glm_model &lt;- glm(y ~ X1, data = as.data.frame(data_matrix), family = &quot;binomial&quot;)</code></pre>
+<pre><code>## [1] &quot;ISLR estimates&quot;</code></pre>
+<pre><code>##          [,1]
+## Int  3.649338
+## X1  -1.064335</code></pre>
+<pre><code>## [1] &quot;Modified ISLR estimates&quot;</code></pre>
+<pre><code>##          [,1]
+## Int  3.649338
+## X1  -1.064335</code></pre>
+<pre><code>## [1] &quot;GLM estimates&quot;</code></pre>
+<pre><code>## (Intercept)          X1 
+##    3.649338   -1.064335</code></pre>
+</div>
+<div id="the-log-likelihood-surface-1" class="section level3">
+<h3>The Log-Likelihood Surface</h3>
+<p>We can also use the log-likelihood surface plot to (approximately) verify that the coefficients we estimated are correct and that the logistic regression estimates do maximize the log-likelihood function by plotting the point for our estimates on the surface plot:</p>
+<pre class="r"><code>likelihood_surface_plot &lt;- likelihood_surface_plot +
+  geom_point(aes(x = beta_vec_mod[1], y = beta_vec_mod[2]))</code></pre>
+<p><img src="univariate_binary_logistic_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="plotting-the-logistic-fit" class="section level3">
+<h3>Plotting the Logistic Fit</h3>
+<p>To get the classic logistic regression plot we can calculate</p>
+<center>
+<span class="math display">\[\Pr (Y = 1 | X = x_i; \vec{\beta}) = \frac{e^{\vec{x} \hat{\vec{\beta^T}}}}{1 + e^{\vec{x} \hat{\vec{\beta^T}}}}\]</span>
+</center>
+<p>for all <span class="math inline">\(x_i\)</span> and plot those probabilities as a line against the data points on the <span class="math inline">\((x, y)\)</span> plane. We’ll also color-code the points by how our model fit classifies the points, using the decision rule that an observation is classified to <span class="math inline">\(\hat{Y} = 0\)</span> if <span class="math inline">\(\Pr (Y = 1 | X = x_i; \vec{\beta}) &lt; 0.5\)</span> and <span class="math inline">\(\hat{Y} = 1\)</span> otherwise.</p>
+<pre class="r"><code>pred_prob &lt;- exp(data_matrix[, 2:3] %*% beta_vec_mod) / 
+    (1 + exp(data_matrix[, 2:3] %*% beta_vec_mod))
+
+data_tibble &lt;- as_tibble(data_matrix)
+
+data_tibble$pred_prob &lt;- pred_prob[,1]
+
+data_tibble$pred &lt;- if_else(data_tibble$pred_prob &lt; .5, 0, 1)
+
+logistic_plot_preds &lt;- ggplot(data_tibble) +
+  geom_point(aes(X1, y, color = as.factor(pred))) +
+  geom_line(aes(X1, pred_prob)) +
+  scale_color_manual(name = &quot;Predicted y&quot;,
+                      values = c(&quot;red&quot;, &quot;blue&quot;))</code></pre>
+<p><img src="univariate_binary_logistic_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
