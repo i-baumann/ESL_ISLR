@@ -1,0 +1,7 @@
+name: "ESL/ISLR Examples"
+navbar:
+  title: "ESL/ISLR Examples"
+  left:
+    - text: "Home"
+      href: index.html
+output_dir: "docs"

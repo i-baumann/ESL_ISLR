@@ -319,15 +319,12 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">My Website</a>
+      <a class="navbar-brand" href="index.html">ESL/ISLR Examples</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">Home</a>
-</li>
-<li>
-  <a href="about.html">About</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -452,8 +449,8 @@ while (max_check != TRUE) {
 }</code></pre>
 <p>Our <span class="math inline">\(\vec{\hat{\beta}}\)</span> for this example from Newton-Raphson/IRLS is:</p>
 <pre><code>##          [,1]
-## Int  3.649338
-## X1  -1.064335</code></pre>
+## Int  3.974618
+## X1  -1.975442</code></pre>
 </div>
 <div id="method-2-modified-irls" class="section level3">
 <h3>Method 2: Modified IRLS</h3>
@@ -486,12 +483,12 @@ while (max_check != TRUE) {
   
 }</code></pre>
 <p>Generally this will converge much more quickly. The number of iterations for this particular example were</p>
-<pre><code>## [1] &quot;ISLR iterations: 99&quot;</code></pre>
-<pre><code>## [1] &quot;Modified ISLR iterations: 21&quot;</code></pre>
+<pre><code>## [1] &quot;ISLR iterations: 336&quot;</code></pre>
+<pre><code>## [1] &quot;Modified ISLR iterations: 61&quot;</code></pre>
 <p>Our <span class="math inline">\(\vec{\hat{\beta}}\)</span> for this example from the modified algorithm is:</p>
 <pre><code>##          [,1]
-## Int  3.649338
-## X1  -1.064335</code></pre>
+## Int  3.974618
+## X1  -1.975442</code></pre>
 </div>
 </div>
 <div id="testing" class="section level2">
@@ -502,15 +499,15 @@ while (max_check != TRUE) {
 <pre class="r"><code>glm_model &lt;- glm(y ~ X1, data = as.data.frame(data_matrix), family = &quot;binomial&quot;)</code></pre>
 <pre><code>## [1] &quot;ISLR estimates&quot;</code></pre>
 <pre><code>##          [,1]
-## Int  3.649338
-## X1  -1.064335</code></pre>
+## Int  3.974618
+## X1  -1.975442</code></pre>
 <pre><code>## [1] &quot;Modified ISLR estimates&quot;</code></pre>
 <pre><code>##          [,1]
-## Int  3.649338
-## X1  -1.064335</code></pre>
+## Int  3.974618
+## X1  -1.975442</code></pre>
 <pre><code>## [1] &quot;GLM estimates&quot;</code></pre>
 <pre><code>## (Intercept)          X1 
-##    3.649338   -1.064335</code></pre>
+##    3.974618   -1.975442</code></pre>
 </div>
 <div id="the-log-likelihood-surface-1" class="section level3">
 <h3>The Log-Likelihood Surface</h3>
