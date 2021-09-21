@@ -7,6 +7,10 @@ output:
     pandoc_args: "--webtex"
 ---
 
+## Linear Discriminant Analysis
+
+- BLAH
+
 ## Logistic Regression
 
 - [Univariate Logistic Regression - Binary Outcome](univariate_binary_logistic.html)

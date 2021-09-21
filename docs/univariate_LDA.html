@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Univariate Linear Discriminant Analysis</title>
+
+<script src="site_libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="site_libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="site_libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ESL/ISLR Examples</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Univariate Linear Discriminant Analysis</h1>
+
+</div>
+
+
+<p>This example walks through using linear discriminant analysis to classify observations in a two-class univariate setting with (idealized) generated data.</p>
+<p>Though not shown here, this example uses the <a href="https://cran.r-project.org/web/packages/tidyverse/index.html" target="_blank"><code>tidyverse</code></a> and <a href="https://patchwork.data-imaginist.com/" target="_blank"><code>patchwork</code></a> packages.</p>
+<div id="data-generation" class="section level2">
+<h2>Data Generation</h2>
+<p>We’ll generate train and test data for two classes (coded 0/1): 1,000 normally-distributed observations for each class with differing means for each class but equal variances.</p>
+<pre class="r"><code>means &lt;- sample.int(6, 2, replace = FALSE)
+
+population0_mean &lt;- min(means)
+population0_sd &lt;- 1
+
+population1_mean &lt;- max(means)
+population1_sd &lt;- 1
+
+c0_train &lt;- tibble(y = 0,
+                   x = rnorm(1000, 
+                             mean = population0_mean, 
+                             sd = population0_sd))
+c1_train &lt;- tibble(y = 1,
+                   x = rnorm(1000,
+                             mean = population1_mean, 
+                             sd = population1_sd))
+
+c0_test &lt;- tibble(y = 0,
+                  x = rnorm(1000, 
+                             mean = population0_mean, 
+                             sd = population0_sd))
+c1_test &lt;- tibble(y = 1,
+                  x = rnorm(1000, 
+                             mean = population1_mean, 
+                             sd = population1_sd))
+
+train_sample_df &lt;- bind_rows(c0_train, c1_train)
+test_sample_df &lt;- bind_rows(c0_test, c1_test)</code></pre>
+<p>We can easily visualize the distributions of our class-wise populations:</p>
+<pre class="r"><code>population_density &lt;- ggplot(data.frame(x = c(population0_mean - 3 * population0_sd,
+                                              population1_mean + 3 * population1_sd)), 
+                             aes(x)) + 
+  stat_function(fun = dnorm, 
+                aes(color = &quot;Class: 0&quot;),
+                args = list(mean = population0_mean, sd = population0_sd)) +
+  stat_function(fun = dnorm, 
+                aes(color = &quot;Class: 1&quot;),
+                args = list(mean = population1_mean, sd = population1_sd)) +
+  scale_colour_manual(values = c(&quot;red&quot;, &quot;blue&quot;)) +
+  labs(title = &quot;Population Densities of Two Classes&quot;) +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="univariate_LDA_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Let’s also quickly visualize the train and test data:</p>
+<pre class="r"><code>train_sample_histogram &lt;- ggplot(train_sample_df) +
+  geom_histogram(aes(x = x, fill = as.factor(y)), 
+                 alpha = .7,
+                 position = &quot;identity&quot;) +
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;blue&quot;),
+                    labels = c(&quot;Class: 0&quot;, &quot;Class: 1&quot;)) +
+  labs(title = &quot;Training Sample&quot;) +
+  theme(legend.title = element_blank())
+
+test_sample_histogram &lt;- ggplot(test_sample_df) +
+  geom_histogram(aes(x = x, fill = as.factor(y)), 
+                 alpha = .7,
+                 position = &quot;identity&quot;) +
+  scale_fill_manual(values = c(&quot;red&quot;, &quot;blue&quot;),
+                    labels = c(&quot;Class: 0&quot;, &quot;Class: 1&quot;)) +
+  labs(title = &quot;Test Sample&quot;) +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="univariate_LDA_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="bayes-decision-boundary" class="section level2">
+<h2>Bayes Decision Boundary</h2>
+<p>We’ll use the <a href="https://en.wikipedia.org/wiki/Bayes_classifier" target="_blank">Bayes classifier</a> as a comparison for our LDA. The Bayes classifier simply assigns an observation to the class for which an observation has the highest prior probability of belonging. The Bayes decision boundary is the boundary for which the probability of an observation being classified by the Bayes classifier is equal among classes; in this case, we will only have one boundary because we only have two classes.</p>
+<p>We’ll compute the optimal Bayes decision boundary from the <em>population</em> data to compare our LDA against. In this case, since we only have two classes and one independent variable/predictor, it’s easy:</p>
+<pre class="r"><code>bayes_decision &lt;- (population0_mean ^ 2 - population1_mean ^ 2) /
+  (2 * (population0_mean - population1_mean))</code></pre>
+<p>We can easily add this optimal boundary to our population density plot and histogram. Unsurprisingly, the decision boundary lies where the two <a href="https://en.wikipedia.org/wiki/Probability_density_function" target="_blank">PDF</a>s meet:</p>
+<pre class="r"><code>population_density + geom_vline(xintercept = bayes_decision,
+                                color = &quot;black&quot;)</code></pre>
+<p><img src="univariate_LDA_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<pre class="r"><code>train_sample_histogram + geom_vline(xintercept = bayes_decision,
+                                color = &quot;black&quot;)</code></pre>
+<p><img src="univariate_LDA_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="creating-the-lda-classifier" class="section level2">
+<h2>Creating the LDA Classifier</h2>
+<p>The LDA classifier uses estimates of mean and variance for each class as well as a discriminant function to determine the probability that an observation is of a particular class. The LDA classifier then assigns to each observation that class for which the probability of membership is highest.</p>
+<div id="theory" class="section level3">
+<h3>Theory</h3>
+<p>The general LDA model explored here and in <a href="https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf#%5B%7B%22num%22%3A195%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22Fit%22%7D%5D" target="_blank">Elements of Statistical Learning</a> uses <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem#For_continuous_random_variables" target="_blank">Bayes’ theorem for continuous variables</a>. Since we have normal data, we use the normal probability density function (for each class, respectively) as our probability function. Taking Bayes’ theorem</p>
+<center>
+<span class="math display">\[\Pr(Y = k|X = x) = \frac{\pi_k f_k(x)}{\sum^K_{j = 1} \pi_j f_j(x)}\]</span>
+</center>
+<p>where <span class="math inline">\(k\)</span> represents one class and <span class="math inline">\(l\)</span> all others, <span class="math inline">\(\pi_k\)</span> represents the prior probability of class <span class="math inline">\(k\)</span>, and <span class="math inline">\(f(\cdot)\)</span> is some probability function, we substitute the normal PDF for <span class="math inline">\(f(\cdot)\)</span> and rewrite</p>
+<center>
+<span class="math display">\[\Pr(Y = k|X = x) = \frac{\pi_k \frac{1}{\sqrt{2 \color{red}{\pi} \sigma_k}} e^{ \left( \frac{-1}{2\sigma^2_k}(x - \mu_k)^2 \right)}}{\sum^K_{j = 1} \pi_j \frac{1}{\sqrt{2 \color{red}{\pi} \sigma_j}} e^{ \left( \frac{-1}{2\sigma^2_j}(x - \mu_j)^2 \right)}}\]</span>
+</center>
+<p>where <span class="math inline">\(\color{red}{\pi}\)</span> is literally the value pi (as used in the normal PDF), not a prior probability.</p>
+<p>In our case, we only have two classes and <span class="math inline">\(\sigma_k = \sigma_l\)</span>. In fact, <strong>LDA assumes equal variance</strong> so this is an idealized case.</p>
+<p>So where does the “discriminant” in LDA come from? How does LDA divide between classes? In the two-class case like our example, we can use the log of the ratio of the probabilities to get our <em>discriminant functions</em> for each class. Taking the ratio of the probabilities…</p>
+<center>
+<span class="math display">\[\begin{align}
+\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \frac{\pi_k f_k(x)}{\sum^K_{j = 1} \pi_j f_j(x)} \frac{\sum^K_{j = 1} \pi_j f_j(x)}{\pi_l f_l(x)} \\ 
+&amp;= \frac{\pi_k f_k(x)}{\pi_l f_l(x)}
+\end{align}\]</span>
+</center>
+<p>…and taking the log of the ratio…</p>
+<center>
+<span class="math display">\[\begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log \frac{\pi_k f_k(x)}{\pi_l f_l(x)} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{f_k(x)}{f_l(x)}}
+\end{align}\]</span>
+</center>
+<p>…we can build a general formula for finding our discriminant functions. Plugging in the normal PDF for <span class="math inline">\(f(\cdot)\)</span> in our case allows for quite a lot of simplification:</p>
+<center>
+<span class="math display">\[\begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{\sqrt{2 \color{red}{\pi} \sigma}} e^{ \left( \frac{-1}{2\sigma^2}(x - \mu_k)^2 \right)}}{\frac{1}{\sqrt{2 \color{red}{\pi} \sigma}} e^{ \left( \frac{-1}{2\sigma^2}(x - \mu_l)^2 \right)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{\sqrt{2 \color{red}{\pi} \sigma}} \bigg/ \frac{1}{\sqrt{2 \color{red}{\pi} \sigma}} \right) + \log \frac{e^{ \left( \frac{-1}{2\sigma^2}(x - \mu_k)^2 \right)}}{e^{ \left( \frac{-1}{2\sigma^2}(x - \mu_l)^2 \right)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log e^{ \left( \frac{-1}{2\sigma^2}(x - \mu_k)^2 \right)} - \log e^{ \left( \frac{-1}{2\sigma^2}(x - \mu_l)^2 \right)} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2\sigma^2}(x - \mu_k)^2 + \frac{1}{2\sigma^2}(x - \mu_l)^2 \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \frac{-x^2 + 2x \mu_k - \mu_k^2 + x^2 - 2x \mu_l + \mu_l^2}{2 \sigma^2} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + x \frac{\mu_k - \mu_l}{\sigma^2} + \frac{\mu_l^2 - \mu_k^2}{2 \sigma^2}
+\end{align}\]</span>
+</center>
+<p>Remember the Bayes decision boundary from above? The LDA decision boundary also exists where the probability of an observation being class <span class="math inline">\(k\)</span> is equal to its probability of being class <span class="math inline">\(l\)</span> in the two-class case, but using the sample data. If we think of our log-ratio in this way (in which case the ratio is 1 and so the log of the ratio is 0) and evaluate on the boundary then we can easily use the above expression to find our discriminant functions.</p>
+<center>
+<span class="math display">\[\Pr(Y = k|X = x) = \Pr(Y = l|X = x) \rightarrow \frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} = 1\]</span> <span class="math display">\[\begin{align}
+\log \left( 1 \right) &amp;= \log{\frac{\pi_k}{\pi_l}} + x \frac{\mu_k - \mu_l}{\sigma^2} + \frac{\mu_l^2 - \mu_k^2}{2 \sigma^2} \\
+0 &amp;= \log{\pi_k} - \log{\pi_l} + \frac{x \mu_k}{\sigma^2} - \frac{x \mu_l}{\sigma^2} + \frac{\mu_l^2}{2 \sigma^2} - \frac{\mu_k^2}{2 \sigma^2} \\
+\underbrace{\log \pi_l + \frac{x \mu_l}{\sigma^2} - \frac{\mu_l^2}{2 \sigma^2}}_{\delta_l(x)} &amp;= \underbrace{\log \pi_k + \frac{x \mu_k}{\sigma^2} - \frac{\mu_k^2}{2 \sigma^2}}_{\delta_k (x)}
+\end{align}\]</span>
+</center>
+<p><span class="math inline">\(\delta_k(x)\)</span> and <span class="math inline">\(\delta_l(x)\)</span> are our discriminant functions which we use to classify observations. We use a simple decision rule for classification: if for observation <span class="math inline">\(x_i\)</span> the <span class="math inline">\(k\)</span> discriminant function evaluates greater than the <span class="math inline">\(l\)</span> discriminant function then we assign <span class="math inline">\(x_i\)</span> to class <span class="math inline">\(k\)</span>.</p>
+</div>
+<div id="implementation" class="section level3">
+<h3>Implementation</h3>
+<p>For our estimates of the mean and variance we use the empirical (i.e., data/sample-derived) class-specific means and standard deviations. Even though the class variances are equivalent in this case we will treat them separately for completeness. We also need to calculate the empirical prior probability that an observation belongs to each class. In this case, both will be 0.5 since we have equal samples but we will again calculate these separately for completeness.</p>
+<pre class="r"><code>class_0_mean &lt;- mean(train_sample_df$x[train_sample_df$y == 0])
+class_0_var &lt;- var(train_sample_df$x[train_sample_df$y == 0])
+
+class_1_mean &lt;- mean(train_sample_df$x[train_sample_df$y == 1])
+class_1_var &lt;- var(train_sample_df$x[train_sample_df$y == 1])
+
+class_0_prior &lt;- length(train_sample_df$x[train_sample_df$y == 0]) /
+  length(train_sample_df$x)
+
+class_1_prior &lt;- length(train_sample_df$x[train_sample_df$y == 1]) /
+  length(train_sample_df$x)</code></pre>
+<p>Building our discriminant functions as specified in the previous section is simple. We’ll write these as functions in R:</p>
+<pre class="r"><code>d0 &lt;- function(x){
+  x * (class_0_mean / class_0_var) - (class_0_mean ^ 2 / (2 * class_0_var ^ 2)) +
+    log(class_0_prior)
+}
+
+d1 &lt;- function(x){
+  x * (class_1_mean / class_1_var) - (class_1_mean ^ 2 / (2 * class_1_var ^ 2)) +
+    log(class_1_prior)
+}</code></pre>
+<p>Then we can build our simple decision rule function, assigning an observation to class <span class="math inline">\(k\)</span> if <span class="math inline">\(\delta_k(x) &gt; \delta_l(x)\)</span> and vice versa:</p>
+<pre class="r"><code>LDA &lt;- function(x){
+  
+  score_0 &lt;- d0(x)
+  score_1 &lt;- d1(x)
+  
+  ifelse(score_0 &gt; score_1, 0, 1)
+
+}</code></pre>
+<p>Then we can <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply" target="_blank"><code>apply</code></a> our LDA function over our training data to classify the observations:</p>
+<pre class="r"><code>train_sample_df$predicted_y &lt;- apply(train_sample_df[,2], MARGIN = 1, LDA)</code></pre>
+<p>Because our discriminant functions are linear in <span class="math inline">\(x\)</span>, we can also solve for the value of <span class="math inline">\(x\)</span> that acts as our LDA boundary:</p>
+<pre class="r"><code>LDA_decision &lt;- (class_0_mean ^ 2 / (2 * class_0_var) -
+                   class_1_mean ^ 2 / (2 * class_0_var) +
+                   log(class_1_prior) - log(class_0_prior)) /
+                (class_0_mean / class_0_var - class_1_mean / class_1_var)</code></pre>
+<p>And we can easily visualize both our (population-based) Bayes decision boundary and our (sample-based) LDA decision boundary:</p>
+<pre class="r"><code>train_sample_histogram + 
+  geom_vline(xintercept = bayes_decision,
+                                   color = &quot;black&quot;) +
+  geom_vline(xintercept = LDA_decision,
+             color = &quot;black&quot;,
+             linetype = &quot;longdash&quot;) +
+  labs(subtitle = &quot;Solid line: Bayes (optimal) decision boundary\nDashed line: LDA decision boundary&quot;)</code></pre>
+<p><img src="univariate_LDA_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+</div>
+<div id="testing" class="section level2">
+<h2>Testing</h2>
+<p>Using the decision boundary from our LDA model applied to the training data, we can simply and easily classify the test data observations:</p>
+<pre class="r"><code>test_sample_df$predicted_y &lt;- if_else(test_sample_df$x &lt; LDA_decision,
+                                             0, 1)</code></pre>
+<p>What’s LDA’s misclassification rate for the test data in this case?</p>
+<pre class="r"><code>LDA_misclass_rate &lt;- nrow(test_sample_df[test_sample_df$y != 
+                                           test_sample_df$predicted_y,]) /
+                     nrow(test_sample_df)
+
+LDA_misclass_rate * 100</code></pre>
+<pre><code>## [1] 7.1</code></pre>
+<p>It’s certainly not perfect! But how imperfect is it? Since we’re using Bayes’ classifier on the population data as our standard, we can apply its decision rule to the test data and calculate its misclassification rate.</p>
+<pre class="r"><code>test_sample_df$bayes_predicted_y &lt;- if_else(test_sample_df$x &lt; bayes_decision,
+                                       0, 1)
+
+bayes_misclass_rate &lt;- nrow(test_sample_df[test_sample_df$y != 
+                                             test_sample_df$bayes_predicted_y,]) /
+                       nrow(test_sample_df)
+
+bayes_misclass_rate * 100</code></pre>
+<pre><code>## [1] 6.5</code></pre>
+<p>In this case, LDA performs well: it’s quite close to the optimal Bayes classifier. Of course, it is possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here in a sense represents the “true” optimal classifier since it is coming from population data.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
