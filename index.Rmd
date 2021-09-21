@@ -9,7 +9,7 @@ output:
 
 ## Linear Discriminant Analysis
 
-- BLAH
+- [Univariate LDA - Binary Outcome](univariate_LDA.html)
 
 ## Logistic Regression
 
