@@ -145,7 +145,7 @@ The general LDA model explored here and in [Elements of Statistical Learning](ht
 $$\Pr(Y = k|X = x) = \frac{\pi_k f_k(x)}{\sum^K_{j = 1} \pi_j f_j(x)}$$
 </center>
 
-where $k$ represents one class and $l$ all others, $\pi_k$ represents the prior probability of class $k$, and $f(\cdot)$ is some probability function, we substitute the normal PDF for $f(\cdot)$ and rewrite
+where $k$ represents one class and $j$ all others, $\pi_k$ represents the prior probability of class $k$, and $f(\cdot)$ is some probability function, we substitute the normal PDF for $f(\cdot)$ and rewrite
 
 <center>
 $$\Pr(Y = k|X = x) = \frac{\pi_k \frac{1}{\sqrt{2 \color{red}{\pi} \sigma_k}} e^{ \left( \frac{-1}{2\sigma^2_k}(x - \mu_k)^2 \right)}}{\sum^K_{j = 1} \pi_j \frac{1}{\sqrt{2 \color{red}{\pi} \sigma_j}} e^{ \left( \frac{-1}{2\sigma^2_j}(x - \mu_j)^2 \right)}}$$
