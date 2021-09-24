@@ -328,7 +328,12 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/my-cabbages/ESL_ISLR">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -536,7 +541,7 @@ d1 &lt;- function(x){
                      nrow(test_sample_df)
 
 LDA_misclass_rate * 100</code></pre>
-<pre><code>## [1] 9.95</code></pre>
+<pre><code>## [1] 7.35</code></pre>
 <p>It’s certainly not perfect! But how imperfect is it? Since we’re using Bayes’ classifier on the population data as our standard, we can apply its decision rule to the test data and calculate its misclassification rate.</p>
 <pre class="r"><code>test_sample_df$bayes_predicted_y &lt;- if_else(test_sample_df$x &lt; bayes_decision,
                                        0, 1)
@@ -546,7 +551,7 @@ bayes_misclass_rate &lt;- nrow(test_sample_df[test_sample_df$y !=
                        nrow(test_sample_df)
 
 bayes_misclass_rate * 100</code></pre>
-<pre><code>## [1] 6.5</code></pre>
+<pre><code>## [1] 6.7</code></pre>
 <p>In this case, LDA performs well: it’s quite close to the optimal Bayes classifier. Of course, it is possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here in a sense represents the “true” optimal classifier since it is coming from population data.</p>
 </div>
 

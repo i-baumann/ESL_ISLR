@@ -121,7 +121,7 @@ Our $\hat{\beta}_0$ and $\hat{\beta}_1$ coordinates estimated by our logistic re
 
 ## Estimating $\hat{\beta}$s
 
-To fit the logistic regression model to the data and find the optimal $\hat{\beta}$ vector we set the derivative of the log-likelihood function (or [score equations](https://en.wikipedia.org/wiki/Score_(statistics){target="_blank"}) with respect to $\vec{\hat{\beta}}$ to zero:
+To fit the logistic regression model to the data and find the optimal $\hat{\beta}$ vector we set the derivative of the log-likelihood function (or [score equations](https://en.wikipedia.org/wiki/Score_(statistics){target="_blank"} ) with respect to $\vec{\hat{\beta}}$ to zero:
 
 <center>
 $$\frac{\partial \ell(\vec{\beta})}{\partial \vec{\beta}} = \sum_{i = 1}^N x_i (y_i - \Pr (Y = 1 | X = x_i; \vec{\beta})) = 0$$
