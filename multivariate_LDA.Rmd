@@ -163,7 +163,7 @@ $$\Pr(Y = k|X = x) = \frac{\pi_k f_k(x)}{\sum^K_{j = 1} \pi_j f_j(x)}$$
 where $k$ represents one class and $j$ all others, $\pi_k$ represents the prior probability of class $k$, $p$ is the number of variables, and we use a probability density function for $f(\cdot)$. In this case we use the [multivariate normal PDF](https://en.wikipedia.org/wiki/Multivariate_normal_distribution){target="_blank"}
 
 <center>
-$$\frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}$$
+$$\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}$$
 </center>
 
 where, in this idealized example, $\Sigma_k, \Sigma_l, \ldots, \Sigma_K = \Sigma$ since we are assuming (and in fact generating data from a distribution in which) all classes have the same covariance matrix. As noted in the univariate example, $\color{red}{\pi}$ in the PDF is the literal value pi, not a prior probability.
@@ -183,8 +183,8 @@ Plugging in the multivariate normal PDF for $f(\cdot)$, like in the univariate c
 
 <center>
 $$\begin{align}
-\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
-&= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
+&= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
 &= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
 \end{align}$$
 </center>

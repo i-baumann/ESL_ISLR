@@ -374,9 +374,9 @@ pop_var &lt;- runif(1, 0, 10)
 pop_sigma &lt;- matrix(c(pop_var, pop_corr,
                       pop_corr, pop_var), 2, 2)</code></pre>
 <p>In this particular example our common covariance matrix looks like</p>
-<pre><code>##            [,1]       [,2]
-## [1,] 2.37429323 0.03586445
-## [2,] 0.03586445 2.37429323</code></pre>
+<pre><code>##           [,1]      [,2]
+## [1,] 4.0779083 0.9150748
+## [2,] 0.9150748 4.0779083</code></pre>
 <p>Now that we have our variable- and class-specific means and a common covariance matrix we can use <code>mvnorm</code> to generate our sample data. We’ll create equally-sized train and test sets with 300 observations in each of our three classes and bind our X1 and X2 samples together with our outcome set into a data frame.</p>
 <pre class="r"><code>n &lt;- 300
 
@@ -458,7 +458,7 @@ test_sample_scatter &lt;- ggplot(test_sample_df) +
 </center>
 <p>where <span class="math inline">\(k\)</span> represents one class and <span class="math inline">\(j\)</span> all others, <span class="math inline">\(\pi_k\)</span> represents the prior probability of class <span class="math inline">\(k\)</span>, <span class="math inline">\(p\)</span> is the number of variables, and we use a probability density function for <span class="math inline">\(f(\cdot)\)</span>. In this case we use the <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution" target="_blank">multivariate normal PDF</a></p>
 <center>
-<span class="math display">\[\frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}\]</span>
+<span class="math display">\[\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}\]</span>
 </center>
 <p>where, in this idealized example, <span class="math inline">\(\Sigma_k, \Sigma_l, \ldots, \Sigma_K = \Sigma\)</span> since we are assuming (and in fact generating data from a distribution in which) all classes have the same covariance matrix. As noted in the univariate example, <span class="math inline">\(\color{red}{\pi}\)</span> in the PDF is the literal value pi, not a prior probability.</p>
 <p>Whereas in the univariate case we only had two outcomes/classes, in this example we have three. Instead of pairwise solving for two discriminant functions we need to pairwise solve for three. The process is of course the same for each pair, so we will generically work through solving for the discriminant functions for a single pair of classes.</p>
@@ -472,8 +472,8 @@ test_sample_scatter &lt;- ggplot(test_sample_df) +
 <p>Plugging in the multivariate normal PDF for <span class="math inline">\(f(\cdot)\)</span>, like in the univariate case, allows for a lot of simplification but with some twists:</p>
 <center>
 <span class="math display">\[\begin{align}
-\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
-&amp;= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{2\color{red}{\pi}}^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
 &amp;= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
 \end{align}\]</span>
 </center>
@@ -667,13 +667,13 @@ for (i in 1:nrow(train_sample_df)) {
 train_sigma_LDA &lt;- train_sigma_LDA / (n * 3 - 3)</code></pre>
 <p>How close is our <span class="math inline">\(\hat{\Sigma}\)</span> to <span class="math inline">\(\Sigma\)</span>?</p>
 <pre><code>## [1] &quot;Sigma&quot;</code></pre>
-<pre><code>##            [,1]       [,2]
-## [1,] 2.37429323 0.03586445
-## [2,] 0.03586445 2.37429323</code></pre>
+<pre><code>##           [,1]      [,2]
+## [1,] 4.0779083 0.9150748
+## [2,] 0.9150748 4.0779083</code></pre>
 <pre><code>## [1] &quot;Estimated sigma&quot;</code></pre>
-<pre><code>##              [,1]         [,2]
-## [1,]  2.448339786 -0.003762778
-## [2,] -0.003762778  2.323354480</code></pre>
+<pre><code>##           [,1]      [,2]
+## [1,] 4.0366644 0.7747452
+## [2,] 0.7747452 4.0440847</code></pre>
 <p>Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and <code>apply</code> them via a decision rule function to our training sample:</p>
 <pre class="r"><code>d0_LDA &lt;- function(x_vec){
   t(x_vec) %*% solve(train_sigma_LDA) %*% sample_c0_mean_vec -
@@ -761,14 +761,14 @@ test_sample_df$LDA_predicted_y &lt;- apply(test_sample_df[, c(&quot;X1&quot;, &q
   nrow(test_sample_df)
 
 LDA_misclass_rate * 100</code></pre>
-<pre><code>## [1] 6.888889</code></pre>
+<pre><code>## [1] 12.33333</code></pre>
 <p>How about the misclassification rate for our (optimal) Bayes classifier?</p>
 <pre class="r"><code>bayes_misclass_rate &lt;- nrow(test_sample_df[test_sample_df$y != 
                                            test_sample_df$bayes_predicted_y,]) /
   nrow(test_sample_df)
 
 bayes_misclass_rate * 100</code></pre>
-<pre><code>## [1] 6.666667</code></pre>
+<pre><code>## [1] 11.77778</code></pre>
 <p>In this case, the LDA classifier performs well: it’s very close to the Bayes classifier. As noted in the univariate case, it’s of course possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the “true” optimal classifier in a sense since its classifying based on population parameters.</p>
 </div>
 <div class="footnotes">

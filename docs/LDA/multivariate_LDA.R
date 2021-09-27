@@ -16,13 +16,16 @@ pacman::p_load(tidyverse, MASS)
 
 # Choose population means per group, centered on (X1, X2, X3) coordinate means
 
-pop_mean_c0_X1 <- sample.int(10, 1)
-pop_mean_c1_X1 <- sample.int(10, 1)
-pop_mean_c2_X1 <- sample.int(10, 1)
+X1_means <- sample.int(10, 3, replace = FALSE)
+X2_means <- sample.int(10, 3, replace = FALSE)
 
-pop_mean_c0_X2 <- sample.int(10, 1)
-pop_mean_c1_X2 <- sample.int(10, 1)
-pop_mean_c2_X2 <- sample.int(10, 1)
+pop_mean_c0_X1 <- X1_means[1]
+pop_mean_c1_X1 <- X1_means[2]
+pop_mean_c2_X1 <- X1_means[3]
+
+pop_mean_c0_X2 <- X2_means[1]
+pop_mean_c1_X2 <- X2_means[2]
+pop_mean_c2_X2 <- X2_means[3]
 
 mu_c0 <- c(pop_mean_c0_X1, pop_mean_c0_X2)
 mu_c1 <- c(pop_mean_c1_X1, pop_mean_c1_X2)
@@ -305,7 +308,7 @@ for (i in 1:nrow(train_sample_df)) {
 
 # Correct the covariance matrix
 
-train_sigma_LDA <- train_sigma_LDA - (n * 3 - 3)
+train_sigma_LDA <- train_sigma_LDA / (n * 3 - 3)
 
 # Calculate midpoints between class-level sample mean-vectors
 
