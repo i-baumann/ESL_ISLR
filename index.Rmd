@@ -21,3 +21,7 @@ Please [open an issue](https://github.com/my-cabbages/ESL_ISLR/issues){target="_
 ## Logistic Regression
 
 - [Univariate Logistic Regression - Binary Outcome](univariate_binary_logistic.html)
+
+## Quadratic Discriminant Analysis
+
+- [Multivariate QDA - Three-Class Outcome](multivariate_QDA.html)
