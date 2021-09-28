@@ -17,22 +17,22 @@ population1_mean <- 3
 population1_sd <- 1
 
 c0_train <- tibble(y = 0,
-             x = rnorm(1000, 
-                       mean = population0_mean, 
-                       sd = population0_sd))
-c1_train <- tibble(y = 1,
-             x = rnorm(1000, 
-                       mean = population1_mean, 
-                       sd = population1_sd))
-
-c0_test <- tibble(y = 0,
                    x = rnorm(1000, 
                              mean = population0_mean, 
                              sd = population0_sd))
-c1_test <- tibble(y = 1,
+c1_train <- tibble(y = 1,
                    x = rnorm(1000, 
                              mean = population1_mean, 
                              sd = population1_sd))
+
+c0_test <- tibble(y = 0,
+                  x = rnorm(1000, 
+                            mean = population0_mean, 
+                            sd = population0_sd))
+c1_test <- tibble(y = 1,
+                  x = rnorm(1000, 
+                            mean = population1_mean, 
+                            sd = population1_sd))
 
 train_sample_df <- bind_rows(c0_train, c1_train)
 test_sample_df <- bind_rows(c0_test, c1_test)
@@ -176,7 +176,7 @@ train_sample_df$predicted_y <- as.integer(train_sample_df$predicted_y)
 LDA_decision <- (class_0_mean ^ 2 / (2 * class_0_var) -
                    class_1_mean ^ 2 / (2 * class_0_var) +
                    log(class_1_prior) - log(class_0_prior)) /
-                (class_0_mean / class_0_var - class_1_mean / class_1_var)
+  (class_0_mean / class_0_var - class_1_mean / class_1_var)
 
 #####
 # Step 4: Analyze performance
@@ -185,24 +185,24 @@ LDA_decision <- (class_0_mean ^ 2 / (2 * class_0_var) -
 # test data
 
 test_sample_df$predicted_y <- if_else(test_sample_df$x < LDA_decision,
-                                             0, 1)
+                                      0, 1)
 
 # Find the misclassification rate of LDA in this case
 
 LDA_misclass_rate <- nrow(test_sample_df[test_sample_df$y != 
                                            test_sample_df$predicted_y,]) /
-                     nrow(test_sample_df)
+  nrow(test_sample_df)
 
 LDA_misclass_rate * 100
 
 # It's not perfect! How does this compare to the Bayes classifier's performance?
 
 test_sample_df$bayes_predicted_y <- if_else(test_sample_df$x < bayes_decision,
-                                       0, 1)
+                                            0, 1)
 
 bayes_misclass_rate <- nrow(test_sample_df[test_sample_df$y != 
                                              test_sample_df$bayes_predicted_y,]) /
-                       nrow(test_sample_df)
+  nrow(test_sample_df)
 
 bayes_misclass_rate * 100
 
@@ -218,9 +218,8 @@ bayes_misclass_rate * 100
 
 test_sample_histogram + 
   geom_vline(xintercept = bayes_decision,
-                                   color = "black") +
+             color = "black") +
   geom_vline(xintercept = LDA_decision,
              color = "black",
              linetype = "longdash") +
   labs(subtitle = "Solid line: Bayes (optimal) decision boundary\nDashed line: LDA decision boundary")
-  

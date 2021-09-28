@@ -57,7 +57,7 @@ for (i in 0:2) {
   mu = paste("mu", class, sep = "_")
   
   temp_sigma <- matrix(c(get(class_var), get(class_corr),
-                        get(class_corr), get(class_var)), 2, 2)
+                         get(class_corr), get(class_var)), 2, 2)
   
   temp_train_data <- mvrnorm(n = n,
                              mu = get(mu),
@@ -222,11 +222,11 @@ sample_cov_mat_c0 <- cov(train_sample_df %>%
                            dplyr::select(X1, X2))
 
 sample_cov_mat_c1 <- cov(train_sample_df %>% 
-                           filter(y == 0) %>% 
+                           filter(y == 1) %>% 
                            dplyr::select(X1, X2))
 
 sample_cov_mat_c2 <- cov(train_sample_df %>% 
-                           filter(y == 0) %>% 
+                           filter(y == 2) %>% 
                            dplyr::select(X1, X2))
 
 # Unlike with LDA, we do not need to build a class-weighted covariance matrix

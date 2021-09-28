@@ -49,22 +49,22 @@ b1_vec <- seq(-5, 5, .25)
 surface <- expand_grid(b0_vec, b1_vec)
 train_data <- cbind(y, train_x)
 
-log_like_func <- function(data, b_0, b_1){
+log_like_interior <- function(data, b_0, b_1){
   
   b_vec <- c(b_0, b_1)
   
   data[1] %*% t(b_vec) %*% data[2:3] -
     log(1 + exp(t(b_vec) %*% data[2:3]))
-
-}
-
-log_like <- function(b_vec){
-  
-  sum(apply(train_data, 1, log_like_func, b_0 = b_vec[1], b_1 = b_vec[2]))
   
 }
 
-surface$l <- apply(surface, 1, log_like)
+log_like_sum <- function(b_vec){
+  
+  sum(apply(train_data, 1, log_like_interior, b_0 = b_vec[1], b_1 = b_vec[2]))
+  
+}
+
+surface$l <- apply(surface, 1, log_like_sum)
 
 likelihood_surface_plot <- ggplot(surface, aes(b0_vec, b1_vec, z = l)) +
   geom_contour_filled(bins = 20) +
@@ -73,6 +73,8 @@ likelihood_surface_plot <- ggplot(surface, aes(b0_vec, b1_vec, z = l)) +
        x = "Intercept",
        y = "B1",
        fill = "Log-Likelihood")
+
+likelihood_surface_plot
 
 #####
 # Step 2a: Newton-Raphson/iteratively re-weighted least squares algorithm
@@ -103,7 +105,7 @@ while (max_check != TRUE) {
   
   p <- exp(train_x %*% beta_vec_newton) / 
     (1 + exp(train_x %*% beta_vec_newton))
-
+  
   W <- diag(as.vector(p))
   
   z <- train_x %*% beta_vec_newton + solve(W) %*% (y - p)
@@ -208,7 +210,7 @@ logistic_plot_preds <- ggplot(train_data) +
   geom_point(aes(x, y, color = as.factor(pred))) +
   geom_line(aes(x, pred_prob)) +
   scale_color_manual(name = "Predicted y",
-                      values = c("red", "blue"))
+                     values = c("red", "blue"))
 
 logistic_plot_preds
 

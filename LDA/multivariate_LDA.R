@@ -16,13 +16,16 @@ pacman::p_load(tidyverse, MASS)
 
 # Choose population means per group, centered on (X1, X2, X3) coordinate means
 
-pop_mean_c0_X1 <- sample.int(10, 1)
-pop_mean_c1_X1 <- sample.int(10, 1)
-pop_mean_c2_X1 <- sample.int(10, 1)
+X1_means <- sample.int(10, 3, replace = FALSE)
+X2_means <- sample.int(10, 3, replace = FALSE)
 
-pop_mean_c0_X2 <- sample.int(10, 1)
-pop_mean_c1_X2 <- sample.int(10, 1)
-pop_mean_c2_X2 <- sample.int(10, 1)
+pop_mean_c0_X1 <- X1_means[1]
+pop_mean_c1_X1 <- X1_means[2]
+pop_mean_c2_X1 <- X1_means[3]
+
+pop_mean_c0_X2 <- X2_means[1]
+pop_mean_c1_X2 <- X2_means[2]
+pop_mean_c2_X2 <- X2_means[3]
 
 mu_c0 <- c(pop_mean_c0_X1, pop_mean_c0_X2)
 mu_c1 <- c(pop_mean_c1_X1, pop_mean_c1_X2)
@@ -45,28 +48,28 @@ pop_sigma <- matrix(c(pop_var, pop_corr,
 n <- 300
 
 c0_train <- mvrnorm(n = n,
-              mu = mu_c0,
-              Sigma = pop_sigma)
+                    mu = mu_c0,
+                    Sigma = pop_sigma)
 
 c1_train <- mvrnorm(n = n,
-              mu = mu_c1,
-              Sigma = pop_sigma)
+                    mu = mu_c1,
+                    Sigma = pop_sigma)
 
 c2_train <- mvrnorm(n = n,
-              mu = mu_c2,
-              Sigma = pop_sigma)
+                    mu = mu_c2,
+                    Sigma = pop_sigma)
 
 c0_test <- mvrnorm(n = n,
-              mu = mu_c0,
-              Sigma = pop_sigma)
+                   mu = mu_c0,
+                   Sigma = pop_sigma)
 
 c1_test <- mvrnorm(n = n,
-              mu = mu_c1,
-              Sigma = pop_sigma)
+                   mu = mu_c1,
+                   Sigma = pop_sigma)
 
 c2_test <- mvrnorm(n = n,
-              mu = mu_c2,
-              Sigma = pop_sigma)
+                   mu = mu_c2,
+                   Sigma = pop_sigma)
 
 train_sample_df <- bind_rows(
   tibble(y = 0,
@@ -206,11 +209,11 @@ pop_c1_c2_midpoint <- (pop_c1_mean_vec + pop_c2_mean_vec) / 2
 # Generate the population orthogonal vectors
 
 pop_c0_c1_ortho <- Null(solve(pop_sigma) %*% 
-                      (pop_c0_mean_vec - pop_c1_mean_vec))
+                          (pop_c0_mean_vec - pop_c1_mean_vec))
 pop_c0_c2_ortho <- Null(solve(pop_sigma) %*% 
-                      (pop_c0_mean_vec - pop_c2_mean_vec))
+                          (pop_c0_mean_vec - pop_c2_mean_vec))
 pop_c1_c2_ortho <- Null(solve(pop_sigma) %*% 
-                      (pop_c1_mean_vec - pop_c2_mean_vec))
+                          (pop_c1_mean_vec - pop_c2_mean_vec))
 
 # Plot the decision boundaries using the midpoints between class means and the
 # vectors orthogonal to S^{-1} (m_i - m_j)
@@ -285,11 +288,11 @@ sample_mean_c2_X2 <- mean(train_sample_df$X2[train_sample_df$y == 2])
 
 train_sample_df <- train_sample_df %>%
   mutate(centered_X1_sample = if_else(y == 0, X1 - sample_mean_c0_X1,
-                                   if_else(y == 1, X1 - sample_mean_c1_X1,
-                                           X1 - sample_mean_c2_X1)),
+                                      if_else(y == 1, X1 - sample_mean_c1_X1,
+                                              X1 - sample_mean_c2_X1)),
          centered_X2_sample = if_else(y == 0, X2 - sample_mean_c0_X2,
-                                   if_else(y == 1, X2 - sample_mean_c1_X2,
-                                           X2 - sample_mean_c2_X2)))
+                                      if_else(y == 1, X2 - sample_mean_c1_X2,
+                                              X2 - sample_mean_c2_X2)))
 
 # Build the sample covariance matrix
 
@@ -305,7 +308,7 @@ for (i in 1:nrow(train_sample_df)) {
 
 # Correct the covariance matrix
 
-train_sigma_LDA <- train_sigma_LDA - (n * 3 - 3)
+train_sigma_LDA <- train_sigma_LDA / (n * 3 - 3)
 
 # Calculate midpoints between class-level sample mean-vectors
 
@@ -350,7 +353,7 @@ LDA_classifier <- function(x_vec){
 # Apply the LDA classifier to the training data
 
 train_sample_df$LDA_predicted_y <- apply(train_sample_df[, c("X1", "X2")], 
-                                           1, LDA_classifier)
+                                         1, LDA_classifier)
 
 # Generate the sample orthogonal vectors for plotting
 
@@ -390,10 +393,10 @@ train_sample_scatter
 # Apply our trained Bayes and LSA models to the test data
 
 test_sample_df$bayes_predicted_y <- apply(test_sample_df[, c("X1", "X2")], 
-                                           1, bayes_classifier)
+                                          1, bayes_classifier)
 
 test_sample_df$LDA_predicted_y <- apply(test_sample_df[, c("X1", "X2")], 
-                                         1, LDA_classifier)
+                                        1, LDA_classifier)
 
 # Find the misclassification rate of LDA in this case
 
@@ -406,7 +409,7 @@ LDA_misclass_rate * 100
 # Again, not perfect! What does the Bayes classification error look like?
 
 bayes_misclass_rate <- nrow(test_sample_df[test_sample_df$y != 
-                                           test_sample_df$bayes_predicted_y,]) /
+                                             test_sample_df$bayes_predicted_y,]) /
   nrow(test_sample_df)
 
 bayes_misclass_rate * 100
