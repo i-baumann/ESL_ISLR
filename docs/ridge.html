@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Ridge Regression</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="site_libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="site_libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">ESL/ISLR Examples</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/my-cabbages/ESL_ISLR">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Ridge Regression</h1>
+
+</div>
+
+
+<p>This example walks through fitting a ridge regression model to idealized data. We assume some prior knowledge of <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares" target="_blank">ordinary least squares</a> and linear algebra.</p>
+<p>Though not included in the code snippets, this example uses the <a href="https://cran.r-project.org/web/packages/tidyverse/index.html" target="_blank"><code>tidyverse</code></a>, <a href="https://cran.r-project.org/web/packages/MASS/index.html" target="_blank"><code>MASS</code></a>, <a href="https://cran.r-project.org/web/packages/latex2exp/index.html" target="_blank"><code>latex2exp</code></a>, <a href="https://cran.r-project.org/web/packages/ggcorrplot/index.html" target="_blank"><code>ggcorrplot</code></a>, and <a href="https://cran.r-project.org/web/packages/RColorBrewer/RColorBrewer.pdf" target="_blank"><code>RColorBrewer</code></a> packages.</p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>Ridge regression may be preferable to OLS if</p>
+<ol style="list-style-type: decimal">
+<li>there are a lot of independent variables/predictors to choose from and</li>
+<li>some of those predictors are highly correlated with one another.</li>
+</ol>
+<p>Ridge regression is, functionally, nearly the same as OLS except that we include a constraint on the <span class="math inline">\(\hat{\beta}\)</span> vector in fitting the model. Constraining a model in this way is broadly called <a href="https://en.wikipedia.org/wiki/Regularization_(mathematics)#Tikhonov-regularized_least_squares" target="_blank">regularization</a> and makes the model less complex by either eliminating or penalizing low-contribution variables. In ridge regression, the particular form of regularization/constraint we use acts as a sum-of-squares (or a <a href="https://mathworld.wolfram.com/L2-Norm.html" target="_blank">L2</a>) penalty and shrinks rather than eliminates variables.</p>
+<p>Ridge regression may have higher prediction accuracy than OLS due to OLS overfitting the training sample. It can be easily shown that OLS estimates, under <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares#Assumptions" target="_blank">certain assumptions</a>, are <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem" target="_blank">unbiased and have the lowest possible variance of unbiased estimators</a>. However, we can oftentimes get an even lower variance of the fitted values by allowing our estimates to be biased. This is usually not desirable if the goal of the model is inference, but we likely don’t care as much if the goal is prediction. This can help improve model accuracy.</p>
+<p>Ridge regression also performs a kind of variable selection by more severely penalizing estimates of variables that contribute less to the overall variance of the fitted values. So long as the penalty term in ridge regression is greater than zero it will shrink all regression coefficients toward zero but it will shrink those with larger projected sample variance less. Ridge regression cannot set coefficients to exactly zero, though, so it doesn’t actually perform full variable selection.</p>
+</div>
+<div id="theory" class="section level2">
+<h2>Theory</h2>
+<p>Just like in OLS, the intent is to minimize <a href="https://en.wikipedia.org/wiki/Residual_sum_of_squares" target="_blank">residual sum of squares</a>.</p>
+<center>
+<span class="math display">\[RSS = \sum_{i=1}^N (y_i - \hat{y}_i)^2\]</span>
+</center>
+<div id="minimizing-rss-ols" class="section level3">
+<h3>Minimizing RSS: OLS</h3>
+<p>Before jumping into ridge regression, let’s review deriving the OLS solution via minimizing RSS. Where <span class="math inline">\(X\)</span> is our <a href="https://en.wikipedia.org/wiki/Design_matrix" target="_blank"><strong>design matrix</strong></a>:</p>
+<center>
+<p><span class="math display">\[\vec{\beta} = \{ \beta_0, \beta_1, \ldots, \beta_k \}\]</span></p>
+<span class="math display">\[\begin{align*}
+RSS(\vec{\beta})_{OLS} &amp;= (\vec{y} - X \vec{\beta})^T(\vec{y} - X \vec{\beta}) \\
+&amp;= \vec{y}^T \vec{y} - \underbrace{\vec{y}^T X \vec{\beta}}_{\vec{\beta}^T X^T \vec{y}} - \vec{\beta}^T X^T \vec{y} + \vec{\beta}^T X^T X \vec{\beta} \\
+&amp;= \vec{y}^T \vec{y} - 2 \vec{\beta}^T X^T \vec{y} + \vec{\beta}^T X^T X \vec{\beta}
+\end{align*}\]</span>
+</center>
+<p>Then minimizing<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <span class="math inline">\(RSS(\vec{\beta})\)</span> with respect to <span class="math inline">\(\vec{\beta}\)</span></p>
+<center>
+<span class="math display">\[\begin{align*}
+\frac{\partial RSS(\vec{\beta})_{OLS}}{\partial \vec{\beta}} = -2 X^T \vec{y} + 2 X^T X \vec{\beta} &amp;= 0 \\
+-2 (X^T \vec{y} - X^T X \vec{\beta}) &amp;= 0 \\
+X^T \vec{y} - X^T X \vec{\beta} &amp;= 0 \\
+X^T X \vec{\beta} &amp;= X^T \vec{y} \\
+\hat{\vec{\beta}}^{OLS} &amp;= (X^T X)^{-1} X^T \vec{y}
+\end{align*}\]</span>
+</center>
+<p>we get the <a href="https://mathworld.wolfram.com/NormalEquation.html" target="_blank">normal equation</a> along the way and arrive at the usual solution.</p>
+</div>
+<div id="minimizing-rss-ridge" class="section level3">
+<h3>Minimizing RSS: Ridge</h3>
+<p>The ridge minimization of RSS works the same way, except we include the penalty term (<span class="math inline">\(\lambda\)</span>) on the squared values of our estimates.</p>
+<p>However, <strong>the penalty does not apply to the intercept term</strong>, so we will use a matrix of just our variables without a leading one-vector for the intercept term (which I will call the <strong>input matrix</strong>). It’s easy to conceptualize how the ridge regression solutions for the non-intercept terms would depend on the intercept if we also penalized it. If the column vectors of <span class="math inline">\(X\)</span> are mean-centered then <span class="math inline">\(\beta_0 = \bar{y}\)</span>. Then we minimize RSS with the penalty term as if there were no intercept.</p>
+<center>
+<p><span class="math display">\[\vec{\beta} = \{ \beta_1, \beta_2 \ldots, \beta_k \}\]</span></p>
+<span class="math display">\[\begin{align*}
+RSS(\vec{\beta})_{Ridge} &amp;= (\vec{y} - X \vec{\beta})^T(\vec{y} - X \vec{\beta}) + \lambda \vec{\beta}^T \vec{\beta} \\
+&amp;= \vec{y}^T \vec{y} - \underbrace{\vec{y}^T X \vec{\beta}}_{\vec{\beta}^T X^T \vec{y}} - \vec{\beta}^T X^T \vec{y} + \vec{\beta}^T X^T X \vec{\beta} + \lambda \vec{\beta}^T \vec{\beta} \\
+&amp;= \vec{y}^T \vec{y} - 2 \vec{\beta}^T X^T \vec{y} + \vec{\beta}^T X^T X \vec{\beta} + \lambda \vec{\beta}^T \vec{\beta}
+\end{align*}\]</span>
+</center>
+<p>Then minimize with respect to <span class="math inline">\(\vec{\beta}\)</span>:</p>
+<center>
+<span class="math display">\[\begin{align*}
+\frac{\partial RSS(\vec{\beta})_{Ridge}}{\partial \vec{\beta}} = -2 X^T \vec{y} + 2 X^T X \vec{\beta} + 2 \lambda \vec{\beta} &amp;= 0 \\
+-2 (X^T \vec{y} - X^T X \vec{\beta} - \lambda \vec{\beta}) &amp;= 0 \\
+X^T \vec{y} - X^T X \vec{\beta} - \lambda \vec{\beta} &amp;= 0 \\
+X^T \vec{y} &amp;= X^T X \beta + \lambda \vec{\beta} \\
+X^T \vec{y} &amp;= \vec{\beta} (X^T X + \lambda I) \\
+\hat{\vec{\beta}}^{Ridge} &amp;= (X^T X + \lambda I)^{-1} X^T \vec{y}
+\end{align*}\]</span>
+</center>
+<p>Notice that for <span class="math inline">\(\lambda = 0\)</span> our minimization is the same as with OLS, so a ridge regression fit with <span class="math inline">\(\lambda = 0\)</span> is just an OLS fit. In calculating MSE we will need to add <span class="math inline">\(\beta_0 = \bar{y}\)</span> in so long as we’re concerned about being off by a constant.</p>
+</div>
+<div id="important-features" class="section level3">
+<h3>Important Features</h3>
+<p>This section is not strictly necessary and may be skipped, but know that</p>
+<ol style="list-style-type: decimal">
+<li>the ridge regression problem will never not have a solution because of <a href="https://en.wikipedia.org/wiki/Rank_(linear_algebra)#Main_definitions" target="_blank">rank-deficiency</a> or <a href="https://en.wikipedia.org/wiki/Linear_independence" target="_blank">linearly dependent</a> variables and</li>
+<li>ridge regression performs a type of variable selection by shrinking variables that contribute less to the variance of fitted values more.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></li>
+</ol>
+<div id="solvability" class="section level4">
+<h4>Solvability</h4>
+<p>Because we add a positive constant, <span class="math inline">\(\lambda I\)</span>, to the diagonal of <span class="math inline">\(X^T X\)</span> prior to inverting that matrix the resulting adjusted matrix will always be <a href="https://en.wikipedia.org/wiki/Invertible_matrix" target="_blank">nonsingular</a>. So there will always be a solution, even if <span class="math inline">\(X^T X\)</span> is <a href="https://en.wikipedia.org/wiki/Rank_(linear_algebra)#Main_definitions" target="_blank">rank-deficient</a>. This is not the case with OLS: ridge regression can provide solutions to least squares-like problems where OLS cannot.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> This may be useful if two or more variables are <a href="https://en.wikipedia.org/wiki/Linear_independence" target="_blank">linearly dependent</a> or are very highly correlated or if there are more variables than observations.</p>
+</div>
+<div id="sort-of-variable-selection" class="section level4">
+<h4>(Sort Of) Variable Selection</h4>
+<p>It’s also important to note that <strong>ridge regression shrinks all estimates toward zero, but it does not shrink them equally.</strong><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Ridge regression shrinks the variables that contribute more variation to the fitted (or predicted) values less than those variables that don’t: in this way, it performs a kind of variable selection.</p>
+<p>To demonstrate this, we can take the <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition" target="_blank">singular value decomposition</a> of the mean-centered input matrix.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p>
+<center>
+<span class="math display">\[X = U D V^T \]</span>
+</center>
+<p>Like with all SVDs, the <span class="math inline">\(D\)</span> matrix is diagonal and contains the singular values (which are associated with <a href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">principal components</a>) of <span class="math inline">\(X\)</span> along its diagonal in descending order.</p>
+<p>We can take this decomposition of <span class="math inline">\(X\)</span> and plug it into our <a href="https://en.wikipedia.org/wiki/Projection_matrix" target="_blank">hat matrix</a> formula</p>
+<center>
+<span class="math display">\[\begin{align}
+X \hat{\beta}^{Ridge} &amp;= X (X^T X + \lambda I)^{-1} X^T \vec{y} \\
+&amp;= U D V^T (V D^T U^T U D V^T + \lambda I)^{-1} V D^T U^T \vec{y} \\
+&amp;= U D V^T (V D^T D V^T + \lambda I)^{-1} V D^T U^T \vec{y} &amp;&amp; U^T U = I \\ 
+&amp;= UD (D^T D + \lambda I)^{-1}) D^T U^T \vec{y} &amp;&amp; V^T V^{-1} (V^T)^{-1} V = I \\
+&amp;= UD (D^2 + \lambda I)^{-1} D U^T \vec{y} &amp;&amp; D^T D = D^2 \text{, } D^T = D
+\end{align}\]</span>
+</center>
+<p>where <span class="math inline">\(U^T U = I\)</span> because <span class="math inline">\(U\)</span> is symmetric, <span class="math inline">\(V^T V^{-1} (V^T)^{-1} V = I\)</span> because <span class="math inline">\(V\)</span> is <a href="https://en.wikipedia.org/wiki/Unitary_matrix" target="_blank">unitary</a>, and <span class="math inline">\(D^T = D\)</span> because <span class="math inline">\(D\)</span> is diagonal and therefore also symmetric.</p>
+<p>If we focus on the above expression in terms of individual vectors of <span class="math inline">\(U\)</span> and individual diagonal elements of <span class="math inline">\(D\)</span> it’s easy to see that</p>
+<center>
+<span class="math display">\[X \hat{\beta}^{Ridge} = \sum_{k = 1}^K \vec{u}_k \frac{\sigma_k^2}{\sigma_k^2 + \lambda} \vec{u}_k^T \vec{y}\]</span>
+</center>
+<p>where <span class="math inline">\(K\)</span> is the number of variables, <span class="math inline">\(u_k\)</span> is the <span class="math inline">\(k\)</span>th column of <span class="math inline">\(U\)</span> (or the <span class="math inline">\(k\)</span>th left <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition#Singular_values,_singular_vectors,_and_their_relation_to_the_SVD" target="_blank">singular vector</a>), and <span class="math inline">\(\sigma_k\)</span> is the <span class="math inline">\(k\)</span>th singular value. A hat matrix is simply a projection of <span class="math inline">\(X\)</span> onto the column space of <span class="math inline">\(\vec{y}\)</span>, so it is clear to see here that the fraction is the penalty in that projection. It’s also clear to see that, because the singular values are decreasing along the diagonal of <span class="math inline">\(D\)</span> (i.e., <span class="math inline">\(\sigma_1 &gt; \sigma_2, \ldots, &gt; \sigma_K\)</span>), this penalty grows larger for basis vectors associated with smaller singular values: i.e., ridge regression more heavily shrinks the estimated “effect” of variables with smaller sample variance.</p>
+</div>
+</div>
+</div>
+<div id="case-1-linearly-dependent-variables" class="section level2">
+<h2>Case 1: Linearly Dependent Variables</h2>
+<p>First we’ll explore a simple case demonstrating how ridge regression can solve problems with <a href="https://en.wikipedia.org/wiki/Linear_independence" target="_blank">linearly dependent</a> variables when OLS can’t. This is just a particular case of <a href="https://en.wikipedia.org/wiki/Rank_(linear_algebra)#Main_definitions" target="_blank">rank-deficiency</a>, the other one that can cause issues with OLS being having more variables (columns) than observations (rows) in your design matrix. Ridge regression can handle both cases.</p>
+<div id="data-generation" class="section level3">
+<h3>Data Generation</h3>
+<p>We’ll create one normally-distributed variable and then a second variable that is simply a multiple of the first to make the two variables linearly dependent.</p>
+<p>Let’s generate one variable with 1,000 observations, a mean between -10 and 10, and a standard deviation between 1 and 10.</p>
+<pre class="r"><code>X1 &lt;- rnorm(1000, mean = runif(1, -10, 10), sd = runif(1, 1, 10))</code></pre>
+<p>We’ll make X1 linearly dependent with a new variable, X2, by making X2 a variable that is simply X1 divided by two.</p>
+<pre class="r"><code>X2 &lt;- X1 / 2</code></pre>
+<p>Next we’ll write a <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">standardization</a> function<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> and standardize both of our variables.</p>
+<pre class="r"><code>standardize &lt;- function(vec){
+  
+  sd &lt;- sqrt(sum((vec - mean(vec))^2) / length(vec))
+  
+  (vec - mean(vec)) / sd
+  
+}
+
+X1_std &lt;- standardize(X1)
+X2_std &lt;- standardize(X2)</code></pre>
+<p>Lastly we’ll create a normally-distributed outcome variable.</p>
+<pre class="r"><code>y &lt;- rnorm(1000, mean = runif(1, -10, 10), sd = runif(1, 1, 10))</code></pre>
+</div>
+<div id="the-problem-ols" class="section level3">
+<h3>The Problem: OLS</h3>
+<p>Let’s run a simple linear regression and see what happens:</p>
+<pre class="r"><code>summary(lm(y ~ X1_std + X2_std))</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ X1_std + X2_std)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -30.1499  -5.6836   0.4354   5.6832  28.6309 
+## 
+## Coefficients: (1 not defined because of singularities)
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  -1.5330     0.2745  -5.584 3.03e-08 ***
+## X1_std       -0.1944     0.2745  -0.708    0.479    
+## X2_std            NA         NA      NA       NA    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 8.681 on 998 degrees of freedom
+## Multiple R-squared:  0.0005024,  Adjusted R-squared:  -0.0004991 
+## F-statistic: 0.5016 on 1 and 998 DF,  p-value: 0.4789</code></pre>
+<p>As expected, R notes that our matrix is singular and returns <code>NA</code> for the X2 estimate.</p>
+<p>But why is this? The objective of OLS is to minimize RSS, but clearly that’s not happening here. So let’s start there: we can evaluate the RSS function from the theory section over combinations of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> values to take a look at the RSS surface.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>.</p>
+<p>Let’s build our RSS function.</p>
+<pre class="r"><code>RSS_OLS &lt;- function(b_vec){
+  
+  t(y) %*% y - 2 * t(b_vec) %*% t(design_matrix) %*% y + t(b_vec) %*% t(design_matrix) %*% design_matrix %*% b_vec
+
+}</code></pre>
+<p>Then we can create a dataset of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> combinations and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply" target="_blank"><code>apply</code></a> our function to it in order to evaluate the log likelihood functions for those <span class="math inline">\(\beta\)</span> values.</p>
+<pre class="r"><code>b1_vec &lt;- seq(-10, 10, .25)
+b2_vec &lt;- seq(-10, 10, .25)
+
+surface &lt;- bind_cols(mean(y), expand_grid(b1_vec, b2_vec))
+design_matrix &lt;- model.matrix(y ~ X1_std + X2_std)
+
+surface$rss_ols &lt;- apply(surface, MARGIN = 1, RSS_OLS)</code></pre>
+<p>So what does our log-likelihood surface look like in this case?</p>
+<pre class="r"><code>rss_ols_surface_plot &lt;- ggplot(surface, aes(x = b1_vec, y = b2_vec, fill = rss_ols)) +
+  geom_raster(interpolate = TRUE) +
+  scale_fill_gradient(name = &quot;RSS&quot;, high = &#39;red&#39;, low = &#39;blue&#39;) +
+  labs(title = &quot;Surface Plot of RSS Function: OLS&quot;,
+       subtitle = &quot;Evaluated Across Range of Beta Coefficients&quot;,
+       x = TeX(&quot;$\\beta_1$&quot;),
+       y = TeX(&quot;$\\beta_2$&quot;))</code></pre>
+<p><img src="ridge_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>There’s a long <strong>valley</strong>! Clearly there’s not a unique minimum here: there are many combinations of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> that could minimize RSS, so there is no unique solution with OLS! The <em>valley</em> in the RSS function corresponds to a <em>ridge</em> in the maximum likelihood surface.</p>
+</div>
+<div id="a-solution-ridge-regression" class="section level3">
+<h3>A Solution: Ridge Regression</h3>
+<p>So how does ridge regression fix this optimization problem? By penalizing (or regularizing) our function!</p>
+<p>Ideally we would choose our penalty term, <span class="math inline">\(\lambda\)</span>, optimally by cross-validating but we’ll arbitrarily set <span class="math inline">\(\lambda = 1,000\)</span> here to illustrate how ridge regression changes the RSS surface. Following the steps for evaluating the OLS RSS, we’ll create our ridge RSS function.</p>
+<pre class="r"><code>RSS_ridge &lt;- function(b_vec){
+  
+  lambda &lt;- 1000
+  
+  t(y) %*% y - 2 * t(b_vec) %*% t(input_matrix) %*% y + t(b_vec) %*% t(input_matrix) %*% input_matrix %*% b_vec + lambda * t(b_vec) %*% b_vec
+
+}</code></pre>
+<p>As noted in the theory section, we do not penalize the intercept. So we will create an input matrix that only has our X1 and X2 variable values.</p>
+<pre class="r"><code>input_matrix &lt;- cbind(X1_std, X2_std)
+
+surface$rss_ridge &lt;- apply(surface[2:3], MARGIN = 1, RSS_ridge)</code></pre>
+<p>So what does our log-likelihood surface look like now?</p>
+<pre class="r"><code>rss_ridge_surface_plot &lt;- ggplot(surface, aes(x = b1_vec, y = b2_vec, fill = rss_ridge)) +
+  geom_raster(interpolate = TRUE) +
+  scale_fill_gradient(name = &quot;RSS&quot;, high = &#39;red&#39;, low = &#39;blue&#39;) +
+  labs(title = &quot;Surface Plot of RSS Function: Ridge&quot;,
+       subtitle = &quot;Evaluated Across Range of Beta Coefficients&quot;,
+       x = TeX(&quot;$\\beta_1$&quot;),
+       y = TeX(&quot;$\\beta_2$&quot;))</code></pre>
+<p><img src="ridge_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>This looks much more like a surface with a unique minimum! Adding the <a href="https://mathworld.wolfram.com/L2-Norm.html" target="_blank">L2</a> penalty “lifts” up the ends of the long valley in the RSS surface to create a bowl, for which we can easily identify and solve for a unique minimum. This also makes it easy to see how this penalization pushes or shrinks our coefficients toward zero.</p>
+<p>With OLS, we allow the least-squares solving process infinite space within which to find a unique solution, but this fails when we have a canyon in the RSS surface without a unique minimum. By applying the L2 constraint in the ridge regression definition of the problem we are restricting the solution space and forcing the solving process to find the best <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> that minimize RSS <em>within that space</em>. Residuals are a function of our <span class="math inline">\(\beta\)</span>s, so this allows for residuals to be higher for some observations than they would be under OLS, which is evidenced by the “lifting” of the RSS surface above.</p>
+<p>Choosing how much much space to allow (i.e., which value to use for <span class="math inline">\(\lambda\)</span>) is another optimization problem that is context-dependent and usually addressed with cross-validation.</p>
+</div>
+<div id="solving-for-hatbetaridge" class="section level3">
+<h3>Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></h3>
+<p>We can easily implement the <span class="math inline">\(\hat{\beta}^{Ridge}\)</span> solution derived in the theory section. Let’s write a function, <code>b_ridge</code>, to solve for the ridge regression coefficients and use it to solve our ridge regression problem.</p>
+<pre class="r"><code>input_matrix &lt;- cbind(X1_std, X2_std)
+lambda &lt;- 1000
+
+b_ridge &lt;- function(y_vec, X_matrix, lambda){
+  
+  penalty &lt;- lambda * diag(1, ncol(X_matrix))
+  
+  solve(t(X_matrix) %*% X_matrix + penalty) %*% t(X_matrix) %*% y_vec
+  
+}
+
+b_vec_ridge &lt;- b_ridge(y_vec = y, X_matrix = input_matrix, lambda = lambda)</code></pre>
+<pre><code>##               [,1]
+## X1_std -0.06481131
+## X2_std -0.06481131</code></pre>
+<p>In this case, because our standardized variables are identical, our ridge regression coefficients are identical.</p>
+</div>
+</div>
+<div id="case-2-correlated-independent-variables" class="section level2">
+<h2>Case 2: Correlated Independent Variables</h2>
+<p>Perfect <a href="https://en.wikipedia.org/wiki/Multicollinearity#Definition" target="_blank">collinearity or multicollinearity</a> like in the last case is rarely found in real data. What’s much more common is having variables that are strongly correlated with one another, but not perfectly. When this is the case, OLS can</p>
+<ol style="list-style-type: decimal">
+<li>fail to find a solution due to numerical rounding (if variables are almost perfectly related) or</li>
+<li>find an unstable solution that can vary wildly between similar data and make it difficult to discern which variables contribute most to prediction of the outcome (usually by imprecisely estimating coefficients).</li>
+</ol>
+<p>In the same way as in the previous case, ridge regression can alleviate both of these problems, but to a different degree.</p>
+<p>We won’t perform cross validation to determine the optimal penalty parameter but will instead evaluate models over ranges of penalty values to show how ridge regression behaves over the range and compare to OLS.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>For this case, we’ll use the famous Boston housing data set. The data come pre-loaded in the <a href="https://cran.r-project.org/web/packages/MASS/index.html" target="_blank"><code>MASS</code></a> package, so there’s no need to download and read in data. The data set contains variables relating to home values in various towns and suburbs in Boston, such as <code>crim</code> (crime rate), <code>nox</code> (an air pollution measure), and <code>rm</code> (average number of rooms per home). We’ll build a model to predict <code>medv</code>, the median value of a home in a town. Some of the variable names are not incredibly self-explanatory, so feel free to check the <a href="https://www.rdocumentation.org/packages/MASS/versions/7.3-54/topics/Boston" target="_blank">documentation</a> for more details.</p>
+<p>We’ll use <code>model.matrix</code> to create our input matrix without the vector for the intercept and separate <code>medv</code> into its own vector.</p>
+<pre class="r"><code>X &lt;- model.matrix(medv ~ ., data = Boston)[,-1]
+y &lt;- Boston$medv</code></pre>
+<p>Then we can split our data into training sets and testing sets. We’ll use <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sample" target="_blank"><code>sample</code></a> to randomly pick 60% of the rows in the data to use as our training set while the other 40% will go into our testing set. Then we’ll <code>apply</code> our <code>standardize</code> function we wrote to the input data for each set.</p>
+<pre class="r"><code>train &lt;- sample(1:nrow(X), nrow(X) * .6)
+test &lt;- (-train)
+
+X_train &lt;- apply(X[train,], 2, standardize)
+y_train &lt;- y[train]
+
+X_test &lt;- apply(X[test,], 2, standardize)
+y_test &lt;- y[test]</code></pre>
+</div>
+<div id="exploratory-analysis" class="section level3">
+<h3>Exploratory Analysis</h3>
+<p>We can easily visualize the correlations between the independent variables using the main function of the <a href="https://cran.r-project.org/web/packages/ggcorrplot/ggcorrplot.pdf" target="_blank"><code>ggcorrplot</code></a> package. First we create a correlation matrix of the independent variables using <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/cor" target="_blank"><code>cor</code></a>,<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a> R’s built-in correlation function, and feed it into <code>ggcorrplot</code> for a quick and simple correlation heat map.</p>
+<pre class="r"><code>X_corr &lt;- cor(X_train)
+
+ggcorrplot(X_corr)</code></pre>
+<p><img src="ridge_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Several variables are highly correlated with one another. <code>indus</code> (a measure of town industrial concentration), <code>nox</code> (air pollution), and <code>age</code> (average home age) are all highly negatively correlated with <code>dis</code> (distance to employment centers). It’s probably not a surprise that some towns in more industrial areas would have more exposure to air pollution and that development might be more common (and so home ages would be lower) in high-employment suburbs far away from job centers. But how much, together, are these variables contributing to prediction? In other words, do we need all of these variables that are highly related to one another or will one or two be enough to capture the “action” contained in all of them?</p>
+<p>To explore this further, we can quickly perform a <a href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">principal component analysis</a><a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> of our input matrix. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp" target="_blank"><code>prcomp</code></a> is R’s built-in PCA function. We’ll look only at the first five principal components.</p>
+<pre class="r"><code>boston_pcomps &lt;- prcomp(X_train)$rotation[,1:5]</code></pre>
+<pre><code>##                  PC1         PC2         PC3         PC4          PC5
+## crim     0.270423781 -0.35806687 -0.18226103  0.08561159 -0.023713340
+## zn      -0.250314542 -0.38623529 -0.24334615  0.19701081 -0.252986676
+## indus    0.335952951  0.14252417  0.02653782  0.01853945  0.001144287
+## chas    -0.006991138  0.37874930 -0.39510121  0.78306329  0.256183799
+## nox      0.338099065  0.18548519 -0.17876380 -0.08643300 -0.158468917
+## rm      -0.213382498  0.02703987 -0.52633753 -0.45106137  0.418535788
+## age      0.312158422  0.30966577 -0.03766199 -0.16059375 -0.051359431
+## dis     -0.313090216 -0.34397459  0.09890641  0.23837043 -0.071539434
+## rad      0.311474785 -0.33414340 -0.22137048  0.02728502  0.253885431
+## tax      0.330806346 -0.27797873 -0.14438133  0.04238373  0.155687387
+## ptratio  0.205832306 -0.25150218  0.44423316  0.09410535  0.601043786
+## black   -0.199814059  0.23694660  0.35441051  0.07575222  0.310606347
+## lstat    0.327485784 -0.03432064  0.19433214  0.17219946 -0.339613569</code></pre>
+<p>The <code>rotation</code> matrix from <code>prcomp</code> contains the <a href="https://en.wikipedia.org/wiki/Principal_component_analysis#Further_components">loadings</a>, which are the correlations between the input variables and the directions represented by the principal components when the input variables are standardized.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a> To find how much each variable “contributes” to the direction of each principal component we simply take the column-wise absolute values as a percentage of the totals. We’ll do this using a combination of <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sweep" target="_blank"><code>sweep</code></a> to divide within columns and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/colSums" target="_blank"><code>colSums</code></a> to get column totals.</p>
+<pre class="r"><code>boston_pcomps &lt;- as.data.frame(abs(boston_pcomps))
+boston_pcomps &lt;- sweep(abs(boston_pcomps), 2, colSums(abs(boston_pcomps)), &quot;/&quot;) * 100</code></pre>
+<pre><code>##              PC1        PC2        PC3        PC4        PC5
+## crim    7.916791 10.9613450  5.9803919  3.5196209  0.8191792
+## zn      7.328083 11.8236526  7.9847312  8.0994098  8.7394451
+## indus   9.835190  4.3630303  0.8707653  0.7621845  0.0395295
+## chas    0.204669 11.5944873 12.9641542 32.1929057  8.8498900
+## nox     9.898018  5.6781772  5.8656401  3.5533902  5.4743215
+## rm      6.246879  0.8277597 17.2703114 18.5438088 14.4583525
+## age     9.138593  9.4796632  1.2357740  6.6022500  1.7742157
+## dis     9.165872 10.5299443  3.2453406  9.7997659  2.4713355
+## rad     9.118579 10.2289864  7.2636603  1.1217280  8.7704926
+## tax     9.684520  8.5096417  4.7374743  1.7424587  5.3782333
+## ptratio 6.025843  7.6991266 14.5762832  3.8688121 20.7631059
+## black   5.849656  7.2535430 11.6290014  3.1142874 10.7299212
+## lstat   9.587309  1.0506428  6.3764721  7.0793780 11.7319781</code></pre>
+<p>Scanning across the principal components (columns) it’s relatively easy to see which variables contribute the most to the first five principal components. This is analogous to the discussion in the theory section about variables being associated with singular values: we should expect that the variables that contribute the most to the these first few principal components will be among the slowest to shrink to zero as <span class="math inline">\(\lambda\)</span> increases.</p>
+</div>
+<div id="ridge-regression" class="section level3">
+<h3>Ridge Regression</h3>
+<p>We’ll solve for our ridge regression estimates over a wide range of the penalty term, <span class="math inline">\(\lambda\)</span>, to explore how ridge regression shrinks our variables - paying special attention to our three correlated variables - and how <span class="math inline">\(\lambda\)</span> plays a role in the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Bias%E2%80%93variance_decomposition_of_mean_squared_error" target="_blank">bias-variance tradeoff</a>. For this example we’ll evaluate our models based on minimizing <a href="https://en.wikipedia.org/wiki/Mean_squared_error" target="_blank">mean square error</a>.</p>
+<p>We’ll create two outcome data sets, <code>betas</code> and <code>performance</code>, that show us how our estimated coefficients and how our mean square error behave across the range of <span class="math inline">\(\lambda\)</span>s.</p>
+<pre class="r"><code>betas &lt;- NULL
+performance &lt;- NULL
+
+for (lambda in seq(0, 200, 1)) {
+  
+  b_vec &lt;- b_ridge(y_train, X_train, lambda)
+  b_MSE &lt;- mean((X_test %*% b_vec + mean(y_test) - y_test)^2)
+  
+  betas &lt;- bind_rows(betas, tibble(&quot;lambda&quot; = lambda,
+                                   &quot;Variable&quot; = colnames(X_train),
+                                   &quot;Coefficient&quot; = b_vec))
+
+  performance &lt;- bind_rows(performance, tibble(&quot;lambda&quot; = lambda,
+                                       &quot;Test_MSE&quot; = b_MSE))
+  
+}</code></pre>
+<p>Let’s visualize how the coefficients of our variables change as <span class="math inline">\(\lambda \rightarrow \infty\)</span>.</p>
+<pre class="r"><code>palette &lt;- colorRampPalette(brewer.pal(9, &quot;Set1&quot;))(length(colnames(X_train)))
+
+coef_plot &lt;- ggplot(betas, aes(x = lambda, y = Coefficient, color = Variable)) +
+  geom_line(size = 1.5) +
+  scale_color_manual(values = palette) +
+  geom_hline(yintercept = 0,
+             linetype = &quot;dashed&quot;) +
+  labs(title = &quot;Ridge Regression Coefficient Shrinkage&quot;,
+       x = TeX(&quot;$\\lambda$&quot;))</code></pre>
+<p><img src="ridge_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>As expected, the estimates for the variables with higher overall principal component contributions maintain their magnitude the most as <span class="math inline">\(\lambda \rightarrow \infty\)</span> while estimates for the variables that don’t contribute much to the principal components (and therefore don’t contribute much to the variance of the projected data) shrink more quickly toward zero.</p>
+<p>Next, we’ll visualize the test set MSE for <span class="math inline">\(\lambda \rightarrow \infty\)</span>. Can ridge regression outperform OLS?</p>
+<pre class="r"><code>performance_plot &lt;- ggplot(performance, aes(x = lambda, y = Test_MSE)) +
+  geom_line() +
+  geom_hline(yintercept = performance$Test_MSE[performance$lambda == 0], 
+             linetype=&quot;dashed&quot;, 
+             color = &quot;red&quot;) +
+  labs(title = &quot;Ridge Regression Test MSE Performance&quot;,
+       x = TeX(&quot;$\\lambda$&quot;),
+       y = &quot;Test MSE&quot;)</code></pre>
+<p><img src="ridge_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>The dashed red line represents the test MSE for OLS (i.e., where <span class="math inline">\(\lambda = 0\)</span>). With some penalty, ridge performs better in prediction than OLS in this case with this train/test split.</p>
+<p>Shrinking some of our coefficients close to zero (i.e., using a penalty, like <span class="math inline">\(\lambda\)</span> in ridge regression) can minimize the variance of our fitted/predicted values, which can sometimes translate to better predictions. While estimating model variance via bootstrapping is outside the scope of this example, generally OLS - which minimizes bias but at the expense of allowing more than the minimum variance - doesn’t reach as low a MSE as a regularized regression like ridge regression - which can find a balance between bias and variance that minimizes MSE. However, this can change depending on the particular data in the train/test split.</p>
+</div>
+</div>
+<div id="standardization" class="section level2">
+<h2>Standardization</h2>
+<p>Why did we standardize our independent variables in the cases above? Because the ridge regression solutions will change depending on the scales of the variables. In reality, this may be because of differences in units between variables (e.g., a dataset with temperatures, distances, monetary values measured in whole amounts or 1000s, etc.). Standardizing puts our variables on the same scale.</p>
+<p>OLS does not have this problem: it will find the same solution for the same data, scaled or not. To illustrate the point, let’s generate samples of two independently normally distributed variables as well as versions of those variables scaled or multiplied by 1000.</p>
+<pre class="r"><code>y &lt;- rnorm(1000, mean = 0, sd = 1)
+
+X1 &lt;- rnorm(1000, mean = runif(1, -10, 10), sd = runif(1, 1, 5))
+X2 &lt;- rnorm(1000, mean = runif(1, -10, 10), sd = runif(1, 5, 10))
+
+X1_scaled &lt;- X1 * 1000
+X2_scaled &lt;- X2 * 1000</code></pre>
+<p>Fitting a simple linear model, we can easily see that the model produces a scaled version of the non-scaled fit using the scaled data.</p>
+<pre class="r"><code>lm(y ~ X1 + X2)$coefficients</code></pre>
+<pre><code>##   (Intercept)            X1            X2 
+##  0.0028490455  0.0008614173 -0.0004059253</code></pre>
+<pre class="r"><code>lm(y ~ X1_scaled + X2_scaled)$coefficients</code></pre>
+<pre><code>##   (Intercept)     X1_scaled     X2_scaled 
+##  2.849046e-03  8.614173e-07 -4.059253e-07</code></pre>
+<p>But we won’t get identical solutions if we fit both versions of the data using ridge regression for any <span class="math inline">\(\lambda &gt; 0\)</span>. The estimated effects of the independent variables on the outcome fundamentally change, not simply by the magnitude of the change in scale.</p>
+<pre class="r"><code>b_ridge(y = y, X = cbind(X1, X2), lambda = 1)</code></pre>
+<pre><code>##             [,1]
+## X1  0.0006093192
+## X2 -0.0005133182</code></pre>
+<pre class="r"><code>b_ridge(y = y, X = cbind(X1_scaled, X2_scaled), lambda = 1)</code></pre>
+<pre><code>##                    [,1]
+## X1_scaled  6.093346e-07
+## X2_scaled -5.133349e-07</code></pre>
+<p>In other words, OLS solutions are <em>equivariant</em> to scaling but ridge solutions aren’t. Standardizing the data removes scaling for comparability.</p>
+<p>Of course, we lose some interpretability in the need to standardize our data and it means that we must input standardized test data into our ridge model for prediction (rather than raw data). <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"><code>glmnet</code></a>, the most prominent implementation of ridge regression in R, implements ridge regression in a different way than presented here: it standardizes the data within the function (so that data don’t need to be standardized prior to the call) and then produces de-standardized regression coefficients that can be used with raw, non-standardized test data for prediction. See the <a href="https://glmnet.stanford.edu/articles/glmnet.html" target="_blank"><code>glmnet</code> vignette</a> for details. <a href="https://parsnip.tidymodels.org/reference/details_linear_reg_glmnet.html" target="_blank"><code>tidymodels</code> and <code>parsnip</code></a> use <code>glmnet</code> to implement regularized regression.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Recall that <span class="math inline">\(\frac{\partial a^T b a}{\partial a} = 2 a x\)</span> and <span class="math inline">\(\frac{\partial a^T b}{\partial a} = a\)</span>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>It can be easy to think that this means the “less important” variables which don’t “explain” our outcome are being shrunk more, but the reason why these variables are shrunk actually has nothing to do with the outcome. Remember that we’re going for prediction here, not inference. So while it might not be true that the variables with higher variance “explain” our outcome, we don’t really care since the goal isn’t causally explaining the outcome. Elements of Statistical Learning explains this well: “The implicit assumption is that the response will tend to vary most in the directions of high variance of the inputs. This is often a reasonable assumption, since predictors are often chosen for study because they vary with the response variable, but need not hold in general.”<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>But, unlike OLS, the estimates will not be <a href="https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem" target="_blank">BLUE</a>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>It would be pretty useless if it did shrink all variables equally!<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Remember, this is just our matrix of variable values, not including the one-vector that would be in the design matrix for the intercept.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Why not use <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale" target="_blank"><code>scale</code></a>? Both <code>scale</code> and <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/sd" target="_blank"><code>sd</code></a> use <a href="https://en.wikipedia.org/wiki/Bessel%27s_correction" target="_blank">Bessel’s correction</a> to calculate the <em>sample</em> standard deviation. We instead use the <a href="https://glmnet.stanford.edu/articles/glmnet.html" target="_blank"><em>population</em> standard deviation</a>. <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"><code>glmnet</code></a>, the primary ridge regression implementation in R, uses the population standard deviation when standardizing variables.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>This is almost identical to what we do in the <a href="univariate_binary_logistic.html" target="_blank">univariate binary logistic case</a> with the maximum likelihood function.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p><code>cor</code> calculates Pearson’s correlation by default.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>If you’re unfamiliar with PCA, see <a href="https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues/140579#140579" target="_blank">this excellent intuitive explanation</a>.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>If this is unfamiliar, for now just think of this as a measure of how much a direction of a principal component is associated with the existing directions of the variables in the hyperplanar space occupied by the data.<a href="#fnref10" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

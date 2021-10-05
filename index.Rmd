@@ -25,3 +25,7 @@ Please [open an issue](https://github.com/my-cabbages/ESL_ISLR/issues){target="_
 ## Quadratic Discriminant Analysis
 
 - [Multivariate QDA - Three-Class Outcome](multivariate_QDA.html)
+
+## Ridge Regression
+
+- [Ridge Regression](ridge.html)
