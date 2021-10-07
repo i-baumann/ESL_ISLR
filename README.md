@@ -6,6 +6,6 @@ All code is written simply for fun in my free time while going through the above
 
 Please open an issue if you notice any errors!
 
-## Page
+## Book
 
-Check out the work-in-progress [site](https://my-cabbages.github.io/ESL_ISLR/index.html) with markdown-style working examples.
+Check out the work-in-progress [site](https://my-cabbages.github.io/ESL_ISLR/index.html) with working examples written with [bookdown](https://bookdown.org/).
