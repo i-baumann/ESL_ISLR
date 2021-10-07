@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Multivariate LDA | ESL &amp; ISLR Working Examples</title>
+  <meta name="description" content="Multivariate LDA | ESL &amp; ISLR Working Examples" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Multivariate LDA | ESL &amp; ISLR Working Examples" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://my-cabbages.github.io/ESL_ISLR/" />
+  <meta property="og:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+  
+  <meta name="github-repo" content="my-cabbages/ESL_ISLR/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Multivariate LDA | ESL &amp; ISLR Working Examples" />
+  
+  
+  <meta name="twitter:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+
+<meta name="author" content="Isaac Baumann" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="univariate-lda.html"/>
+<link rel="next" href="quadratic-discriminant-analysis.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">ESL & ISLR Working Examples</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
+<li class="chapter" data-level="" data-path="packages.html"><a href="packages.html"><i class="fa fa-check"></i>Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i>Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="data-generation.html"><a href="data-generation.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="the-log-likelihood-surface.html"><a href="the-log-likelihood-surface.html"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-1-newton-raphsonirls"><i class="fa fa-check"></i>Method 1: Newton-Raphson/IRLS</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-2-modified-irls"><i class="fa fa-check"></i>Method 2: Modified IRLS</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li><a href="testing.html#comparing-to-glm">Comparing to <code>glm</code></a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#the-log-likelihood-surface-1"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#plotting-the-logistic-fit"><i class="fa fa-check"></i>Plotting the Logistic Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-discriminant-analysis.html"><a href="linear-discriminant-analysis.html"><i class="fa fa-check"></i>Linear Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html"><i class="fa fa-check"></i>Univariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#theory"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#setup"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#data-generation-1"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#implementation-1"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#testing-1"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html"><i class="fa fa-check"></i>Multivariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#theory-1"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#setup-1"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#data-generation-2"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#implementation-2"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#testing-2"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html"><i class="fa fa-check"></i>Quadratic Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html#theory-2"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="data-generation-3.html"><a href="data-generation-3.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-bayes-classifier-and-decision-boundaries-1"><i class="fa fa-check"></i>The Bayes Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-qda-classifier-and-decision-boundaries"><i class="fa fa-check"></i>The QDA Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#visualizing-the-decision-boundaries"><i class="fa fa-check"></i>Visualizing the Decision Boundaries</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html#visualization"><i class="fa fa-check"></i>Visualization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ridge-regression.html"><a href="ridge-regression.html"><i class="fa fa-check"></i>Ridge Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html"><i class="fa fa-check"></i>Theory</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ols"><i class="fa fa-check"></i>Minimizing RSS: OLS</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ridge"><i class="fa fa-check"></i>Minimizing RSS: Ridge</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#important-features"><i class="fa fa-check"></i>Important Features</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html"><i class="fa fa-check"></i>Case 1: Linearly Dependent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#data-generation-4"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#the-problem-ols"><i class="fa fa-check"></i>The Problem: OLS</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#a-solution-ridge-regression"><i class="fa fa-check"></i>A Solution: Ridge Regression</a></li>
+<li><a href="case-1-linearly-dependent-variables.html#solving-for-hatbetaridge">Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html"><i class="fa fa-check"></i>Case 2: Correlated Independent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#exploratory-analysis"><i class="fa fa-check"></i>Exploratory Analysis</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#implementation-4"><i class="fa fa-check"></i>Implementation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="standardization.html"><a href="standardization.html"><i class="fa fa-check"></i>Standardization</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ESL &amp; ISLR Working Examples</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multivariate-lda" class="section level2">
+<h2>Multivariate LDA</h2>
+<p>This example walks through using linear discriminant analysis to classify observations in a three-class multivariate setting with (idealized) generated data.</p>
+<div id="theory-1" class="section level3">
+<h3>Theory</h3>
+<p>This section builds on the <a href="univariate-lda.html#theory" target="_blank">theory behind univariate LDA example</a>. The theory in the multivariate case is essentially the same, but we will cover it here for thoroughness.</p>
+<p>Similar to the univariate example, in the multivariate case <strong>LDA assumes identical variance-covariance matrices between classes</strong>. The theory discussion and example reflect this.</p>
+<div id="bayes-theorem-1" class="section level4">
+<h4>Bayes’ Theorem</h4>
+<p>Like in the univariate case, take Bayes’ theorem,</p>
+<center>
+<span class="math display">\[\Pr(Y = k|X = x) = \frac{\pi_k f_k(x)}{\sum^K_{j = 1} \pi_j f_j(x)}\]</span>
+</center>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(k\)</span> is one class and <span class="math inline">\(j\)</span> all others,</li>
+<li><span class="math inline">\(\pi_k\)</span> represents the prior probability of class <span class="math inline">\(k\)</span>,</li>
+<li><span class="math inline">\(p\)</span> is the number of variables/predictors, and</li>
+<li><span class="math inline">\(f(\cdot)\)</span> is some probability function.</li>
+</ul>
+<p>In this case we use the <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution" target="_blank">multivariate normal PDF</a></p>
+<center>
+<span class="math display">\[\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}\]</span>
+</center>
+<p>where, in this idealized example, <span class="math inline">\(\Sigma_k, \Sigma_l, \ldots, \Sigma_K = \Sigma\)</span> since we are assuming (and in fact generating data from a distribution in which) all classes have the same covariance matrix. As noted in the univariate example, <span class="math inline">\(\color{red}{\pi}\)</span> in the PDF is the literal value pi, not a prior probability.</p>
+<p>Whereas in the univariate case we only had two outcomes/classes, in this example we have three. Instead of pairwise solving for two discriminant functions we need to pairwise solve for three. The process is of course the same for each pair, so we will generically work through solving for the discriminant functions for a single pair of classes.</p>
+<p>Just as in the univariate case, in order to arrive at our discriminant functions we take the log of the ratio of conditional probabilities and the summation terms in the ratio cancel, leaving us with</p>
+<center>
+<span class="math display">\[\begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log \frac{\pi_k f_k(x)}{\pi_l f_l(x)} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{f_k(x)}{f_l(x)}}
+\end{align}\]</span>
+</center>
+<p>Plugging in the multivariate normal PDF for <span class="math inline">\(f(\cdot)\)</span>, like in the univariate case, allows for a lot of simplification but with some twists:</p>
+<center>
+<span class="math display">\[\small \begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
+\end{align}\]</span>
+</center>
+<p>Because <span class="math inline">\(\Sigma\)</span> represents the covariance matrix for all classes, a convenient cancellation occurs after we expand the right two terms in the expression above:</p>
+<center>
+<span class="math display">\[\begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} \color{red}{- \frac{1}{2}x^T \Sigma^{-1}x} + \frac{1}{2}x^T \Sigma^{-1} \mu_k + \frac{1}{2}\mu_k^T \Sigma^{-1} x - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k \\ &amp;\qquad \qquad \color{red}{+ \frac{1}{2}x^T \Sigma^{-1}x} - \frac{1}{2}x^T \Sigma^{-1} \mu_l - \frac{1}{2}\mu_l^T \Sigma^{-1} x + \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ \frac{1}{2}x^T \Sigma^{-1} \mu_k + \frac{1}{2}\mu_k^T \Sigma^{-1} x} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k} \\ &amp;\qquad ~~~~~~~ \color{purple}{- \frac{1}{2}x^T \Sigma^{-1} \mu_l - \frac{1}{2}\mu_l^T \Sigma^{-1} x} \color{green}{+ \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l} \\
+\end{align}\]</span>
+</center>
+<p>This is where the fun starts. Because <span class="math inline">\(\Sigma\)</span> is symmetric (and so <span class="math inline">\(\Sigma^{-1}\)</span> is symmetric) <span class="math inline">\(a^T \Sigma^{-1} b = b^T \Sigma^{-1} a\)</span>. So the <span style="color:purple">purple</span> terms can be rewritten and consolidated:</p>
+<center>
+<span class="math display">\[\begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} \mu_k} \color{purple}{- x^T \Sigma^{-1} \mu_l} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k} \color{green}{+ \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k} \color{green}{+ \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l} \\
+\end{align}\]</span>
+</center>
+<p>The <span style="color:green">green</span> terms can’t be easily simplified unless we creatively add zero to the equation. Using the above property that <span class="math inline">\(a^T \Sigma^{-1} b = b^T \Sigma^{-1} a\)</span> we can do exactly that. Let’s add <span class="math inline">\(0 = \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_k\)</span> and factor and consolidate:</p>
+<center>
+<span class="math display">\[\small \begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k} \color{green}{+ \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l + \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_k} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} (\mu_k - \mu_l) - \frac{1}{2} \mu_l^T \Sigma^{-1} (\mu_k - \mu_l)} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} (\mu_k + \mu_l)^T \Sigma^{-1} (\mu_k - \mu_l)} \\
+\end{align}\]</span>
+</center>
+</div>
+<div id="discriminant-functions-1" class="section level4">
+<h4>Discriminant Functions</h4>
+<p>The above derivation gets us to the nice, neat expression in <a href="https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf#%5B%7B%22num%22%3A195%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22Fit%22%7D%5D" target="_blank">Elements of Statistical Learning</a>, but for arriving at our discriminant functions it’s easier to stay with the fully-expanded-without-consolidating expression. From this point on we will work from the following expression we intermediately arrived at above:</p>
+<center>
+<span class="math display">\[\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} = \log{\frac{\pi_k}{\pi_l}} + x^T \Sigma^{-1} \mu_k - x^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k + \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l\]</span>
+</center>
+<p>Just like in the univariate case, all we need to do to get the discriminant functions is evaluate this ratio on the pairwise decision boundary where our probability ratio is 1 and so the log of the ratio is 0. Doing this, we can simply rearrange the expression to get our discriminant functions for classes <span class="math inline">\(k\)</span> and <span class="math inline">\(l\)</span></p>
+<center>
+<span class="math display">\[\small \begin{align}
+0 &amp;= \log{\pi_k} - \log{\pi_l} + x^T \Sigma^{-1} \mu_k - x^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k + \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l \\
+\underbrace{\log{\pi_l} + x^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l}_{\delta_l (x)} &amp;= \underbrace{\log{\pi_k} + x^T \Sigma^{-1} \mu_k - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k}_{\delta_k (x)} \\
+\end{align}\]</span>
+</center>
+<p>Again, just like in the univariate case, we evaluate the discriminant functions for each class for some observation’s vector of values for X1 and X2, then assign the class to that observation for which the discriminant function evaluates largest.</p>
+</div>
+<div id="estimating-the-variance-covariance-matrix" class="section level4">
+<h4>Estimating the Variance-Covariance Matrix</h4>
+<p>In reality, we typically don’t know the covariance matrix, prior probabilities, and class-wise population means for our variables. Instead, we need to estimate them from the sample data. Estimating the class-wise population means and prior probabilities is easy: we can simply use the empirical means and proportions as estimates, respectively.</p>
+<p>Estimating the common covariance matrix is less straightforward. We estimate this matrix by creating a weighted average of covariance matrices within each class with a <a href="https://en.wikipedia.org/wiki/Bessel%27s_correction" target="_blank">Bessel-like correction</a>. This is a lot like <a href="https://en.wikipedia.org/wiki/Pooled_variance" target="_blank">pooled variance</a>.</p>
+<center>
+<span class="math display">\[\hat{\Sigma} = \frac{\sum_{k = 1}^K \sum_{i = 1; y = k}^{n_k} (x_i - \hat{\mu}_k)(x_i - \hat{\mu}_k)^T}{n - K}\]</span>
+</center>
+<p><span class="math inline">\(K\)</span> here is the total number of classes.</p>
+<p>Because we are still assuming that all classes have the same covariance matrix (in this case, the estimated matrix <span class="math inline">\(\hat{\Sigma}\)</span>) none of the derivations in the Bayes classifier theory section are different: we are simply substituting the “true” means and covariance matrix in the Bayes classifier with our estimates since we usually cannot know the “true” parameters.</p>
+</div>
+</div>
+<div id="setup-1" class="section level3">
+<h3>Setup</h3>
+<p>This example uses the <a href="https://cran.r-project.org/web/packages/tidyverse/index.html" target="_blank"><code>tidyverse</code></a> and <a href="https://cran.r-project.org/web/packages/MASS/index.html" target="_blank"><code>MASS</code></a> packages.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multivariate-lda.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb46-2"><a href="multivariate-lda.html#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span></code></pre></div>
+</div>
+<div id="data-generation-2" class="section level3">
+<h3>Data Generation</h3>
+<p>We’ll generate data with three possible outcome classes (coded as 0, 1, and 2) with two independent variables/predictors.</p>
+<p>We’ll use <code>MASS</code>’s <a href="https://www.rdocumentation.org/packages/rockchalk/versions/1.8.144/topics/mvrnorm" target="_blank"><code>mvnorm</code></a> function to sample from a multivariate normal distribution. Throughout this example we’ll refer to the first variable as X1 and the second variable as X2. For each class we’ll construct a vector of means for X1 and X2 with randomly sampled integers between 1 and 10:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multivariate-lda.html#cb47-1" aria-hidden="true" tabindex="-1"></a>X1_means <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb47-2"><a href="multivariate-lda.html#cb47-2" aria-hidden="true" tabindex="-1"></a>X2_means <span class="ot">&lt;-</span> <span class="fu">sample.int</span>(<span class="dv">10</span>, <span class="dv">3</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb47-3"><a href="multivariate-lda.html#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="multivariate-lda.html#cb47-4" aria-hidden="true" tabindex="-1"></a>pop_mean_c0_X1 <span class="ot">&lt;-</span> X1_means[<span class="dv">1</span>]</span>
+<span id="cb47-5"><a href="multivariate-lda.html#cb47-5" aria-hidden="true" tabindex="-1"></a>pop_mean_c1_X1 <span class="ot">&lt;-</span> X1_means[<span class="dv">2</span>]</span>
+<span id="cb47-6"><a href="multivariate-lda.html#cb47-6" aria-hidden="true" tabindex="-1"></a>pop_mean_c2_X1 <span class="ot">&lt;-</span> X1_means[<span class="dv">3</span>]</span>
+<span id="cb47-7"><a href="multivariate-lda.html#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="multivariate-lda.html#cb47-8" aria-hidden="true" tabindex="-1"></a>pop_mean_c0_X2 <span class="ot">&lt;-</span> X2_means[<span class="dv">1</span>]</span>
+<span id="cb47-9"><a href="multivariate-lda.html#cb47-9" aria-hidden="true" tabindex="-1"></a>pop_mean_c1_X2 <span class="ot">&lt;-</span> X2_means[<span class="dv">2</span>]</span>
+<span id="cb47-10"><a href="multivariate-lda.html#cb47-10" aria-hidden="true" tabindex="-1"></a>pop_mean_c2_X2 <span class="ot">&lt;-</span> X2_means[<span class="dv">3</span>]</span>
+<span id="cb47-11"><a href="multivariate-lda.html#cb47-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-12"><a href="multivariate-lda.html#cb47-12" aria-hidden="true" tabindex="-1"></a>mu_c0 <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_mean_c0_X1, pop_mean_c0_X2)</span>
+<span id="cb47-13"><a href="multivariate-lda.html#cb47-13" aria-hidden="true" tabindex="-1"></a>mu_c1 <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_mean_c1_X1, pop_mean_c1_X2)</span>
+<span id="cb47-14"><a href="multivariate-lda.html#cb47-14" aria-hidden="true" tabindex="-1"></a>mu_c2 <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_mean_c2_X1, pop_mean_c2_X2)</span></code></pre></div>
+<p>Remember that in the univariate case LDA assumes equal variance for each class so in the multivariate case <strong>LDA assumes equal covariance for each class</strong>, meaning that the population covariance matrices for each class are identical (they also need to be <a href="https://en.wikipedia.org/wiki/Definite_matrix" target="_blank">positive semi-definite</a>). For our data to be sampled from distributions with this idealized property, we’ll construct a single covariance matrix (which we’ll call <code>pop_sigma</code>) to use when sampling our data:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multivariate-lda.html#cb48-1" aria-hidden="true" tabindex="-1"></a>pop_corr <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb48-2"><a href="multivariate-lda.html#cb48-2" aria-hidden="true" tabindex="-1"></a>pop_var <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">10</span>)</span>
+<span id="cb48-3"><a href="multivariate-lda.html#cb48-3" aria-hidden="true" tabindex="-1"></a>pop_sigma <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(pop_var, pop_corr,</span>
+<span id="cb48-4"><a href="multivariate-lda.html#cb48-4" aria-hidden="true" tabindex="-1"></a>                      pop_corr, pop_var), <span class="dv">2</span>, <span class="dv">2</span>)</span></code></pre></div>
+<p>Now that we have our variable- and class-specific means and a common covariance matrix we can use <code>mvnorm</code> to generate our sample data. We’ll create equally-sized train and test sets with 300 observations in each of our three classes and bind our X1 and X2 samples together with our outcome set into a data frame. Using a loop with the <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/get" target="_blank"><code>get</code></a> and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/assign" target="_blank"><code>assign</code></a> functions, we can variably refer to our class-level means as well as variably generate our class sample data sets.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multivariate-lda.html#cb49-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">300</span></span>
+<span id="cb49-2"><a href="multivariate-lda.html#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="multivariate-lda.html#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">2</span>) {</span>
+<span id="cb49-4"><a href="multivariate-lda.html#cb49-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-5"><a href="multivariate-lda.html#cb49-5" aria-hidden="true" tabindex="-1"></a>  class <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;c&quot;</span>, i, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb49-6"><a href="multivariate-lda.html#cb49-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-7"><a href="multivariate-lda.html#cb49-7" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">&quot;mu&quot;</span>, class, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>)</span>
+<span id="cb49-8"><a href="multivariate-lda.html#cb49-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-9"><a href="multivariate-lda.html#cb49-9" aria-hidden="true" tabindex="-1"></a>  temp_train_data <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> n,</span>
+<span id="cb49-10"><a href="multivariate-lda.html#cb49-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">mu =</span> <span class="fu">get</span>(mu),</span>
+<span id="cb49-11"><a href="multivariate-lda.html#cb49-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">Sigma =</span> pop_sigma)</span>
+<span id="cb49-12"><a href="multivariate-lda.html#cb49-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-13"><a href="multivariate-lda.html#cb49-13" aria-hidden="true" tabindex="-1"></a>  temp_test_data <span class="ot">&lt;-</span> <span class="fu">mvrnorm</span>(<span class="at">n =</span> n,</span>
+<span id="cb49-14"><a href="multivariate-lda.html#cb49-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">mu =</span> <span class="fu">get</span>(mu),</span>
+<span id="cb49-15"><a href="multivariate-lda.html#cb49-15" aria-hidden="true" tabindex="-1"></a>                            <span class="at">Sigma =</span> pop_sigma)</span>
+<span id="cb49-16"><a href="multivariate-lda.html#cb49-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-17"><a href="multivariate-lda.html#cb49-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(<span class="fu">paste</span>(class, <span class="st">&quot;train&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), temp_train_data)</span>
+<span id="cb49-18"><a href="multivariate-lda.html#cb49-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(<span class="fu">paste</span>(class, <span class="st">&quot;test&quot;</span>, <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>), temp_test_data)</span>
+<span id="cb49-19"><a href="multivariate-lda.html#cb49-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb49-20"><a href="multivariate-lda.html#cb49-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb49-21"><a href="multivariate-lda.html#cb49-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-22"><a href="multivariate-lda.html#cb49-22" aria-hidden="true" tabindex="-1"></a>train_sample_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb49-23"><a href="multivariate-lda.html#cb49-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">y =</span> <span class="dv">0</span>,</span>
+<span id="cb49-24"><a href="multivariate-lda.html#cb49-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">X1 =</span> c0_train[,<span class="dv">1</span>],</span>
+<span id="cb49-25"><a href="multivariate-lda.html#cb49-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">X2 =</span> c0_train[,<span class="dv">2</span>]),</span>
+<span id="cb49-26"><a href="multivariate-lda.html#cb49-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">y =</span> <span class="dv">1</span>,</span>
+<span id="cb49-27"><a href="multivariate-lda.html#cb49-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">X1 =</span> c1_train[,<span class="dv">1</span>],</span>
+<span id="cb49-28"><a href="multivariate-lda.html#cb49-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">X2 =</span> c1_train[,<span class="dv">2</span>]),</span>
+<span id="cb49-29"><a href="multivariate-lda.html#cb49-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">y =</span> <span class="dv">2</span>,</span>
+<span id="cb49-30"><a href="multivariate-lda.html#cb49-30" aria-hidden="true" tabindex="-1"></a>         <span class="at">X1 =</span> c2_train[,<span class="dv">1</span>],</span>
+<span id="cb49-31"><a href="multivariate-lda.html#cb49-31" aria-hidden="true" tabindex="-1"></a>         <span class="at">X2 =</span> c2_train[,<span class="dv">2</span>])</span>
+<span id="cb49-32"><a href="multivariate-lda.html#cb49-32" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb49-33"><a href="multivariate-lda.html#cb49-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-34"><a href="multivariate-lda.html#cb49-34" aria-hidden="true" tabindex="-1"></a>test_sample_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb49-35"><a href="multivariate-lda.html#cb49-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">y =</span> <span class="dv">0</span>,</span>
+<span id="cb49-36"><a href="multivariate-lda.html#cb49-36" aria-hidden="true" tabindex="-1"></a>         <span class="at">X1 =</span> c0_test[,<span class="dv">1</span>],</span>
+<span id="cb49-37"><a href="multivariate-lda.html#cb49-37" aria-hidden="true" tabindex="-1"></a>         <span class="at">X2 =</span> c0_test[,<span class="dv">2</span>]),</span>
+<span id="cb49-38"><a href="multivariate-lda.html#cb49-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">y =</span> <span class="dv">1</span>,</span>
+<span id="cb49-39"><a href="multivariate-lda.html#cb49-39" aria-hidden="true" tabindex="-1"></a>         <span class="at">X1 =</span> c1_test[,<span class="dv">1</span>],</span>
+<span id="cb49-40"><a href="multivariate-lda.html#cb49-40" aria-hidden="true" tabindex="-1"></a>         <span class="at">X2 =</span> c1_test[,<span class="dv">2</span>]),</span>
+<span id="cb49-41"><a href="multivariate-lda.html#cb49-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">y =</span> <span class="dv">2</span>,</span>
+<span id="cb49-42"><a href="multivariate-lda.html#cb49-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">X1 =</span> c2_test[,<span class="dv">1</span>],</span>
+<span id="cb49-43"><a href="multivariate-lda.html#cb49-43" aria-hidden="true" tabindex="-1"></a>         <span class="at">X2 =</span> c2_test[,<span class="dv">2</span>])</span>
+<span id="cb49-44"><a href="multivariate-lda.html#cb49-44" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>What do our data look like? We can easily create scatterplots:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multivariate-lda.html#cb50-1" aria-hidden="true" tabindex="-1"></a>train_sample_scatter <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(train_sample_df) <span class="sc">+</span> </span>
+<span id="cb50-2"><a href="multivariate-lda.html#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">color =</span> <span class="fu">as.factor</span>(y))) <span class="sc">+</span></span>
+<span id="cb50-3"><a href="multivariate-lda.html#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Dark2&quot;</span>, <span class="at">name =</span> <span class="st">&quot;class&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-4"><a href="multivariate-lda.html#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Bivariate Training Sample of Three Classes: Scatterplot&quot;</span>)</span>
+<span id="cb50-5"><a href="multivariate-lda.html#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="multivariate-lda.html#cb50-6" aria-hidden="true" tabindex="-1"></a>test_sample_scatter <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(test_sample_df) <span class="sc">+</span> </span>
+<span id="cb50-7"><a href="multivariate-lda.html#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">color =</span> <span class="fu">as.factor</span>(y))) <span class="sc">+</span></span>
+<span id="cb50-8"><a href="multivariate-lda.html#cb50-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">&quot;Dark2&quot;</span>, <span class="at">name =</span> <span class="st">&quot;class&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-9"><a href="multivariate-lda.html#cb50-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Bivariate Test Sample of Three Classes: Scatterplot&quot;</span>)</span>
+<span id="cb50-10"><a href="multivariate-lda.html#cb50-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-11"><a href="multivariate-lda.html#cb50-11" aria-hidden="true" tabindex="-1"></a>train_sample_scatter</span></code></pre></div>
+<p><img src="LDA_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+</div>
+<div id="implementation-2" class="section level3">
+<h3>Implementation</h3>
+<div id="the-bayes-classifier-and-decision-boundaries" class="section level4">
+<h4>The Bayes Classifier and Decision Boundaries</h4>
+<p>Like with the <a href="univariate_LDA.html" target="&quot;_blank">univariate LDA example</a> we will compare performance against the Bayes classifier. This time, because we have more than one independent variable/predictor, building the classifier and displaying the decision boundaries won’t be as straightforward as in the univariate LDA case (though the fundamental concept is the same).</p>
+<p>Also like in the univariate example, we will use a discriminant function to determine which class to assign to a given observation. The discriminant functions are exactly the same and are derived in the same way, except that since we have more than one independent variable we will use a vector of variables and instead of a scalar variance (<span class="math inline">\(\sigma\)</span>) we will use the common covariance matrix we constructed above (<span class="math inline">\(\Sigma\)</span>).</p>
+<p>We can easily build our class-wise discriminant functions. Since we also know the true parameters of the distributions we are sampling from we can create the <em>optimal</em> decision boundaries.</p>
+<p>First, we’ll construct vectors of our population means by class as well as the class-wise prior probabilities. In this example we know that the class-wise prior probabilities are equal, but we’ll calculate them each separately for thoroughness.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multivariate-lda.html#cb51-1" aria-hidden="true" tabindex="-1"></a>pop_c0_mean_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_mean_c0_X1, pop_mean_c0_X2)</span>
+<span id="cb51-2"><a href="multivariate-lda.html#cb51-2" aria-hidden="true" tabindex="-1"></a>pop_c1_mean_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_mean_c1_X1, pop_mean_c1_X2)</span>
+<span id="cb51-3"><a href="multivariate-lda.html#cb51-3" aria-hidden="true" tabindex="-1"></a>pop_c2_mean_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(pop_mean_c2_X1, pop_mean_c2_X2)</span>
+<span id="cb51-4"><a href="multivariate-lda.html#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="multivariate-lda.html#cb51-5" aria-hidden="true" tabindex="-1"></a>pop_c0_prior <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">*</span> <span class="dv">3</span>)</span>
+<span id="cb51-6"><a href="multivariate-lda.html#cb51-6" aria-hidden="true" tabindex="-1"></a>pop_c1_prior <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">*</span> <span class="dv">3</span>)</span>
+<span id="cb51-7"><a href="multivariate-lda.html#cb51-7" aria-hidden="true" tabindex="-1"></a>pop_c2_prior <span class="ot">&lt;-</span> n <span class="sc">/</span> (n <span class="sc">*</span> <span class="dv">3</span>)</span></code></pre></div>
+<p>Then we’ll build our three discriminant functions and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply" target="_blank"><code>apply</code></a> them inside the decision rule for classification described above.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multivariate-lda.html#cb52-1" aria-hidden="true" tabindex="-1"></a>d0_bayes <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb52-2"><a href="multivariate-lda.html#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> pop_c0_mean_vec <span class="sc">-</span></span>
+<span id="cb52-3"><a href="multivariate-lda.html#cb52-3" aria-hidden="true" tabindex="-1"></a>    .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">t</span>(pop_c0_mean_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> pop_c0_mean_vec <span class="sc">+</span></span>
+<span id="cb52-4"><a href="multivariate-lda.html#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(pop_c0_prior)</span>
+<span id="cb52-5"><a href="multivariate-lda.html#cb52-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-6"><a href="multivariate-lda.html#cb52-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-7"><a href="multivariate-lda.html#cb52-7" aria-hidden="true" tabindex="-1"></a>d1_bayes <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb52-8"><a href="multivariate-lda.html#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> pop_c1_mean_vec <span class="sc">-</span></span>
+<span id="cb52-9"><a href="multivariate-lda.html#cb52-9" aria-hidden="true" tabindex="-1"></a>    .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">t</span>(pop_c1_mean_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> pop_c1_mean_vec <span class="sc">+</span></span>
+<span id="cb52-10"><a href="multivariate-lda.html#cb52-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(pop_c1_prior)</span>
+<span id="cb52-11"><a href="multivariate-lda.html#cb52-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-12"><a href="multivariate-lda.html#cb52-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-13"><a href="multivariate-lda.html#cb52-13" aria-hidden="true" tabindex="-1"></a>d2_bayes <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb52-14"><a href="multivariate-lda.html#cb52-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> pop_c2_mean_vec <span class="sc">-</span></span>
+<span id="cb52-15"><a href="multivariate-lda.html#cb52-15" aria-hidden="true" tabindex="-1"></a>    .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">t</span>(pop_c2_mean_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> pop_c2_mean_vec <span class="sc">+</span></span>
+<span id="cb52-16"><a href="multivariate-lda.html#cb52-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(pop_c2_prior)</span>
+<span id="cb52-17"><a href="multivariate-lda.html#cb52-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-18"><a href="multivariate-lda.html#cb52-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-19"><a href="multivariate-lda.html#cb52-19" aria-hidden="true" tabindex="-1"></a>bayes_classifier <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb52-20"><a href="multivariate-lda.html#cb52-20" aria-hidden="true" tabindex="-1"></a>  score_c0 <span class="ot">&lt;-</span> <span class="fu">d0_bayes</span>(x_vec)</span>
+<span id="cb52-21"><a href="multivariate-lda.html#cb52-21" aria-hidden="true" tabindex="-1"></a>  score_c1 <span class="ot">&lt;-</span> <span class="fu">d1_bayes</span>(x_vec)</span>
+<span id="cb52-22"><a href="multivariate-lda.html#cb52-22" aria-hidden="true" tabindex="-1"></a>  score_c2 <span class="ot">&lt;-</span> <span class="fu">d2_bayes</span>(x_vec)</span>
+<span id="cb52-23"><a href="multivariate-lda.html#cb52-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb52-24"><a href="multivariate-lda.html#cb52-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (score_c0 <span class="sc">&gt;</span> score_c1 <span class="sc">&amp;</span> score_c0 <span class="sc">&gt;</span> score_c2) {</span>
+<span id="cb52-25"><a href="multivariate-lda.html#cb52-25" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb52-26"><a href="multivariate-lda.html#cb52-26" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (score_c1 <span class="sc">&gt;</span> score_c0 <span class="sc">&amp;</span> score_c1 <span class="sc">&gt;</span> score_c2) {</span>
+<span id="cb52-27"><a href="multivariate-lda.html#cb52-27" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb52-28"><a href="multivariate-lda.html#cb52-28" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb52-29"><a href="multivariate-lda.html#cb52-29" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span></span>
+<span id="cb52-30"><a href="multivariate-lda.html#cb52-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb52-31"><a href="multivariate-lda.html#cb52-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-32"><a href="multivariate-lda.html#cb52-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-33"><a href="multivariate-lda.html#cb52-33" aria-hidden="true" tabindex="-1"></a>train_sample_df<span class="sc">$</span>bayes_predicted_y <span class="ot">&lt;-</span> <span class="fu">apply</span>(train_sample_df[, <span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)], </span>
+<span id="cb52-34"><a href="multivariate-lda.html#cb52-34" aria-hidden="true" tabindex="-1"></a>                                           <span class="dv">1</span>, bayes_classifier)</span></code></pre></div>
+<p>Can we plot the decision boundaries? Absolutely, but it’s a little more involved than in the univariate case. How <em>do</em> we draw these boundary lines?</p>
+<p>One obvious thing must be true: the decision boundary between two classes must pass through the midpoint between the centers of the two classes.</p>
+<p>What determines the direction of the line crossing through this point? The boundary line is orthogonal<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> to <span class="math inline">\(\Sigma^{-1} (\mu_k - \mu_l)\)</span>. To get a vector orthogonal to <span class="math inline">\(\Sigma^{-1} (\mu_k - \mu_l)\)</span> we can use <code>MASS</code>’s <a href="https://www.rdocumentation.org/packages/MASS/versions/7.3-54/topics/Null" target="_blank"><code>Null</code></a> function.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="multivariate-lda.html#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate midpoints between class-level population mean-vectors</span></span>
+<span id="cb53-2"><a href="multivariate-lda.html#cb53-2" aria-hidden="true" tabindex="-1"></a>pop_c0_c1_midpoint <span class="ot">&lt;-</span> (pop_c0_mean_vec <span class="sc">+</span> pop_c1_mean_vec) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb53-3"><a href="multivariate-lda.html#cb53-3" aria-hidden="true" tabindex="-1"></a>pop_c0_c2_midpoint <span class="ot">&lt;-</span> (pop_c0_mean_vec <span class="sc">+</span> pop_c2_mean_vec) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb53-4"><a href="multivariate-lda.html#cb53-4" aria-hidden="true" tabindex="-1"></a>pop_c1_c2_midpoint <span class="ot">&lt;-</span> (pop_c1_mean_vec <span class="sc">+</span> pop_c2_mean_vec) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb53-5"><a href="multivariate-lda.html#cb53-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-6"><a href="multivariate-lda.html#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate orthogonal vectors</span></span>
+<span id="cb53-7"><a href="multivariate-lda.html#cb53-7" aria-hidden="true" tabindex="-1"></a>pop_c0_c1_ortho <span class="ot">&lt;-</span> <span class="fu">Null</span>(<span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> </span>
+<span id="cb53-8"><a href="multivariate-lda.html#cb53-8" aria-hidden="true" tabindex="-1"></a>                      (pop_c0_mean_vec <span class="sc">-</span> pop_c1_mean_vec))</span>
+<span id="cb53-9"><a href="multivariate-lda.html#cb53-9" aria-hidden="true" tabindex="-1"></a>pop_c0_c2_ortho <span class="ot">&lt;-</span> <span class="fu">Null</span>(<span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> </span>
+<span id="cb53-10"><a href="multivariate-lda.html#cb53-10" aria-hidden="true" tabindex="-1"></a>                      (pop_c0_mean_vec <span class="sc">-</span> pop_c2_mean_vec))</span>
+<span id="cb53-11"><a href="multivariate-lda.html#cb53-11" aria-hidden="true" tabindex="-1"></a>pop_c1_c2_ortho <span class="ot">&lt;-</span> <span class="fu">Null</span>(<span class="fu">solve</span>(pop_sigma) <span class="sc">%*%</span> </span>
+<span id="cb53-12"><a href="multivariate-lda.html#cb53-12" aria-hidden="true" tabindex="-1"></a>                      (pop_c1_mean_vec <span class="sc">-</span> pop_c2_mean_vec))</span></code></pre></div>
+<p>Then we can use these midpoints and orthogonal vectors to overlay the decision boundaries over the scatterplot we created above:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="multivariate-lda.html#cb54-1" aria-hidden="true" tabindex="-1"></a>train_sample_scatter <span class="ot">&lt;-</span> train_sample_scatter <span class="sc">+</span></span>
+<span id="cb54-2"><a href="multivariate-lda.html#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> pop_c0_c1_midpoint[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c1_ortho[<span class="dv">1</span>],</span>
+<span id="cb54-3"><a href="multivariate-lda.html#cb54-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> pop_c0_c1_midpoint[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c1_ortho[<span class="dv">1</span>],</span>
+<span id="cb54-4"><a href="multivariate-lda.html#cb54-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> pop_c0_c1_midpoint[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c1_ortho[<span class="dv">2</span>],</span>
+<span id="cb54-5"><a href="multivariate-lda.html#cb54-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">yend =</span> pop_c0_c1_midpoint[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c1_ortho[<span class="dv">2</span>]),</span>
+<span id="cb54-6"><a href="multivariate-lda.html#cb54-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>) <span class="sc">+</span></span>
+<span id="cb54-7"><a href="multivariate-lda.html#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> pop_c0_c2_midpoint[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb54-8"><a href="multivariate-lda.html#cb54-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> pop_c0_c2_midpoint[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb54-9"><a href="multivariate-lda.html#cb54-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> pop_c0_c2_midpoint[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c2_ortho[<span class="dv">2</span>],</span>
+<span id="cb54-10"><a href="multivariate-lda.html#cb54-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">yend =</span> pop_c0_c2_midpoint[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> pop_c0_c2_ortho[<span class="dv">2</span>]),</span>
+<span id="cb54-11"><a href="multivariate-lda.html#cb54-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>) <span class="sc">+</span></span>
+<span id="cb54-12"><a href="multivariate-lda.html#cb54-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> pop_c1_c2_midpoint[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> pop_c1_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb54-13"><a href="multivariate-lda.html#cb54-13" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> pop_c1_c2_midpoint[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> pop_c1_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb54-14"><a href="multivariate-lda.html#cb54-14" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> pop_c1_c2_midpoint[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> pop_c1_c2_ortho[<span class="dv">2</span>],</span>
+<span id="cb54-15"><a href="multivariate-lda.html#cb54-15" aria-hidden="true" tabindex="-1"></a>                   <span class="at">yend =</span> pop_c1_c2_midpoint[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> pop_c1_c2_ortho[<span class="dv">2</span>]),</span>
+<span id="cb54-16"><a href="multivariate-lda.html#cb54-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;solid&quot;</span>)</span>
+<span id="cb54-17"><a href="multivariate-lda.html#cb54-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-18"><a href="multivariate-lda.html#cb54-18" aria-hidden="true" tabindex="-1"></a>train_sample_scatter</span></code></pre></div>
+<p><img src="LDA_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Obviously the segments represented above are just that: segments. The true lines extend infinitely in both directions.</p>
+</div>
+<div id="the-lda-classifier-and-decision-boundaries" class="section level4">
+<h4>The LDA Classifier and Decision Boundaries</h4>
+<p>Like before, first we’ll construct vectors of our <em>sample</em> means by class as well as the class-wise prior probabilities. Also like before, in this example we know that the class-wise prior probabilities are equal, but we’ll calculate estimates of each separately for thoroughness. Depending on your sample, your class samples obviously may not be same size.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="multivariate-lda.html#cb55-1" aria-hidden="true" tabindex="-1"></a>sample_c0_mean_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X1[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>]), </span>
+<span id="cb55-2"><a href="multivariate-lda.html#cb55-2" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X2[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>]))</span>
+<span id="cb55-3"><a href="multivariate-lda.html#cb55-3" aria-hidden="true" tabindex="-1"></a>sample_c1_mean_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X1[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>]), </span>
+<span id="cb55-4"><a href="multivariate-lda.html#cb55-4" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X2[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>]))</span>
+<span id="cb55-5"><a href="multivariate-lda.html#cb55-5" aria-hidden="true" tabindex="-1"></a>sample_c2_mean_vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X1[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">2</span>]), </span>
+<span id="cb55-6"><a href="multivariate-lda.html#cb55-6" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X2[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">2</span>]))</span>
+<span id="cb55-7"><a href="multivariate-lda.html#cb55-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-8"><a href="multivariate-lda.html#cb55-8" aria-hidden="true" tabindex="-1"></a>sample_c0_prior <span class="ot">&lt;-</span> <span class="fu">nrow</span>(train_sample_df[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>,]) <span class="sc">/</span></span>
+<span id="cb55-9"><a href="multivariate-lda.html#cb55-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(train_sample_df)</span>
+<span id="cb55-10"><a href="multivariate-lda.html#cb55-10" aria-hidden="true" tabindex="-1"></a>sample_c1_prior <span class="ot">&lt;-</span> <span class="fu">nrow</span>(train_sample_df[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>,]) <span class="sc">/</span></span>
+<span id="cb55-11"><a href="multivariate-lda.html#cb55-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(train_sample_df)</span>
+<span id="cb55-12"><a href="multivariate-lda.html#cb55-12" aria-hidden="true" tabindex="-1"></a>sample_c2_prior <span class="ot">&lt;-</span> <span class="fu">nrow</span>(train_sample_df[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">2</span>,]) <span class="sc">/</span></span>
+<span id="cb55-13"><a href="multivariate-lda.html#cb55-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(train_sample_df)</span></code></pre></div>
+<p>To build <span class="math inline">\(\hat{\Sigma}\)</span> we will first de-mean the X1 and X2 vectors class-wise. We will do this explicitly and add<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> these de-meaned versions of the X1 and X2 variables to the data tibble rather than de-mean the variables within a loop for conceptual simplicity.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="multivariate-lda.html#cb56-1" aria-hidden="true" tabindex="-1"></a>sample_mean_c0_X1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X1[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb56-2"><a href="multivariate-lda.html#cb56-2" aria-hidden="true" tabindex="-1"></a>sample_mean_c0_X2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X2[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>])</span>
+<span id="cb56-3"><a href="multivariate-lda.html#cb56-3" aria-hidden="true" tabindex="-1"></a>sample_mean_c1_X1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X1[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb56-4"><a href="multivariate-lda.html#cb56-4" aria-hidden="true" tabindex="-1"></a>sample_mean_c1_X2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X2[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>])</span>
+<span id="cb56-5"><a href="multivariate-lda.html#cb56-5" aria-hidden="true" tabindex="-1"></a>sample_mean_c2_X1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X1[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">2</span>])</span>
+<span id="cb56-6"><a href="multivariate-lda.html#cb56-6" aria-hidden="true" tabindex="-1"></a>sample_mean_c2_X2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(train_sample_df<span class="sc">$</span>X2[train_sample_df<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">2</span>])</span>
+<span id="cb56-7"><a href="multivariate-lda.html#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="multivariate-lda.html#cb56-8" aria-hidden="true" tabindex="-1"></a>train_sample_df <span class="ot">&lt;-</span> train_sample_df <span class="sc">%&gt;%</span></span>
+<span id="cb56-9"><a href="multivariate-lda.html#cb56-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">centered_X1_sample =</span> <span class="fu">if_else</span>(y <span class="sc">==</span> <span class="dv">0</span>, X1 <span class="sc">-</span> sample_mean_c0_X1,</span>
+<span id="cb56-10"><a href="multivariate-lda.html#cb56-10" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">if_else</span>(y <span class="sc">==</span> <span class="dv">1</span>, X1 <span class="sc">-</span> sample_mean_c1_X1,</span>
+<span id="cb56-11"><a href="multivariate-lda.html#cb56-11" aria-hidden="true" tabindex="-1"></a>                                           X1 <span class="sc">-</span> sample_mean_c2_X1)),</span>
+<span id="cb56-12"><a href="multivariate-lda.html#cb56-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">centered_X2_sample =</span> <span class="fu">if_else</span>(y <span class="sc">==</span> <span class="dv">0</span>, X2 <span class="sc">-</span> sample_mean_c0_X2,</span>
+<span id="cb56-13"><a href="multivariate-lda.html#cb56-13" aria-hidden="true" tabindex="-1"></a>                                   <span class="fu">if_else</span>(y <span class="sc">==</span> <span class="dv">1</span>, X2 <span class="sc">-</span> sample_mean_c1_X2,</span>
+<span id="cb56-14"><a href="multivariate-lda.html#cb56-14" aria-hidden="true" tabindex="-1"></a>                                           X2 <span class="sc">-</span> sample_mean_c2_X2)))</span></code></pre></div>
+<p>Then we can build our estimated covariance matrix with a simple for loop and make the correction afterward:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="multivariate-lda.html#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Zero-matrix of correct dimensions to build over</span></span>
+<span id="cb57-2"><a href="multivariate-lda.html#cb57-2" aria-hidden="true" tabindex="-1"></a>train_sigma_LDA <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, </span>
+<span id="cb57-3"><a href="multivariate-lda.html#cb57-3" aria-hidden="true" tabindex="-1"></a>                            <span class="dv">0</span>, <span class="dv">0</span>), <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb57-4"><a href="multivariate-lda.html#cb57-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-5"><a href="multivariate-lda.html#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(train_sample_df)) {</span>
+<span id="cb57-6"><a href="multivariate-lda.html#cb57-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-7"><a href="multivariate-lda.html#cb57-7" aria-hidden="true" tabindex="-1"></a>  temp_cov <span class="ot">&lt;-</span> <span class="fu">c</span>(train_sample_df<span class="sc">$</span>centered_X1_sample[i], train_sample_df<span class="sc">$</span>centered_X2_sample[i])</span>
+<span id="cb57-8"><a href="multivariate-lda.html#cb57-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-9"><a href="multivariate-lda.html#cb57-9" aria-hidden="true" tabindex="-1"></a>  train_sigma_LDA <span class="ot">&lt;-</span> train_sigma_LDA <span class="sc">+</span> temp_cov <span class="sc">%*%</span> <span class="fu">t</span>(temp_cov)</span>
+<span id="cb57-10"><a href="multivariate-lda.html#cb57-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb57-11"><a href="multivariate-lda.html#cb57-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb57-12"><a href="multivariate-lda.html#cb57-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-13"><a href="multivariate-lda.html#cb57-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct the covariance matrix</span></span>
+<span id="cb57-14"><a href="multivariate-lda.html#cb57-14" aria-hidden="true" tabindex="-1"></a>train_sigma_LDA <span class="ot">&lt;-</span> train_sigma_LDA <span class="sc">/</span> (n <span class="sc">*</span> <span class="dv">3</span> <span class="sc">-</span> <span class="dv">3</span>)</span></code></pre></div>
+<p>How close is our <span class="math inline">\(\hat{\Sigma}\)</span> to <span class="math inline">\(\Sigma\)</span>?</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="multivariate-lda.html#cb58-1" aria-hidden="true" tabindex="-1"></a>pop_sigma</span></code></pre></div>
+<pre><code>##           [,1]      [,2]
+## [1,] 6.2345077 0.2674444
+## [2,] 0.2674444 6.2345077</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="multivariate-lda.html#cb60-1" aria-hidden="true" tabindex="-1"></a>train_sigma_LDA</span></code></pre></div>
+<pre><code>##           [,1]      [,2]
+## [1,] 6.2618598 0.1127193
+## [2,] 0.1127193 5.9705306</code></pre>
+<p>Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and <code>apply</code> them via a decision rule function to our training sample:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="multivariate-lda.html#cb62-1" aria-hidden="true" tabindex="-1"></a>d0_LDA <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb62-2"><a href="multivariate-lda.html#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> sample_c0_mean_vec <span class="sc">-</span></span>
+<span id="cb62-3"><a href="multivariate-lda.html#cb62-3" aria-hidden="true" tabindex="-1"></a>    .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">t</span>(sample_c0_mean_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> </span>
+<span id="cb62-4"><a href="multivariate-lda.html#cb62-4" aria-hidden="true" tabindex="-1"></a>    sample_c0_mean_vec <span class="sc">+</span> <span class="fu">log</span>(sample_c0_prior)</span>
+<span id="cb62-5"><a href="multivariate-lda.html#cb62-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb62-6"><a href="multivariate-lda.html#cb62-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-7"><a href="multivariate-lda.html#cb62-7" aria-hidden="true" tabindex="-1"></a>d1_LDA <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb62-8"><a href="multivariate-lda.html#cb62-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> sample_c1_mean_vec <span class="sc">-</span></span>
+<span id="cb62-9"><a href="multivariate-lda.html#cb62-9" aria-hidden="true" tabindex="-1"></a>    .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">t</span>(sample_c1_mean_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> </span>
+<span id="cb62-10"><a href="multivariate-lda.html#cb62-10" aria-hidden="true" tabindex="-1"></a>    sample_c1_mean_vec <span class="sc">+</span> <span class="fu">log</span>(sample_c1_prior)</span>
+<span id="cb62-11"><a href="multivariate-lda.html#cb62-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb62-12"><a href="multivariate-lda.html#cb62-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-13"><a href="multivariate-lda.html#cb62-13" aria-hidden="true" tabindex="-1"></a>d2_LDA <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb62-14"><a href="multivariate-lda.html#cb62-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> sample_c2_mean_vec <span class="sc">-</span></span>
+<span id="cb62-15"><a href="multivariate-lda.html#cb62-15" aria-hidden="true" tabindex="-1"></a>    .<span class="dv">5</span> <span class="sc">*</span> <span class="fu">t</span>(sample_c2_mean_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> </span>
+<span id="cb62-16"><a href="multivariate-lda.html#cb62-16" aria-hidden="true" tabindex="-1"></a>    sample_c2_mean_vec <span class="sc">+</span> <span class="fu">log</span>(sample_c2_prior)</span>
+<span id="cb62-17"><a href="multivariate-lda.html#cb62-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb62-18"><a href="multivariate-lda.html#cb62-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-19"><a href="multivariate-lda.html#cb62-19" aria-hidden="true" tabindex="-1"></a>LDA_classifier <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
+<span id="cb62-20"><a href="multivariate-lda.html#cb62-20" aria-hidden="true" tabindex="-1"></a>  score_c0 <span class="ot">&lt;-</span> <span class="fu">d0_LDA</span>(x_vec)</span>
+<span id="cb62-21"><a href="multivariate-lda.html#cb62-21" aria-hidden="true" tabindex="-1"></a>  score_c1 <span class="ot">&lt;-</span> <span class="fu">d1_LDA</span>(x_vec)</span>
+<span id="cb62-22"><a href="multivariate-lda.html#cb62-22" aria-hidden="true" tabindex="-1"></a>  score_c2 <span class="ot">&lt;-</span> <span class="fu">d2_LDA</span>(x_vec)</span>
+<span id="cb62-23"><a href="multivariate-lda.html#cb62-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb62-24"><a href="multivariate-lda.html#cb62-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (score_c0 <span class="sc">&gt;</span> score_c1 <span class="sc">&amp;</span> score_c0 <span class="sc">&gt;</span> score_c2) {</span>
+<span id="cb62-25"><a href="multivariate-lda.html#cb62-25" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb62-26"><a href="multivariate-lda.html#cb62-26" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (score_c1 <span class="sc">&gt;</span> score_c0 <span class="sc">&amp;</span> score_c1 <span class="sc">&gt;</span> score_c2) {</span>
+<span id="cb62-27"><a href="multivariate-lda.html#cb62-27" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span></span>
+<span id="cb62-28"><a href="multivariate-lda.html#cb62-28" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb62-29"><a href="multivariate-lda.html#cb62-29" aria-hidden="true" tabindex="-1"></a>    <span class="dv">2</span></span>
+<span id="cb62-30"><a href="multivariate-lda.html#cb62-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb62-31"><a href="multivariate-lda.html#cb62-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb62-32"><a href="multivariate-lda.html#cb62-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-33"><a href="multivariate-lda.html#cb62-33" aria-hidden="true" tabindex="-1"></a>train_sample_df<span class="sc">$</span>LDA_predicted_y <span class="ot">&lt;-</span> <span class="fu">apply</span>(train_sample_df[, <span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)], </span>
+<span id="cb62-34"><a href="multivariate-lda.html#cb62-34" aria-hidden="true" tabindex="-1"></a>                                           <span class="dv">1</span>, LDA_classifier)</span></code></pre></div>
+<p>We can then overlay these lines on our existing scatterplot just like we did with the Bayes decision boundaries. Again, we will calculate pairwise class midpoints with the <em>sample</em> data and use <code>Null</code> to generate vectors orthogonal to <span class="math inline">\(\hat{\Sigma} (\hat{\mu}_k - \hat{\mu}_l)\)</span>. This time we’ll plot the LDA decision boundaries as dashed lines.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="multivariate-lda.html#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate midpoints between class-level sample mean-vectors</span></span>
+<span id="cb63-2"><a href="multivariate-lda.html#cb63-2" aria-hidden="true" tabindex="-1"></a>sample_c0_c1_midpoint <span class="ot">&lt;-</span> (sample_c0_mean_vec <span class="sc">+</span> sample_c1_mean_vec) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb63-3"><a href="multivariate-lda.html#cb63-3" aria-hidden="true" tabindex="-1"></a>sample_c0_c2_midpoint <span class="ot">&lt;-</span> (sample_c0_mean_vec <span class="sc">+</span> sample_c2_mean_vec) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb63-4"><a href="multivariate-lda.html#cb63-4" aria-hidden="true" tabindex="-1"></a>sample_c1_c2_midpoint <span class="ot">&lt;-</span> (sample_c1_mean_vec <span class="sc">+</span> sample_c2_mean_vec) <span class="sc">/</span> <span class="dv">2</span></span>
+<span id="cb63-5"><a href="multivariate-lda.html#cb63-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="multivariate-lda.html#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the sample orthogonal vectors for plotting</span></span>
+<span id="cb63-7"><a href="multivariate-lda.html#cb63-7" aria-hidden="true" tabindex="-1"></a>sample_c0_c1_ortho <span class="ot">&lt;-</span> <span class="fu">Null</span>(<span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> </span>
+<span id="cb63-8"><a href="multivariate-lda.html#cb63-8" aria-hidden="true" tabindex="-1"></a>                             (sample_c0_mean_vec <span class="sc">-</span> sample_c1_mean_vec))</span>
+<span id="cb63-9"><a href="multivariate-lda.html#cb63-9" aria-hidden="true" tabindex="-1"></a>sample_c0_c2_ortho <span class="ot">&lt;-</span> <span class="fu">Null</span>(<span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> </span>
+<span id="cb63-10"><a href="multivariate-lda.html#cb63-10" aria-hidden="true" tabindex="-1"></a>                             (sample_c0_mean_vec <span class="sc">-</span> sample_c2_mean_vec))</span>
+<span id="cb63-11"><a href="multivariate-lda.html#cb63-11" aria-hidden="true" tabindex="-1"></a>sample_c1_c2_ortho <span class="ot">&lt;-</span> <span class="fu">Null</span>(<span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> </span>
+<span id="cb63-12"><a href="multivariate-lda.html#cb63-12" aria-hidden="true" tabindex="-1"></a>                             (sample_c1_mean_vec <span class="sc">-</span> sample_c2_mean_vec))</span>
+<span id="cb63-13"><a href="multivariate-lda.html#cb63-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-14"><a href="multivariate-lda.html#cb63-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Overlay scatterplot with LDA boundaries</span></span>
+<span id="cb63-15"><a href="multivariate-lda.html#cb63-15" aria-hidden="true" tabindex="-1"></a>train_sample_scatter <span class="ot">&lt;-</span> train_sample_scatter <span class="sc">+</span></span>
+<span id="cb63-16"><a href="multivariate-lda.html#cb63-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> sample_c0_c1_midpoint[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c1_ortho[<span class="dv">1</span>],</span>
+<span id="cb63-17"><a href="multivariate-lda.html#cb63-17" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> sample_c0_c1_midpoint[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c1_ortho[<span class="dv">1</span>],</span>
+<span id="cb63-18"><a href="multivariate-lda.html#cb63-18" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> sample_c0_c1_midpoint[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c1_ortho[<span class="dv">2</span>],</span>
+<span id="cb63-19"><a href="multivariate-lda.html#cb63-19" aria-hidden="true" tabindex="-1"></a>                   <span class="at">yend =</span> sample_c0_c1_midpoint[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c1_ortho[<span class="dv">2</span>]),</span>
+<span id="cb63-20"><a href="multivariate-lda.html#cb63-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb63-21"><a href="multivariate-lda.html#cb63-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> sample_c0_c2_midpoint[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb63-22"><a href="multivariate-lda.html#cb63-22" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> sample_c0_c2_midpoint[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb63-23"><a href="multivariate-lda.html#cb63-23" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> sample_c0_c2_midpoint[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c2_ortho[<span class="dv">2</span>],</span>
+<span id="cb63-24"><a href="multivariate-lda.html#cb63-24" aria-hidden="true" tabindex="-1"></a>                   <span class="at">yend =</span> sample_c0_c2_midpoint[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> sample_c0_c2_ortho[<span class="dv">2</span>]),</span>
+<span id="cb63-25"><a href="multivariate-lda.html#cb63-25" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb63-26"><a href="multivariate-lda.html#cb63-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">x =</span> sample_c1_c2_midpoint[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> sample_c1_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb63-27"><a href="multivariate-lda.html#cb63-27" aria-hidden="true" tabindex="-1"></a>                   <span class="at">xend =</span> sample_c1_c2_midpoint[<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> sample_c1_c2_ortho[<span class="dv">1</span>],</span>
+<span id="cb63-28"><a href="multivariate-lda.html#cb63-28" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> sample_c1_c2_midpoint[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">5</span> <span class="sc">*</span> sample_c1_c2_ortho[<span class="dv">2</span>],</span>
+<span id="cb63-29"><a href="multivariate-lda.html#cb63-29" aria-hidden="true" tabindex="-1"></a>                   <span class="at">yend =</span> sample_c1_c2_midpoint[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">5</span> <span class="sc">*</span> sample_c1_c2_ortho[<span class="dv">2</span>]),</span>
+<span id="cb63-30"><a href="multivariate-lda.html#cb63-30" aria-hidden="true" tabindex="-1"></a>               <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb63-31"><a href="multivariate-lda.html#cb63-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Bayes classifier boundaries are solid; LDA boundaries are dashed&quot;</span>)</span>
+<span id="cb63-32"><a href="multivariate-lda.html#cb63-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-33"><a href="multivariate-lda.html#cb63-33" aria-hidden="true" tabindex="-1"></a>train_sample_scatter</span></code></pre></div>
+<p><img src="LDA_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+</div>
+</div>
+<div id="testing-2" class="section level3">
+<h3>Testing</h3>
+<p>Now that we have functions built for the Bayes classifier and LDA classifier, we can easily <code>apply</code> them to the test data just as we did with the training data.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="multivariate-lda.html#cb64-1" aria-hidden="true" tabindex="-1"></a>test_sample_df<span class="sc">$</span>bayes_predicted_y <span class="ot">&lt;-</span> <span class="fu">apply</span>(test_sample_df[, <span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)], </span>
+<span id="cb64-2"><a href="multivariate-lda.html#cb64-2" aria-hidden="true" tabindex="-1"></a>                                           <span class="dv">1</span>, bayes_classifier)</span>
+<span id="cb64-3"><a href="multivariate-lda.html#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="multivariate-lda.html#cb64-4" aria-hidden="true" tabindex="-1"></a>test_sample_df<span class="sc">$</span>LDA_predicted_y <span class="ot">&lt;-</span> <span class="fu">apply</span>(test_sample_df[, <span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>)], </span>
+<span id="cb64-5"><a href="multivariate-lda.html#cb64-5" aria-hidden="true" tabindex="-1"></a>                                         <span class="dv">1</span>, LDA_classifier)</span></code></pre></div>
+<p>What does the misclassification rate for LDA look like?</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="multivariate-lda.html#cb65-1" aria-hidden="true" tabindex="-1"></a>LDA_misclass_rate <span class="ot">&lt;-</span> <span class="fu">nrow</span>(test_sample_df[test_sample_df<span class="sc">$</span>y <span class="sc">!=</span> </span>
+<span id="cb65-2"><a href="multivariate-lda.html#cb65-2" aria-hidden="true" tabindex="-1"></a>                                           test_sample_df<span class="sc">$</span>LDA_predicted_y,]) <span class="sc">/</span></span>
+<span id="cb65-3"><a href="multivariate-lda.html#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(test_sample_df)</span>
+<span id="cb65-4"><a href="multivariate-lda.html#cb65-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-5"><a href="multivariate-lda.html#cb65-5" aria-hidden="true" tabindex="-1"></a>LDA_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
+<pre><code>## [1] 20.33333</code></pre>
+<p>How about the misclassification rate for our (optimal) Bayes classifier?</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="multivariate-lda.html#cb67-1" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="ot">&lt;-</span> <span class="fu">nrow</span>(test_sample_df[test_sample_df<span class="sc">$</span>y <span class="sc">!=</span> </span>
+<span id="cb67-2"><a href="multivariate-lda.html#cb67-2" aria-hidden="true" tabindex="-1"></a>                                           test_sample_df<span class="sc">$</span>bayes_predicted_y,]) <span class="sc">/</span></span>
+<span id="cb67-3"><a href="multivariate-lda.html#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(test_sample_df)</span>
+<span id="cb67-4"><a href="multivariate-lda.html#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-5"><a href="multivariate-lda.html#cb67-5" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
+<pre><code>## [1] 20.44444</code></pre>
+<p>It’s of course possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the “true” optimal classifier in a sense since its classifying based on population parameters.</p>
+
+</div>
+</div>
+<!-- </div> -->
+<div class="footnotes">
+<hr />
+<ol start="1">
+<li id="fn1"><p>See <a href="https://stats.stackexchange.com/questions/92157/compute-and-graph-the-lda-decision-boundary/103552#103552" target="_blank">this excellent CV answer</a> for explanations why.<a href="multivariate-lda.html#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>See <a href="https://dplyr.tidyverse.org/reference/mutate.html" target="_blank"><code>mutate</code></a>.<a href="multivariate-lda.html#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="univariate-lda.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="quadratic-discriminant-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"],
+"google": false,
+"instapper": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"df_print": "kable"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

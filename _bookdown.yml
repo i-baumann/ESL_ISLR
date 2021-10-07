@@ -1,0 +1,31 @@
+book_filename: "bookdown-start"
+chapter_name: "Chapter "
+repo: https://github.com/my-cabbages/ESL_ISLR
+output_dir: docs
+clean: [packages.bib, bookdown.bbl]
+new_session: yes
+language:
+  ui:
+    chapter_name: 'Chapter '
+delete_merged_file: true
+
+rmd_files: [
+  index.Rmd,
+  
+  # Bookkeeping
+  introduction.Rmd,
+  
+  # Logistic Regression
+  binary_logistic.Rmd,
+  
+  # LDA
+  LDA.Rmd,
+  # univariate_LDA.Rmd,
+  # multivariate_LDA.Rmd,
+  
+  # QDA
+  multivariate_QDA.Rmd,
+  
+  # Ridge Regression
+  ridge.Rmd
+]

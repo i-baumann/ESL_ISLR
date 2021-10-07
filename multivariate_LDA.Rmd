@@ -1,28 +1,12 @@
----
-title: "Multivariate Linear Discriminant Analysis"
-output: 
-    html_document:
-        toc: TRUE
-        toc_float: TRUE
-    pandoc_args: "--webtex"
----
-
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(MASS)
+library(patchwork)
 library(xaringanExtra) # If needed: devtools::install_github("gadenbuie/xaringanExtra")
 ```
 
-```{r xaringanExtra-clipboard, echo=FALSE}
-htmltools::tagList(
-  xaringanExtra::use_clipboard(
-    button_text = "<i class=\"fa fa-clipboard\"></i>",
-    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
-  ),
-  rmarkdown::html_dependency_font_awesome()
-)
-```
+# Multivariate LDA
 
 This example walks through using linear discriminant analysis to classify observations in a three-class multivariate setting with (idealized) generated data. I'd suggest reading the [univariate LDA](univariate_LDA.html) example first.
 
@@ -182,7 +166,7 @@ $$\begin{align}
 Plugging in the multivariate normal PDF for $f(\cdot)$, like in the univariate case, allows for a lot of simplification but with some twists:
 
 <center>
-$$\begin{align}
+$$\small \begin{align}
 \log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
 &= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
 &= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
@@ -211,7 +195,7 @@ $$\begin{align}
 The <span style="color:green">green</span> terms can't be easily simplified unless we creatively add zero to the equation. Using the above property that $a^T \Sigma^{-1} b = b^T \Sigma^{-1} a$ we can do exactly that. Let's add $0 = \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_k$ and factor and consolidate:
 
 <center>
-$$\begin{align}
+$$\small \begin{align}
 \log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k} \color{green}{+ \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l + \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_k} \\
 &= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} \mu_k^T \Sigma^{-1} (\mu_k - \mu_l) - \frac{1}{2} \mu_l^T \Sigma^{-1} (\mu_k - \mu_l)} \\
 &= \log{\frac{\pi_k}{\pi_l}} \color{purple}{+ x^T \Sigma^{-1} (\mu_k - \mu_l)} \color{green}{- \frac{1}{2} (\mu_k + \mu_l)^T \Sigma^{-1} (\mu_k - \mu_l)} \\
@@ -227,7 +211,7 @@ $$\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} = \log{\frac{\pi_k}{\pi_l}} + x^
 Just like in the univariate case, all we need to do to get the discriminant functions is evaluate this ratio on the pairwise decision boundary where our probability ratio is 1 and so the log of the ratio is 0. Doing this, we can simply rearrange the expression to get our discriminant functions for classes $k$ and $l$
 
 <center>
-$$\begin{align}
+$$\small \begin{align}
 0 &= \log{\pi_k} - \log{\pi_l} + x^T \Sigma^{-1} \mu_k - x^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k + \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l \\
 \underbrace{\log{\pi_l} + x^T \Sigma^{-1} \mu_l - \frac{1}{2} \mu_l^T \Sigma^{-1} \mu_l}_{\delta_l (x)} &= \underbrace{\log{\pi_k} + x^T \Sigma^{-1} \mu_k - \frac{1}{2} \mu_k^T \Sigma^{-1} \mu_k}_{\delta_k (x)} \\
 \end{align}$$

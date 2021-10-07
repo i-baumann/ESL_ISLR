@@ -1,48 +1,22 @@
----
-title: "Ridge Regression"
-output: 
-    html_document:
-        toc: TRUE
-        toc_float: TRUE
-    pandoc_args: "--webtex"
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(MASS)
-library(latex2exp)
-library(ggcorrplot)
-library(RColorBrewer)
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE)
 library(xaringanExtra) # If needed: devtools::install_github("gadenbuie/xaringanExtra")
 ```
 
-```{r xaringanExtra-clipboard, echo=FALSE}
-htmltools::tagList(
-  xaringanExtra::use_clipboard(
-    button_text = "<i class=\"fa fa-clipboard\"></i>",
-    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
-  ),
-  rmarkdown::html_dependency_font_awesome()
-)
-```
+# Ridge Regression
 
-This example walks through fitting a ridge regression model to idealized data. We assume some prior knowledge of [ordinary least squares](https://en.wikipedia.org/wiki/Ordinary_least_squares){target="_blank"} and linear algebra.
+This example walks through fitting a ridge regression model to idealized data. It assumes some prior knowledge of [ordinary least squares](https://en.wikipedia.org/wiki/Ordinary_least_squares){target="_blank"} and linear algebra.
 
-Though not included in the code snippets, this example uses the [`tidyverse`](https://cran.r-project.org/web/packages/tidyverse/index.html){target="_blank"},  [`MASS`](https://cran.r-project.org/web/packages/MASS/index.html){target="_blank"}, [`latex2exp`](https://cran.r-project.org/web/packages/latex2exp/index.html){target="_blank"},  [`ggcorrplot`](https://cran.r-project.org/web/packages/ggcorrplot/index.html){target="_blank"}, and [`RColorBrewer`](https://cran.r-project.org/web/packages/RColorBrewer/RColorBrewer.pdf){target="_blank"} packages.
-
-## Overview
+Ridge regression is, functionally, nearly the same as OLS except that we include a constraint on the $\hat{\beta}$ vector in fitting the model. Constraining a model in this way is broadly called [regularization](https://en.wikipedia.org/wiki/Regularization_(mathematics)#Tikhonov-regularized_least_squares){target="_blank"} and makes the model less complex by either eliminating or penalizing low-contribution variables. In ridge regression, the particular form of regularization/constraint we use acts as a sum-of-squares (or a [L2](https://mathworld.wolfram.com/L2-Norm.html){target="_blank"}) penalty and shrinks rather than eliminates variables.
 
 Ridge regression may be preferable to OLS if
 
 1. there are a lot of independent variables/predictors to choose from and
 2. some of those predictors are highly correlated with one another.
 
-Ridge regression is, functionally, nearly the same as OLS except that we include a constraint on the $\hat{\beta}$ vector in fitting the model. Constraining a model in this way is broadly called [regularization](https://en.wikipedia.org/wiki/Regularization_(mathematics)#Tikhonov-regularized_least_squares){target="_blank"} and makes the model less complex by either eliminating or penalizing low-contribution variables. In ridge regression, the particular form of regularization/constraint we use acts as a sum-of-squares (or a [L2](https://mathworld.wolfram.com/L2-Norm.html){target="_blank"}) penalty and shrinks rather than eliminates variables.
-
 Ridge regression may have higher prediction accuracy than OLS due to OLS overfitting the training sample. It can be easily shown that OLS estimates, under [certain assumptions](https://en.wikipedia.org/wiki/Ordinary_least_squares#Assumptions){target="_blank"}, are [unbiased and have the lowest possible variance of unbiased estimators](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem){target="_blank"}. However, we can oftentimes get an even lower variance of the fitted values by allowing our estimates to be biased. This is usually not desirable if the goal of the model is inference, but we likely don't care as much if the goal is prediction. This can help improve model accuracy.
 
-Ridge regression also performs a kind of variable selection by more severely penalizing estimates of variables that contribute less to the overall variance of the fitted values. So long as the penalty term in ridge regression is greater than zero it will shrink all regression coefficients toward zero but it will shrink those with larger projected sample variance less. Ridge regression cannot set coefficients to exactly zero, though, so it doesn't actually perform full variable selection.
+Ridge regression also performs a kind of variable selection by more severely penalizing estimates of variables that contribute less to the overall variance of the fitted values. So long as the penalty term in ridge regression is greater than zero it will shrink all regression coefficients toward zero but it will shrink those with larger projected sample variance less. Ridge regression cannot set coefficients to exactly zero, so it doesn't actually perform full variable selection.
 
 ## Theory
 
@@ -165,6 +139,16 @@ First we'll explore a simple case demonstrating how ridge regression can solve p
 
 ### Data Generation
 
+For the cases in this example, load the [`tidyverse`](https://cran.r-project.org/web/packages/tidyverse/index.html){target="_blank"},  [`MASS`](https://cran.r-project.org/web/packages/MASS/index.html){target="_blank"}, [`latex2exp`](https://cran.r-project.org/web/packages/latex2exp/index.html){target="_blank"},  [`ggcorrplot`](https://cran.r-project.org/web/packages/ggcorrplot/index.html){target="_blank"}, and [`RColorBrewer`](https://cran.r-project.org/web/packages/RColorBrewer/RColorBrewer.pdf){target="_blank"} packages.
+
+```{r setup}
+library(tidyverse)
+library(MASS)
+library(latex2exp)
+library(ggcorrplot)
+library(RColorBrewer)
+```
+
 We'll create one normally-distributed variable and then a second variable that is simply a multiple of the first to make the two variables linearly dependent.
 
 Let's generate one variable with 1,000 observations, a mean between -10 and 10, and a standard deviation between 1 and 10.
@@ -239,7 +223,8 @@ So what does our log-likelihood surface look like in this case?
 ```{r eval=TRUE, fig.height=5, fig.retina=3}
 rss_ols_surface_plot <- ggplot(surface, aes(x = b1_vec, y = b2_vec, fill = rss_ols)) +
   geom_raster(interpolate = TRUE) +
-  scale_fill_gradient(name = "RSS", high = 'red', low = 'blue') +
+  # scale_fill_gradient(name = "RSS", high = 'red', low = 'blue') +
+  scale_fill_distiller(palette = "RdBu", name = "RSS: OLS") +
   labs(title = "Surface Plot of RSS Function: OLS",
        subtitle = "Evaluated Across Range of Beta Coefficients",
        x = TeX("$\\beta_1$"),
@@ -281,7 +266,7 @@ So what does our log-likelihood surface look like now?
 ```{r eval=TRUE, fig.height=5, fig.retina=3}
 rss_ridge_surface_plot <- ggplot(surface, aes(x = b1_vec, y = b2_vec, fill = rss_ridge)) +
   geom_raster(interpolate = TRUE) +
-  scale_fill_gradient(name = "RSS", high = 'red', low = 'blue') +
+  scale_fill_distiller(palette = "RdBu", name = "RSS: Ridge") +
   labs(title = "Surface Plot of RSS Function: Ridge",
        subtitle = "Evaluated Across Range of Beta Coefficients",
        x = TeX("$\\beta_1$"),
@@ -300,13 +285,18 @@ Choosing how much much space to allow (i.e., which value to use for $\lambda$) i
 
 ### Solving for $\hat{\beta}^{Ridge}$
 
-We can easily implement the $\hat{\beta}^{Ridge}$ solution derived in the theory section. Let's write a function, `b_ridge`, to solve for the ridge regression coefficients and use it to solve our ridge regression problem.
+We can easily implement the $\hat{\beta}^{Ridge}$ solution derived in the theory section. Let's write a function, `ridge`, to solve for the ridge regression coefficients and use it to solve our ridge regression problem.
 
 ```{r eval=TRUE}
 input_matrix <- cbind(X1_std, X2_std)
 lambda <- 1000
 
-b_ridge <- function(y_vec, X_matrix, lambda){
+ridge <- function(y_vec, X_matrix, lambda){
+  
+  # Arguments:
+  # y_vec - a continuous outcome vector
+  # X_matrix - a standardized input vector
+  # lambda - a > 0 penalty term
   
   penalty <- lambda * diag(1, ncol(X_matrix))
   
@@ -314,7 +304,7 @@ b_ridge <- function(y_vec, X_matrix, lambda){
   
 }
 
-b_vec_ridge <- b_ridge(y_vec = y, X_matrix = input_matrix, lambda = lambda)
+b_vec_ridge <- ridge(y_vec = y, X_matrix = input_matrix, lambda = lambda)
 ```
 
 ```{r eval=TRUE, echo=FALSE}
@@ -337,6 +327,8 @@ We won't perform cross validation to determine the optimal penalty parameter but
 ### Data
 
 For this case, we'll use the famous Boston housing data set. The data come pre-loaded in the [`MASS`](https://cran.r-project.org/web/packages/MASS/index.html){target="_blank"} package, so there's no need to download and read in data. The data set contains variables relating to home values in various towns and suburbs in Boston, such as `crim` (crime rate), `nox` (an air pollution measure), and `rm` (average number of rooms per home). We'll build a model to predict `medv`, the median value of a home in a town. Some of the variable names are not incredibly self-explanatory, so feel free to check the [documentation](https://www.rdocumentation.org/packages/MASS/versions/7.3-54/topics/Boston){target="_blank"} for more details.
+
+This case uses many of the same packages and functions that were loaded and written in [the first case](case-1-linearly-dependent-variables.html), so review that case if not already completed.
 
 We'll use `model.matrix` to create our input matrix without the vector for the intercept and separate `medv` into its own vector. 
 
@@ -365,7 +357,8 @@ We can easily visualize the correlations between the independent variables using
 ```{r eval=TRUE}
 X_corr <- cor(X_train)
 
-ggcorrplot(X_corr)
+ggcorrplot(X_corr, type = "lower",
+           colors = rev(brewer.pal(3, name = "RdBu")))
 ```
 
 Several variables are highly correlated with one another. `indus` (a measure of town industrial concentration), `nox` (air pollution), and `age` (average home age) are all highly negatively correlated with `dis` (distance to employment centers). It's probably not a surprise that some towns in more industrial areas would have more exposure to air pollution and that development might be more common (and so home ages would be lower) in high-employment suburbs far away from job centers. But how much, together, are these variables contributing to prediction? In other words, do we need all of these variables that are highly related to one another or will one or two be enough to capture the "action" contained in all of them?
@@ -391,7 +384,7 @@ boston_pcomps
 
 Scanning across the principal components (columns) it's relatively easy to see which variables contribute the most to the first five principal components. This is analogous to the discussion in the theory section about variables being associated with singular values: we should expect that the variables that contribute the most to the these first few principal components will be among the slowest to shrink to zero as $\lambda$ increases.
 
-### Ridge Regression
+### Implementation
 
 We'll solve for our ridge regression estimates over a wide range of the penalty term, $\lambda$, to explore how ridge regression shrinks our variables - paying special attention to our three correlated variables - and how $\lambda$ plays a role in the [bias-variance tradeoff](https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Bias%E2%80%93variance_decomposition_of_mean_squared_error){target="_blank"}. For this example we'll evaluate our models based on minimizing [mean square error](https://en.wikipedia.org/wiki/Mean_squared_error){target="_blank"}.
 
@@ -401,9 +394,9 @@ We'll create two outcome data sets, `betas` and `performance`, that show us how 
 betas <- NULL
 performance <- NULL
 
-for (lambda in seq(0, 200, 1)) {
+for (lambda in seq(0, 1000, 1)) {
   
-  b_vec <- b_ridge(y_train, X_train, lambda)
+  b_vec <- ridge(y_train, X_train, lambda)
   b_MSE <- mean((X_test %*% b_vec + mean(y_test) - y_test)^2)
   
   betas <- bind_rows(betas, tibble("lambda" = lambda,
@@ -419,7 +412,7 @@ for (lambda in seq(0, 200, 1)) {
 Let's visualize how the coefficients of our variables change as $\lambda \rightarrow \infty$. 
 
 ```{r eval=TRUE, fig.height=5, fig.retina=3}
-palette <- colorRampPalette(brewer.pal(9, "Set1"))(length(colnames(X_train)))
+palette <- colorRampPalette(brewer.pal(12, "Paired"))(length(colnames(X_train)))
 
 coef_plot <- ggplot(betas, aes(x = lambda, y = Coefficient, color = Variable)) +
   geom_line(size = 1.5) +
@@ -439,7 +432,8 @@ As expected, the estimates for the variables with higher overall principal compo
 Next, we'll visualize the test set MSE for $\lambda \rightarrow \infty$. Can ridge regression outperform OLS?
 
 ```{r eval=TRUE, fig.height=5, fig.retina=3}
-performance_plot <- ggplot(performance, aes(x = lambda, y = Test_MSE)) +
+performance_plot <- ggplot(performance %>% filter(lambda <= 200), 
+                           aes(x = lambda, y = Test_MSE)) +
   geom_line() +
   geom_hline(yintercept = performance$Test_MSE[performance$lambda == 0], 
              linetype="dashed", 
@@ -459,7 +453,7 @@ Shrinking some of our coefficients close to zero (i.e., using a penalty, like $\
 
 ## Standardization
 
-Why did we standardize our independent variables in the cases above? Because the ridge regression solutions will change depending on the scales of the variables. In reality, this may be because of differences in units between variables (e.g., a dataset with temperatures, distances, monetary values measured in whole amounts or 1000s, etc.). Standardizing puts our variables on the same scale.
+Why did we standardize our independent variables in these cases? Because the ridge regression solutions will change depending on the scales of the variables. In reality, this may be because of differences in units between variables (e.g., a dataset with temperatures, distances, monetary values measured in whole amounts or 1000s, etc.). Standardizing puts our variables on the same scale.
 
 OLS does not have this problem: it will find the same solution for the same data, scaled or not. To illustrate the point, let's generate samples of two independently normally distributed variables as well as versions of those variables scaled or multiplied by 1000. 
 
@@ -484,9 +478,9 @@ lm(y ~ X1_scaled + X2_scaled)$coefficients
 But we won't get identical solutions if we fit both versions of the data using ridge regression for any $\lambda > 0$. The estimated effects of the independent variables on the outcome fundamentally change, not simply by the magnitude of the change in scale.
 
 ```{r eval=TRUE}
-b_ridge(y = y, X = cbind(X1, X2), lambda = 1)
+ridge(y = y, X = cbind(X1, X2), lambda = 1)
 
-b_ridge(y = y, X = cbind(X1_scaled, X2_scaled), lambda = 1)
+ridge(y = y, X = cbind(X1_scaled, X2_scaled), lambda = 1)
 ```
 
 In other words, OLS solutions are *equivariant* to scaling but ridge solutions aren't. Standardizing the data removes scaling for comparability.

@@ -1,0 +1,15 @@
+base
+xaringanExtra
+tidyverse
+ggplot2
+tibble
+tidyr
+readr
+purrr
+dplyr
+stringr
+forcats
+MASS
+latex2exp
+ggcorrplot
+RColorBrewer

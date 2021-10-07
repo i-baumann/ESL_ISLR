@@ -1,0 +1,36 @@
+bookdown::gitbook:
+  # css: [css/book.css, 'https://use.fontawesome.com/releases/v5.15.1/css/all.css']
+  css: style.css
+  font-import: https://fonts.googleapis.com/css2?family=Open+Sans
+  font-family: 'Roboto'
+  link-citations: true
+  new_session: yes
+  number_sections: false
+  highlight: tango
+  split_by: section
+  config:
+    df_print: kable
+    download: null
+    search: yes
+    sharing:
+      github: yes
+      facebook: no
+      twitter: no
+      google: no
+      weibo: no
+      instapper: no
+      vk: no
+      all: ['facebook', 'twitter', 'linkedin', 'weibo', 'instapaper']
+    toc:
+      collapse: section
+      before: |
+        <li><a href="./">ESL & ISLR Working Examples</a></li>
+      after: |
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+bookdown::pdf_book:
+  includes:
+    in_header: preamble.tex
+  latex_engine: xelatex
+  citation_package: natbib
+bookdown::epub_book:
+  stylesheet: style.css

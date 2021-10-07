@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Quadratic Discriminant Analysis | ESL &amp; ISLR Working Examples</title>
+  <meta name="description" content="Quadratic Discriminant Analysis | ESL &amp; ISLR Working Examples" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Quadratic Discriminant Analysis | ESL &amp; ISLR Working Examples" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://my-cabbages.github.io/ESL_ISLR/" />
+  <meta property="og:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+  
+  <meta name="github-repo" content="my-cabbages/ESL_ISLR/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Quadratic Discriminant Analysis | ESL &amp; ISLR Working Examples" />
+  
+  
+  <meta name="twitter:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+
+<meta name="author" content="Isaac Baumann" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="multivariate-lda.html"/>
+<link rel="next" href="data-generation-3.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">ESL & ISLR Working Examples</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
+<li class="chapter" data-level="" data-path="packages.html"><a href="packages.html"><i class="fa fa-check"></i>Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i>Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="data-generation.html"><a href="data-generation.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="the-log-likelihood-surface.html"><a href="the-log-likelihood-surface.html"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-1-newton-raphsonirls"><i class="fa fa-check"></i>Method 1: Newton-Raphson/IRLS</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-2-modified-irls"><i class="fa fa-check"></i>Method 2: Modified IRLS</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li><a href="testing.html#comparing-to-glm">Comparing to <code>glm</code></a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#the-log-likelihood-surface-1"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#plotting-the-logistic-fit"><i class="fa fa-check"></i>Plotting the Logistic Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-discriminant-analysis.html"><a href="linear-discriminant-analysis.html"><i class="fa fa-check"></i>Linear Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html"><i class="fa fa-check"></i>Univariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#theory"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#setup"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#data-generation-1"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#implementation-1"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#testing-1"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html"><i class="fa fa-check"></i>Multivariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#theory-1"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#setup-1"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#data-generation-2"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#implementation-2"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#testing-2"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html"><i class="fa fa-check"></i>Quadratic Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html#theory-2"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="data-generation-3.html"><a href="data-generation-3.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-bayes-classifier-and-decision-boundaries-1"><i class="fa fa-check"></i>The Bayes Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-qda-classifier-and-decision-boundaries"><i class="fa fa-check"></i>The QDA Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#visualizing-the-decision-boundaries"><i class="fa fa-check"></i>Visualizing the Decision Boundaries</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html#visualization"><i class="fa fa-check"></i>Visualization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ridge-regression.html"><a href="ridge-regression.html"><i class="fa fa-check"></i>Ridge Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html"><i class="fa fa-check"></i>Theory</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ols"><i class="fa fa-check"></i>Minimizing RSS: OLS</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ridge"><i class="fa fa-check"></i>Minimizing RSS: Ridge</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#important-features"><i class="fa fa-check"></i>Important Features</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html"><i class="fa fa-check"></i>Case 1: Linearly Dependent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#data-generation-4"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#the-problem-ols"><i class="fa fa-check"></i>The Problem: OLS</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#a-solution-ridge-regression"><i class="fa fa-check"></i>A Solution: Ridge Regression</a></li>
+<li><a href="case-1-linearly-dependent-variables.html#solving-for-hatbetaridge">Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html"><i class="fa fa-check"></i>Case 2: Correlated Independent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#exploratory-analysis"><i class="fa fa-check"></i>Exploratory Analysis</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#implementation-4"><i class="fa fa-check"></i>Implementation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="standardization.html"><a href="standardization.html"><i class="fa fa-check"></i>Standardization</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ESL &amp; ISLR Working Examples</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="quadratic-discriminant-analysis" class="section level1">
+<h1>Quadratic Discriminant Analysis</h1>
+<p>This example walks through using quadratic discriminant analysis to classify observations in a three-class multivariate setting with (idealized) generated data. Covering the <a href="multivariate-lda.html" target="_blank">multivariate LDA example</a> first is recommended.</p>
+<p>Unlike linear discriminant analysis,</p>
+<ol style="list-style-type: decimal">
+<li>QDA allows for non-linear decision boundaries, and</li>
+<li><strong>QDA does not assume that the class distribution covariance matrices are identical</strong>.</li>
+</ol>
+<div id="theory-2" class="section level3">
+<h3>Theory</h3>
+<p>Deriving the pairwise discriminant functions in the QDA case where we don’t assume that the class covariance matrices are identical is the exact same process as in the multivariate LDA case: we simply end up with slightly uglier discriminant functions since we don’t assume identical covariance matrices. In fact, the derivation is even easier than in multivariate LDA and is really just an exercise in remembering <a href="https://mathinsight.org/logarithm_basics" target="_blank">log rules</a>.</p>
+<div id="bayes-theorem-2" class="section level4">
+<h4>Bayes’ Theorem</h4>
+<p>Just like in the <a href="multivariate-lda.html#theory" target="_blank">multivariate LDA example</a>, we start by taking <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem#For_continuous_random_variables" target="_blank">Bayes’ theorem for continuous variables</a> and plugging in the <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution" target="_blank">multivariate normal PDF</a> and then taking the log ratio of conditional probabilities.</p>
+<center>
+<span class="math display">\[\begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log \frac{\pi_k f_k(x)}{\pi_l f_l(x)} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{f_k(x)}{f_l(x)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}}
+\end{align}\]</span>
+</center>
+<p>Just as in the univariate and multivariate LDA examples, <span class="math inline">\(\color{red}{\pi}\)</span> in the PDF is the literal value pi, not a prior probability. <span class="math inline">\(p\)</span> is the number of variables.</p>
+<p>Remembering our log rules, we can easily break this down:</p>
+<center>
+<span class="math display">\[\scriptsize \begin{align}
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}}}} + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{1} - \log{2\color{red}{\pi}^\frac{p}{2} \det(\Sigma_k)^\frac{1}{2}} - \log{1} + \log{2\color{red}{\pi}^\frac{p}{2} \det(\Sigma_l)^\frac{1}{2}}
++ \log{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_l^{-1} (x - \mu_k)}} - \log{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} - \log{2\color{red}{\pi}^\frac{p}{2}} + \log{\det(\Sigma_k)^\frac{1}{2}} + \log{2\color{red}{\pi}^\frac{p}{2}} + \log{\det(\Sigma_l)^\frac{1}{2}}
+- \frac{1}{2} (x - \mu_k)^T \Sigma_l^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l) \\
+&amp;= \log{\pi_k} - \log{\pi_l} - \frac{1}{2}\log{\det(\Sigma_k)} + \frac{1}{2}\log{\det(\Sigma_l)}
+- \frac{1}{2} (x - \mu_k)^T \Sigma_l^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l) \\
+\end{align}\]</span>
+</center>
+</div>
+<div id="discriminant-functions-2" class="section level4">
+<h4>Discriminant Functions</h4>
+<p>Then, like in the multivariate LDA case, all that’s left to do is to evaluate this expression at the decision boundary (where <span class="math inline">\(\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} = 1\)</span> and so <span class="math inline">\(\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} = 0\)</span>) and then reorganize the expression to find our discriminant functions.</p>
+<center>
+<span class="math display">\[\scriptsize \begin{align}
+0 &amp;= \log{\pi_k} - \log{\pi_l} - \frac{1}{2}\log{\det(\Sigma_k)} + \frac{1}{2}\log{\det(\Sigma_l)}
+- \frac{1}{2} (x - \mu_k)^T \Sigma_l^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l) \\
+\underbrace{\log{\pi_l} - \frac{1}{2}\log{\det(\Sigma_l)} - \frac{1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}_{\delta_l(x)} &amp;= \underbrace{\log{\pi_k} - \frac{1}{2}\log{\det(\Sigma_k)} - \frac{1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}_{\delta_k(x)} \\
+\end{align}\]</span>
+</center>
+<p>Just like in the univariate and multivariate LDA cases, for a given observation the Bayes classifier assigns that observation to a class based on which class’s discriminant function evaluates largest.</p>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="multivariate-lda.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-generation-3.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"],
+"google": false,
+"instapper": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"df_print": "kable"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

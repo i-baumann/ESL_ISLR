@@ -1,62 +1,47 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="" xml:lang="">
 <head>
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>ESL &amp; ISLR Working Examples</title>
+  <meta name="description" content="ESL &amp; ISLR Working Examples" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="ESL &amp; ISLR Working Examples" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://my-cabbages.github.io/ESL_ISLR/" />
+  <meta property="og:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+  
+  <meta name="github-repo" content="my-cabbages/ESL_ISLR/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="ESL &amp; ISLR Working Examples" />
+  
+  
+  <meta name="twitter:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+
+<meta name="author" content="Isaac Baumann" />
 
 
 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
 
-<title>ESL/ISLR Working Examples</title>
-
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
-}
-</script>
+<link rel="next" href="introduction.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -65,377 +50,267 @@ if (window.hljs) {
 
 
 
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-pre code {
-  padding: 0;
-}
-</style>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 
 <style type="text/css">
-.dropdown-submenu {
-  position: relative;
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
 }
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
 @media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
   }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
-
+<link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body>
 
 
-<div class="container-fluid main-container">
 
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
 
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
+    <div class="book-summary">
+      <nav role="navigation">
 
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+<ul class="summary">
+<li><a href="./">ESL & ISLR Working Examples</a></li>
 
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
+<li class="chapter" data-level="" data-path="packages.html"><a href="packages.html"><i class="fa fa-check"></i>Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i>Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="data-generation.html"><a href="data-generation.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="the-log-likelihood-surface.html"><a href="the-log-likelihood-surface.html"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-1-newton-raphsonirls"><i class="fa fa-check"></i>Method 1: Newton-Raphson/IRLS</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-2-modified-irls"><i class="fa fa-check"></i>Method 2: Modified IRLS</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li><a href="testing.html#comparing-to-glm">Comparing to <code>glm</code></a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#the-log-likelihood-surface-1"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#plotting-the-logistic-fit"><i class="fa fa-check"></i>Plotting the Logistic Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-discriminant-analysis.html"><a href="linear-discriminant-analysis.html"><i class="fa fa-check"></i>Linear Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html"><i class="fa fa-check"></i>Univariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#theory"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#setup"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#data-generation-1"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#implementation-1"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#testing-1"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html"><i class="fa fa-check"></i>Multivariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#theory-1"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#setup-1"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#data-generation-2"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#implementation-2"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#testing-2"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html"><i class="fa fa-check"></i>Quadratic Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html#theory-2"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="data-generation-3.html"><a href="data-generation-3.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-bayes-classifier-and-decision-boundaries-1"><i class="fa fa-check"></i>The Bayes Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-qda-classifier-and-decision-boundaries"><i class="fa fa-check"></i>The QDA Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#visualizing-the-decision-boundaries"><i class="fa fa-check"></i>Visualizing the Decision Boundaries</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html#visualization"><i class="fa fa-check"></i>Visualization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ridge-regression.html"><a href="ridge-regression.html"><i class="fa fa-check"></i>Ridge Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html"><i class="fa fa-check"></i>Theory</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ols"><i class="fa fa-check"></i>Minimizing RSS: OLS</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ridge"><i class="fa fa-check"></i>Minimizing RSS: Ridge</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#important-features"><i class="fa fa-check"></i>Important Features</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html"><i class="fa fa-check"></i>Case 1: Linearly Dependent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#data-generation-4"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#the-problem-ols"><i class="fa fa-check"></i>The Problem: OLS</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#a-solution-ridge-regression"><i class="fa fa-check"></i>A Solution: Ridge Regression</a></li>
+<li><a href="case-1-linearly-dependent-variables.html#solving-for-hatbetaridge">Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html"><i class="fa fa-check"></i>Case 2: Correlated Independent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#exploratory-analysis"><i class="fa fa-check"></i>Exploratory Analysis</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#implementation-4"><i class="fa fa-check"></i>Implementation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="standardization.html"><a href="standardization.html"><i class="fa fa-check"></i>Standardization</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
+</ul>
 
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">ESL/ISLR Examples</a>
+      </nav>
     </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="index.html">Home</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/my-cabbages/ESL_ISLR">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
 
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ESL &amp; ISLR Working Examples</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
 <div id="header">
-
-
-
-<h1 class="title toc-ignore">ESL/ISLR Working Examples</h1>
+<h1 class="title">ESL &amp; ISLR Working Examples</h1>
+<p class="author"><em>Isaac Baumann</em></p>
+<p class="date"><em>Updated 2021-10-07</em></p>
+</div>
+<div id="section" class="section level1 unnumbered">
+<h1 class="unnumbered"></h1>
+<center>
+<img src="docs/multivariate_QDA_files/figure-html/qda_areas-1.png"></img>
+</center>
 
 </div>
+            </section>
 
+          </div>
+        </div>
+      </div>
 
-<p>Below is a list of working examples of common statistical learning models, built as I make my way through Hastie, Tibshirani, and Friedman’s <a href="https://web.stanford.edu/~hastie/ElemStatLearn/" target="_blank">Elements of Statistical Learning</a> and Hastie, Tibshirani, James, and Witten’s <a href="https://www.statlearning.com/" target="_blank">Introduction to Statistical Learning With Applications in R</a>.</p>
-<p>All code is written simply for fun in my free time while going through the above texts and are meant only for educational/fun purposes. In most cases the processes/algorithms used are not the most stable or efficient in finite precision.</p>
-<p>Please <a href="https://github.com/my-cabbages/ESL_ISLR/issues" target="_blank">open an issue</a> if you notice any errors!</p>
-<div id="linear-discriminant-analysis" class="section level2">
-<h2>Linear Discriminant Analysis</h2>
-<ul>
-<li><a href="univariate_LDA.html">Univariate LDA - Binary Outcome</a></li>
-<li><a href="multivariate_LDA.html">Multivariate LDA - Three-Class Outcome</a></li>
-</ul>
-</div>
-<div id="logistic-regression" class="section level2">
-<h2>Logistic Regression</h2>
-<ul>
-<li><a href="univariate_binary_logistic.html">Univariate Logistic Regression - Binary Outcome</a></li>
-</ul>
-</div>
-<div id="quadratic-discriminant-analysis" class="section level2">
-<h2>Quadratic Discriminant Analysis</h2>
-<ul>
-<li><a href="multivariate_QDA.html">Multivariate QDA - Three-Class Outcome</a></li>
-</ul>
-</div>
-<div id="ridge-regression" class="section level2">
-<h2>Ridge Regression</h2>
-<ul>
-<li><a href="ridge.html">Ridge Regression</a></li>
-</ul>
-</div>
-
-
-
-</div>
-</div>
-
-</div>
-
+<a href="introduction.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"],
+"google": false,
+"instapper": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"df_print": "kable"
 });
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
 });
 </script>
 
@@ -444,10 +319,15 @@ $(document).ready(function ()  {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
-
 </body>
+
 </html>

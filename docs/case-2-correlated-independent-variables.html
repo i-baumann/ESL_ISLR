@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Case 2: Correlated Independent Variables | ESL &amp; ISLR Working Examples</title>
+  <meta name="description" content="Case 2: Correlated Independent Variables | ESL &amp; ISLR Working Examples" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Case 2: Correlated Independent Variables | ESL &amp; ISLR Working Examples" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://my-cabbages.github.io/ESL_ISLR/" />
+  <meta property="og:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+  
+  <meta name="github-repo" content="my-cabbages/ESL_ISLR/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Case 2: Correlated Independent Variables | ESL &amp; ISLR Working Examples" />
+  
+  
+  <meta name="twitter:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+
+<meta name="author" content="Isaac Baumann" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="case-1-linearly-dependent-variables.html"/>
+<link rel="next" href="standardization.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">ESL & ISLR Working Examples</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
+<li class="chapter" data-level="" data-path="packages.html"><a href="packages.html"><i class="fa fa-check"></i>Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i>Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="data-generation.html"><a href="data-generation.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="the-log-likelihood-surface.html"><a href="the-log-likelihood-surface.html"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-1-newton-raphsonirls"><i class="fa fa-check"></i>Method 1: Newton-Raphson/IRLS</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-2-modified-irls"><i class="fa fa-check"></i>Method 2: Modified IRLS</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li><a href="testing.html#comparing-to-glm">Comparing to <code>glm</code></a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#the-log-likelihood-surface-1"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#plotting-the-logistic-fit"><i class="fa fa-check"></i>Plotting the Logistic Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-discriminant-analysis.html"><a href="linear-discriminant-analysis.html"><i class="fa fa-check"></i>Linear Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html"><i class="fa fa-check"></i>Univariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#theory"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#setup"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#data-generation-1"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#implementation-1"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#testing-1"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html"><i class="fa fa-check"></i>Multivariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#theory-1"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#setup-1"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#data-generation-2"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#implementation-2"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#testing-2"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html"><i class="fa fa-check"></i>Quadratic Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html#theory-2"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="data-generation-3.html"><a href="data-generation-3.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-bayes-classifier-and-decision-boundaries-1"><i class="fa fa-check"></i>The Bayes Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-qda-classifier-and-decision-boundaries"><i class="fa fa-check"></i>The QDA Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#visualizing-the-decision-boundaries"><i class="fa fa-check"></i>Visualizing the Decision Boundaries</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html#visualization"><i class="fa fa-check"></i>Visualization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ridge-regression.html"><a href="ridge-regression.html"><i class="fa fa-check"></i>Ridge Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html"><i class="fa fa-check"></i>Theory</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ols"><i class="fa fa-check"></i>Minimizing RSS: OLS</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ridge"><i class="fa fa-check"></i>Minimizing RSS: Ridge</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#important-features"><i class="fa fa-check"></i>Important Features</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html"><i class="fa fa-check"></i>Case 1: Linearly Dependent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#data-generation-4"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#the-problem-ols"><i class="fa fa-check"></i>The Problem: OLS</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#a-solution-ridge-regression"><i class="fa fa-check"></i>A Solution: Ridge Regression</a></li>
+<li><a href="case-1-linearly-dependent-variables.html#solving-for-hatbetaridge">Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html"><i class="fa fa-check"></i>Case 2: Correlated Independent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#exploratory-analysis"><i class="fa fa-check"></i>Exploratory Analysis</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#implementation-4"><i class="fa fa-check"></i>Implementation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="standardization.html"><a href="standardization.html"><i class="fa fa-check"></i>Standardization</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ESL &amp; ISLR Working Examples</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="case-2-correlated-independent-variables" class="section level2">
+<h2>Case 2: Correlated Independent Variables</h2>
+<p>Perfect <a href="https://en.wikipedia.org/wiki/Multicollinearity#Definition" target="_blank">collinearity or multicollinearity</a> like in the last case is rarely found in real data. What’s much more common is having variables that are strongly correlated with one another, but not perfectly. When this is the case, OLS can</p>
+<ol style="list-style-type: decimal">
+<li>fail to find a solution due to numerical rounding (if variables are almost perfectly related) or</li>
+<li>find an unstable solution that can vary wildly between similar data and make it difficult to discern which variables contribute most to prediction of the outcome (usually by imprecisely estimating coefficients).</li>
+</ol>
+<p>In the same way as in the previous case, ridge regression can alleviate both of these problems, but to a different degree.</p>
+<p>We won’t perform cross validation to determine the optimal penalty parameter but will instead evaluate models over ranges of penalty values to show how ridge regression behaves over the range and compare to OLS.</p>
+<div id="data" class="section level3">
+<h3>Data</h3>
+<p>For this case, we’ll use the famous Boston housing data set. The data come pre-loaded in the <a href="https://cran.r-project.org/web/packages/MASS/index.html" target="_blank"><code>MASS</code></a> package, so there’s no need to download and read in data. The data set contains variables relating to home values in various towns and suburbs in Boston, such as <code>crim</code> (crime rate), <code>nox</code> (an air pollution measure), and <code>rm</code> (average number of rooms per home). We’ll build a model to predict <code>medv</code>, the median value of a home in a town. Some of the variable names are not incredibly self-explanatory, so feel free to check the <a href="https://www.rdocumentation.org/packages/MASS/versions/7.3-54/topics/Boston" target="_blank">documentation</a> for more details.</p>
+<p>This case uses many of the same packages and functions that were loaded and written in <a href="case-1-linearly-dependent-variables.html">the first case</a>, so review that case if not already completed.</p>
+<p>We’ll use <code>model.matrix</code> to create our input matrix without the vector for the intercept and separate <code>medv</code> into its own vector.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="case-2-correlated-independent-variables.html#cb104-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(medv <span class="sc">~</span> ., <span class="at">data =</span> Boston)[,<span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb104-2"><a href="case-2-correlated-independent-variables.html#cb104-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> Boston<span class="sc">$</span>medv</span></code></pre></div>
+<p>Then we can split our data into training sets and testing sets. We’ll use <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sample" target="_blank"><code>sample</code></a> to randomly pick 60% of the rows in the data to use as our training set while the other 40% will go into our testing set. Then we’ll <code>apply</code> our <code>standardize</code> function we wrote to the input data for each set.</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="case-2-correlated-independent-variables.html#cb105-1" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(X), <span class="fu">nrow</span>(X) <span class="sc">*</span> .<span class="dv">6</span>)</span>
+<span id="cb105-2"><a href="case-2-correlated-independent-variables.html#cb105-2" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> (<span class="sc">-</span>train)</span>
+<span id="cb105-3"><a href="case-2-correlated-independent-variables.html#cb105-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-4"><a href="case-2-correlated-independent-variables.html#cb105-4" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> <span class="fu">apply</span>(X[train,], <span class="dv">2</span>, standardize)</span>
+<span id="cb105-5"><a href="case-2-correlated-independent-variables.html#cb105-5" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> y[train]</span>
+<span id="cb105-6"><a href="case-2-correlated-independent-variables.html#cb105-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb105-7"><a href="case-2-correlated-independent-variables.html#cb105-7" aria-hidden="true" tabindex="-1"></a>X_test <span class="ot">&lt;-</span> <span class="fu">apply</span>(X[test,], <span class="dv">2</span>, standardize)</span>
+<span id="cb105-8"><a href="case-2-correlated-independent-variables.html#cb105-8" aria-hidden="true" tabindex="-1"></a>y_test <span class="ot">&lt;-</span> y[test]</span></code></pre></div>
+</div>
+<div id="exploratory-analysis" class="section level3">
+<h3>Exploratory Analysis</h3>
+<p>We can easily visualize the correlations between the independent variables using the main function of the <a href="https://cran.r-project.org/web/packages/ggcorrplot/ggcorrplot.pdf" target="_blank"><code>ggcorrplot</code></a> package. First we create a correlation matrix of the independent variables using <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/cor" target="_blank"><code>cor</code></a>,<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> R’s built-in correlation function, and feed it into <code>ggcorrplot</code> for a quick and simple correlation heat map.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="case-2-correlated-independent-variables.html#cb106-1" aria-hidden="true" tabindex="-1"></a>X_corr <span class="ot">&lt;-</span> <span class="fu">cor</span>(X_train)</span>
+<span id="cb106-2"><a href="case-2-correlated-independent-variables.html#cb106-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-3"><a href="case-2-correlated-independent-variables.html#cb106-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggcorrplot</span>(X_corr, <span class="at">type =</span> <span class="st">&quot;lower&quot;</span>,</span>
+<span id="cb106-4"><a href="case-2-correlated-independent-variables.html#cb106-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">colors =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">3</span>, <span class="at">name =</span> <span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="ridge_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>Several variables are highly correlated with one another. <code>indus</code> (a measure of town industrial concentration), <code>nox</code> (air pollution), and <code>age</code> (average home age) are all highly negatively correlated with <code>dis</code> (distance to employment centers). It’s probably not a surprise that some towns in more industrial areas would have more exposure to air pollution and that development might be more common (and so home ages would be lower) in high-employment suburbs far away from job centers. But how much, together, are these variables contributing to prediction? In other words, do we need all of these variables that are highly related to one another or will one or two be enough to capture the “action” contained in all of them?</p>
+<p>To explore this further, we can quickly perform a <a href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">principal component analysis</a><a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a> of our input matrix. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp" target="_blank"><code>prcomp</code></a> is R’s built-in PCA function. We’ll look only at the first five principal components.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="case-2-correlated-independent-variables.html#cb107-1" aria-hidden="true" tabindex="-1"></a>boston_pcomps <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X_train)<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<pre><code>##                 PC1        PC2         PC3         PC4           PC5
+## crim     0.24723382 -0.2511045  0.32667740 -0.05176398  0.0115208738
+## zn      -0.25663683 -0.2949816  0.34809979  0.18933832 -0.2393946151
+## indus    0.34672495  0.1184171 -0.05263250 -0.02367901 -0.0564490554
+## chas    -0.01199561  0.5009851  0.25771830 -0.44547852 -0.6803669783
+## nox      0.34539496  0.2109929  0.04747682  0.21510231  0.0005181504
+## rm      -0.17494602  0.2982463  0.52407021 -0.11258859  0.5417159930
+## age      0.31669117  0.3050543 -0.10973424  0.16707139  0.0979389787
+## dis     -0.32017540 -0.3591163  0.04200562 -0.05483417 -0.2306089451
+## rad      0.32352458 -0.2095725  0.30789728 -0.21403644  0.0560045383
+## tax      0.33749996 -0.2005586  0.25100970 -0.14875406 -0.0015581921
+## ptratio  0.20651028 -0.3128254 -0.25092106 -0.64907762  0.1514701909
+## black   -0.20783511  0.1352615 -0.39138198 -0.32773507  0.1171877432
+## lstat    0.30907152 -0.1706826 -0.19560668  0.27557840 -0.2835976550</code></pre>
+<p>The <code>rotation</code> matrix from <code>prcomp</code> contains the <a href="https://en.wikipedia.org/wiki/Principal_component_analysis#Further_components">loadings</a>, which are the correlations between the input variables and the directions represented by the principal components when the input variables are standardized.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a> To find how much each variable “contributes” to the direction of each principal component we simply take the column-wise absolute values as a percentage of the totals. We’ll do this using a combination of <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sweep" target="_blank"><code>sweep</code></a> to divide within columns and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/colSums" target="_blank"><code>colSums</code></a> to get column totals.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="case-2-correlated-independent-variables.html#cb109-1" aria-hidden="true" tabindex="-1"></a>boston_pcomps <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">abs</span>(boston_pcomps))</span>
+<span id="cb109-2"><a href="case-2-correlated-independent-variables.html#cb109-2" aria-hidden="true" tabindex="-1"></a>boston_pcomps <span class="ot">&lt;-</span> <span class="fu">sweep</span>(<span class="fu">abs</span>(boston_pcomps), <span class="dv">2</span>, <span class="fu">colSums</span>(<span class="fu">abs</span>(boston_pcomps)), <span class="st">&quot;/&quot;</span>) <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
+<pre><code>##                PC1       PC2       PC3        PC4         PC5
+## crim     7.2625258  7.456042 10.520227  1.8004627  0.46674735
+## zn       7.5387405  8.758884 11.210107  6.5855940  9.69863956
+## indus   10.1850907  3.516158  1.694962  0.8236069  2.28693132
+## chas     0.3523725 14.875744  8.299487 15.4947008 27.56383676
+## nox     10.1460221  6.265009  1.528930  7.4817209  0.02099192
+## rm       5.1390620  8.855824 16.877009  3.9160733 21.94664303
+## age      9.3028444  9.057973  3.533850  5.8111022  3.96782047
+## dis      9.4051942 10.663235  1.352737  1.9072503  9.34270404
+## rad      9.5035767  6.222833  9.915437  7.4446478  2.26892251
+## tax      9.9141054  5.955185  8.083445  5.1739861  0.06312733
+## ptratio  6.0662663  9.288720  8.080591 22.5763152  6.13654065
+## black    6.1051834  4.016318 12.603955 11.3993306  4.74764932
+## lstat    9.0790161  5.068075  6.299262  9.5852092 11.48944572</code></pre>
+<p>Scanning across the principal components (columns) it’s relatively easy to see which variables contribute the most to the first five principal components. This is analogous to the discussion in the theory section about variables being associated with singular values: we should expect that the variables that contribute the most to the these first few principal components will be among the slowest to shrink to zero as <span class="math inline">\(\lambda\)</span> increases.</p>
+</div>
+<div id="implementation-4" class="section level3">
+<h3>Implementation</h3>
+<p>We’ll solve for our ridge regression estimates over a wide range of the penalty term, <span class="math inline">\(\lambda\)</span>, to explore how ridge regression shrinks our variables - paying special attention to our three correlated variables - and how <span class="math inline">\(\lambda\)</span> plays a role in the <a href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff#Bias%E2%80%93variance_decomposition_of_mean_squared_error" target="_blank">bias-variance tradeoff</a>. For this example we’ll evaluate our models based on minimizing <a href="https://en.wikipedia.org/wiki/Mean_squared_error" target="_blank">mean square error</a>.</p>
+<p>We’ll create two outcome data sets, <code>betas</code> and <code>performance</code>, that show us how our estimated coefficients and how our mean square error behave across the range of <span class="math inline">\(\lambda\)</span>s.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="case-2-correlated-independent-variables.html#cb111-1" aria-hidden="true" tabindex="-1"></a>betas <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb111-2"><a href="case-2-correlated-independent-variables.html#cb111-2" aria-hidden="true" tabindex="-1"></a>performance <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb111-3"><a href="case-2-correlated-independent-variables.html#cb111-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-4"><a href="case-2-correlated-independent-variables.html#cb111-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (lambda <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1000</span>, <span class="dv">1</span>)) {</span>
+<span id="cb111-5"><a href="case-2-correlated-independent-variables.html#cb111-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb111-6"><a href="case-2-correlated-independent-variables.html#cb111-6" aria-hidden="true" tabindex="-1"></a>  b_vec <span class="ot">&lt;-</span> <span class="fu">ridge</span>(y_train, X_train, lambda)</span>
+<span id="cb111-7"><a href="case-2-correlated-independent-variables.html#cb111-7" aria-hidden="true" tabindex="-1"></a>  b_MSE <span class="ot">&lt;-</span> <span class="fu">mean</span>((X_test <span class="sc">%*%</span> b_vec <span class="sc">+</span> <span class="fu">mean</span>(y_test) <span class="sc">-</span> y_test)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb111-8"><a href="case-2-correlated-independent-variables.html#cb111-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb111-9"><a href="case-2-correlated-independent-variables.html#cb111-9" aria-hidden="true" tabindex="-1"></a>  betas <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(betas, <span class="fu">tibble</span>(<span class="st">&quot;lambda&quot;</span> <span class="ot">=</span> lambda,</span>
+<span id="cb111-10"><a href="case-2-correlated-independent-variables.html#cb111-10" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">&quot;Variable&quot;</span> <span class="ot">=</span> <span class="fu">colnames</span>(X_train),</span>
+<span id="cb111-11"><a href="case-2-correlated-independent-variables.html#cb111-11" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">&quot;Coefficient&quot;</span> <span class="ot">=</span> b_vec))</span>
+<span id="cb111-12"><a href="case-2-correlated-independent-variables.html#cb111-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb111-13"><a href="case-2-correlated-independent-variables.html#cb111-13" aria-hidden="true" tabindex="-1"></a>  performance <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(performance, <span class="fu">tibble</span>(<span class="st">&quot;lambda&quot;</span> <span class="ot">=</span> lambda,</span>
+<span id="cb111-14"><a href="case-2-correlated-independent-variables.html#cb111-14" aria-hidden="true" tabindex="-1"></a>                                       <span class="st">&quot;Test_MSE&quot;</span> <span class="ot">=</span> b_MSE))</span>
+<span id="cb111-15"><a href="case-2-correlated-independent-variables.html#cb111-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb111-16"><a href="case-2-correlated-independent-variables.html#cb111-16" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Let’s visualize how the coefficients of our variables change as <span class="math inline">\(\lambda \rightarrow \infty\)</span>.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="case-2-correlated-independent-variables.html#cb112-1" aria-hidden="true" tabindex="-1"></a>palette <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">12</span>, <span class="st">&quot;Paired&quot;</span>))(<span class="fu">length</span>(<span class="fu">colnames</span>(X_train)))</span>
+<span id="cb112-2"><a href="case-2-correlated-independent-variables.html#cb112-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb112-3"><a href="case-2-correlated-independent-variables.html#cb112-3" aria-hidden="true" tabindex="-1"></a>coef_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(betas, <span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> Coefficient, <span class="at">color =</span> Variable)) <span class="sc">+</span></span>
+<span id="cb112-4"><a href="case-2-correlated-independent-variables.html#cb112-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb112-5"><a href="case-2-correlated-independent-variables.html#cb112-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> palette) <span class="sc">+</span></span>
+<span id="cb112-6"><a href="case-2-correlated-independent-variables.html#cb112-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,</span>
+<span id="cb112-7"><a href="case-2-correlated-independent-variables.html#cb112-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>) <span class="sc">+</span></span>
+<span id="cb112-8"><a href="case-2-correlated-independent-variables.html#cb112-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Ridge Regression Coefficient Shrinkage&quot;</span>,</span>
+<span id="cb112-9"><a href="case-2-correlated-independent-variables.html#cb112-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">lambda$&quot;</span>))</span></code></pre></div>
+<p><img src="ridge_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>As expected, the estimates for the variables with higher overall principal component contributions maintain their magnitude the most as <span class="math inline">\(\lambda \rightarrow \infty\)</span> while estimates for the variables that don’t contribute much to the principal components (and therefore don’t contribute much to the variance of the projected data) shrink more quickly toward zero.</p>
+<p>Next, we’ll visualize the test set MSE for <span class="math inline">\(\lambda \rightarrow \infty\)</span>. Can ridge regression outperform OLS?</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="case-2-correlated-independent-variables.html#cb113-1" aria-hidden="true" tabindex="-1"></a>performance_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(performance <span class="sc">%&gt;%</span> <span class="fu">filter</span>(lambda <span class="sc">&lt;=</span> <span class="dv">200</span>), </span>
+<span id="cb113-2"><a href="case-2-correlated-independent-variables.html#cb113-2" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">aes</span>(<span class="at">x =</span> lambda, <span class="at">y =</span> Test_MSE)) <span class="sc">+</span></span>
+<span id="cb113-3"><a href="case-2-correlated-independent-variables.html#cb113-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb113-4"><a href="case-2-correlated-independent-variables.html#cb113-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> performance<span class="sc">$</span>Test_MSE[performance<span class="sc">$</span>lambda <span class="sc">==</span> <span class="dv">0</span>], </span>
+<span id="cb113-5"><a href="case-2-correlated-independent-variables.html#cb113-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>, </span>
+<span id="cb113-6"><a href="case-2-correlated-independent-variables.html#cb113-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb113-7"><a href="case-2-correlated-independent-variables.html#cb113-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Ridge Regression Test MSE Performance&quot;</span>,</span>
+<span id="cb113-8"><a href="case-2-correlated-independent-variables.html#cb113-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">lambda$&quot;</span>),</span>
+<span id="cb113-9"><a href="case-2-correlated-independent-variables.html#cb113-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Test MSE&quot;</span>)</span></code></pre></div>
+<p><img src="ridge_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>The dashed red line represents the test MSE for OLS (i.e., where <span class="math inline">\(\lambda = 0\)</span>). With some penalty, ridge performs better in prediction than OLS in this case with this train/test split.</p>
+<p>Shrinking some of our coefficients close to zero (i.e., using a penalty, like <span class="math inline">\(\lambda\)</span> in ridge regression) can minimize the variance of our fitted/predicted values, which can sometimes translate to better predictions. While estimating model variance via bootstrapping is outside the scope of this example, generally OLS - which minimizes bias but at the expense of allowing more than the minimum variance - doesn’t reach as low a MSE as a regularized regression like ridge regression - which can find a balance between bias and variance that minimizes MSE. However, this can change depending on the particular data in the train/test split.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="11">
+<li id="fn11"><p><code>cor</code> calculates Pearson’s correlation by default.<a href="case-2-correlated-independent-variables.html#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>If you’re unfamiliar with PCA, see <a href="https://stats.stackexchange.com/questions/2691/making-sense-of-principal-component-analysis-eigenvectors-eigenvalues/140579#140579" target="_blank">this excellent intuitive explanation</a>.<a href="case-2-correlated-independent-variables.html#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>If this is unfamiliar, for now just think of this as a measure of how much a direction of a principal component is associated with the existing directions of the variables in the hyperplanar space occupied by the data.<a href="case-2-correlated-independent-variables.html#fnref13" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="case-1-linearly-dependent-variables.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="standardization.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"],
+"google": false,
+"instapper": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"df_print": "kable"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

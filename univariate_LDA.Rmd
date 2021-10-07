@@ -1,28 +1,12 @@
----
-title: "Univariate Linear Discriminant Analysis"
-output: 
-    html_document:
-        toc: TRUE
-        toc_float: TRUE
-    pandoc_args: "--webtex"
----
-
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(MASS)
 library(patchwork)
 library(xaringanExtra) # If needed: devtools::install_github("gadenbuie/xaringanExtra")
 ```
 
-```{r xaringanExtra-clipboard, echo=FALSE}
-htmltools::tagList(
-  xaringanExtra::use_clipboard(
-    button_text = "<i class=\"fa fa-clipboard\"></i>",
-    success_text = "<i class=\"fa fa-check\" style=\"color: #90BE6D\"></i>",
-  ),
-  rmarkdown::html_dependency_font_awesome()
-)
-```
+# Univariate Linear Discriminant Analysis
 
 This example walks through using linear discriminant analysis to classify observations in a two-class univariate setting with (idealized) generated data. 
 

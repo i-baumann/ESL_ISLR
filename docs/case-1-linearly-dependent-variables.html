@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Case 1: Linearly Dependent Variables | ESL &amp; ISLR Working Examples</title>
+  <meta name="description" content="Case 1: Linearly Dependent Variables | ESL &amp; ISLR Working Examples" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Case 1: Linearly Dependent Variables | ESL &amp; ISLR Working Examples" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://my-cabbages.github.io/ESL_ISLR/" />
+  <meta property="og:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+  
+  <meta name="github-repo" content="my-cabbages/ESL_ISLR/" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Case 1: Linearly Dependent Variables | ESL &amp; ISLR Working Examples" />
+  
+  
+  <meta name="twitter:image" content="https://my-cabbages.github.io/ESL_ISLR//./_bookdown_files/multivariate_QDA_files/figure-html" />
+
+<meta name="author" content="Isaac Baumann" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="theory-3.html"/>
+<link rel="next" href="case-2-correlated-independent-variables.html"/>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/clipboard-2.0.6/clipboard.min.js"></script>
+<link href="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
+<script src="libs/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.js"></script>
+<script>window.xaringanExtraClipboard(null, {"button":"<i class=\"fa fa-clipboard\"><\/i>","success":"<i class=\"fa fa-check\" style=\"color: #90BE6D\"><\/i>","error":"Press Ctrl+C to Copy"})</script>
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">ESL & ISLR Working Examples</a></li>
+
+<li class="divider"></li>
+<li><a href="index.html#section"></a></li>
+<li class="chapter" data-level="" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i>Introduction</a>
+<ul>
+<li class="chapter" data-level="" data-path="packages.html"><a href="packages.html"><i class="fa fa-check"></i>Packages</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="logistic-regression.html"><a href="logistic-regression.html"><i class="fa fa-check"></i>Logistic Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="data-generation.html"><a href="data-generation.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="the-log-likelihood-surface.html"><a href="the-log-likelihood-surface.html"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-1-newton-raphsonirls"><i class="fa fa-check"></i>Method 1: Newton-Raphson/IRLS</a></li>
+<li class="chapter" data-level="" data-path="implementation.html"><a href="implementation.html#method-2-modified-irls"><i class="fa fa-check"></i>Method 2: Modified IRLS</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li><a href="testing.html#comparing-to-glm">Comparing to <code>glm</code></a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#the-log-likelihood-surface-1"><i class="fa fa-check"></i>The Log-Likelihood Surface</a></li>
+<li class="chapter" data-level="" data-path="testing.html"><a href="testing.html#plotting-the-logistic-fit"><i class="fa fa-check"></i>Plotting the Logistic Fit</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-discriminant-analysis.html"><a href="linear-discriminant-analysis.html"><i class="fa fa-check"></i>Linear Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html"><i class="fa fa-check"></i>Univariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#theory"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#setup"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#data-generation-1"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#implementation-1"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="univariate-lda.html"><a href="univariate-lda.html#testing-1"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html"><i class="fa fa-check"></i>Multivariate LDA</a>
+<ul>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#theory-1"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#setup-1"><i class="fa fa-check"></i>Setup</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#data-generation-2"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#implementation-2"><i class="fa fa-check"></i>Implementation</a></li>
+<li class="chapter" data-level="" data-path="multivariate-lda.html"><a href="multivariate-lda.html#testing-2"><i class="fa fa-check"></i>Testing</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html"><i class="fa fa-check"></i>Quadratic Discriminant Analysis</a>
+<ul>
+<li class="chapter" data-level="" data-path="quadratic-discriminant-analysis.html"><a href="quadratic-discriminant-analysis.html#theory-2"><i class="fa fa-check"></i>Theory</a></li>
+<li class="chapter" data-level="" data-path="data-generation-3.html"><a href="data-generation-3.html"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html"><i class="fa fa-check"></i>Implementation</a>
+<ul>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-bayes-classifier-and-decision-boundaries-1"><i class="fa fa-check"></i>The Bayes Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#the-qda-classifier-and-decision-boundaries"><i class="fa fa-check"></i>The QDA Classifier and Decision Boundaries</a></li>
+<li class="chapter" data-level="" data-path="implementation-3.html"><a href="implementation-3.html#visualizing-the-decision-boundaries"><i class="fa fa-check"></i>Visualizing the Decision Boundaries</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html"><i class="fa fa-check"></i>Testing</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-3.html"><a href="testing-3.html#visualization"><i class="fa fa-check"></i>Visualization</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="ridge-regression.html"><a href="ridge-regression.html"><i class="fa fa-check"></i>Ridge Regression</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html"><i class="fa fa-check"></i>Theory</a>
+<ul>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ols"><i class="fa fa-check"></i>Minimizing RSS: OLS</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#minimizing-rss-ridge"><i class="fa fa-check"></i>Minimizing RSS: Ridge</a></li>
+<li class="chapter" data-level="" data-path="theory-3.html"><a href="theory-3.html#important-features"><i class="fa fa-check"></i>Important Features</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html"><i class="fa fa-check"></i>Case 1: Linearly Dependent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#data-generation-4"><i class="fa fa-check"></i>Data Generation</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#the-problem-ols"><i class="fa fa-check"></i>The Problem: OLS</a></li>
+<li class="chapter" data-level="" data-path="case-1-linearly-dependent-variables.html"><a href="case-1-linearly-dependent-variables.html#a-solution-ridge-regression"><i class="fa fa-check"></i>A Solution: Ridge Regression</a></li>
+<li><a href="case-1-linearly-dependent-variables.html#solving-for-hatbetaridge">Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html"><i class="fa fa-check"></i>Case 2: Correlated Independent Variables</a>
+<ul>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#data"><i class="fa fa-check"></i>Data</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#exploratory-analysis"><i class="fa fa-check"></i>Exploratory Analysis</a></li>
+<li class="chapter" data-level="" data-path="case-2-correlated-independent-variables.html"><a href="case-2-correlated-independent-variables.html#implementation-4"><i class="fa fa-check"></i>Implementation</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="standardization.html"><a href="standardization.html"><i class="fa fa-check"></i>Standardization</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">ESL &amp; ISLR Working Examples</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="case-1-linearly-dependent-variables" class="section level2">
+<h2>Case 1: Linearly Dependent Variables</h2>
+<p>First we’ll explore a simple case demonstrating how ridge regression can solve problems with <a href="https://en.wikipedia.org/wiki/Linear_independence" target="_blank">linearly dependent</a> variables when OLS can’t. This is just a particular case of <a href="https://en.wikipedia.org/wiki/Rank_(linear_algebra)#Main_definitions" target="_blank">rank-deficiency</a>, the other one that can cause issues with OLS being having more variables (columns) than observations (rows) in your design matrix. Ridge regression can handle both cases.</p>
+<div id="data-generation-4" class="section level3">
+<h3>Data Generation</h3>
+<p>For the cases in this example, load the <a href="https://cran.r-project.org/web/packages/tidyverse/index.html" target="_blank"><code>tidyverse</code></a>, <a href="https://cran.r-project.org/web/packages/MASS/index.html" target="_blank"><code>MASS</code></a>, <a href="https://cran.r-project.org/web/packages/latex2exp/index.html" target="_blank"><code>latex2exp</code></a>, <a href="https://cran.r-project.org/web/packages/ggcorrplot/index.html" target="_blank"><code>ggcorrplot</code></a>, and <a href="https://cran.r-project.org/web/packages/RColorBrewer/RColorBrewer.pdf" target="_blank"><code>RColorBrewer</code></a> packages.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="case-1-linearly-dependent-variables.html#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb89-2"><a href="case-1-linearly-dependent-variables.html#cb89-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb89-3"><a href="case-1-linearly-dependent-variables.html#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span>
+<span id="cb89-4"><a href="case-1-linearly-dependent-variables.html#cb89-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggcorrplot)</span>
+<span id="cb89-5"><a href="case-1-linearly-dependent-variables.html#cb89-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<p>We’ll create one normally-distributed variable and then a second variable that is simply a multiple of the first to make the two variables linearly dependent.</p>
+<p>Let’s generate one variable with 1,000 observations, a mean between -10 and 10, and a standard deviation between 1 and 10.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="case-1-linearly-dependent-variables.html#cb90-1" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="at">mean =</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>), <span class="at">sd =</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">10</span>))</span></code></pre></div>
+<p>We’ll make X1 linearly dependent with a new variable, X2, by making X2 a variable that is simply X1 divided by two.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="case-1-linearly-dependent-variables.html#cb91-1" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> X1 <span class="sc">/</span> <span class="dv">2</span></span></code></pre></div>
+<p>Next we’ll write a <a href="https://en.wikipedia.org/wiki/Standard_score" target="_blank">standardization</a> function<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> and standardize both of our variables.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="case-1-linearly-dependent-variables.html#cb92-1" aria-hidden="true" tabindex="-1"></a>standardize <span class="ot">&lt;-</span> <span class="cf">function</span>(vec){</span>
+<span id="cb92-2"><a href="case-1-linearly-dependent-variables.html#cb92-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb92-3"><a href="case-1-linearly-dependent-variables.html#cb92-3" aria-hidden="true" tabindex="-1"></a>  sd <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((vec <span class="sc">-</span> <span class="fu">mean</span>(vec))<span class="sc">^</span><span class="dv">2</span>) <span class="sc">/</span> <span class="fu">length</span>(vec))</span>
+<span id="cb92-4"><a href="case-1-linearly-dependent-variables.html#cb92-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb92-5"><a href="case-1-linearly-dependent-variables.html#cb92-5" aria-hidden="true" tabindex="-1"></a>  (vec <span class="sc">-</span> <span class="fu">mean</span>(vec)) <span class="sc">/</span> sd</span>
+<span id="cb92-6"><a href="case-1-linearly-dependent-variables.html#cb92-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb92-7"><a href="case-1-linearly-dependent-variables.html#cb92-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb92-8"><a href="case-1-linearly-dependent-variables.html#cb92-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb92-9"><a href="case-1-linearly-dependent-variables.html#cb92-9" aria-hidden="true" tabindex="-1"></a>X1_std <span class="ot">&lt;-</span> <span class="fu">standardize</span>(X1)</span>
+<span id="cb92-10"><a href="case-1-linearly-dependent-variables.html#cb92-10" aria-hidden="true" tabindex="-1"></a>X2_std <span class="ot">&lt;-</span> <span class="fu">standardize</span>(X2)</span></code></pre></div>
+<p>Lastly we’ll create a normally-distributed outcome variable.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="case-1-linearly-dependent-variables.html#cb93-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="at">mean =</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>), <span class="at">sd =</span> <span class="fu">runif</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">10</span>))</span></code></pre></div>
+</div>
+<div id="the-problem-ols" class="section level3">
+<h3>The Problem: OLS</h3>
+<p>Let’s run a simple linear regression and see what happens:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="case-1-linearly-dependent-variables.html#cb94-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(y <span class="sc">~</span> X1_std <span class="sc">+</span> X2_std))</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ X1_std + X2_std)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.2579 -1.2354 -0.0098  1.1402  6.1318 
+## 
+## Coefficients: (1 not defined because of singularities)
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -0.33836    0.05455  -6.203 8.09e-10 ***
+## X1_std       0.10551    0.05455   1.934   0.0533 .  
+## X2_std            NA         NA      NA       NA    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.725 on 998 degrees of freedom
+## Multiple R-squared:  0.003735,   Adjusted R-squared:  0.002737 
+## F-statistic: 3.742 on 1 and 998 DF,  p-value: 0.05334</code></pre>
+<p>As expected, R notes that our matrix is singular and returns <code>NA</code> for the X2 estimate.</p>
+<p>But why is this? The objective of OLS is to minimize RSS, but clearly that’s not happening here. So let’s start there: we can evaluate the RSS function from the theory section over combinations of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> values to take a look at the RSS surface.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>.</p>
+<p>Let’s build our RSS function.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="case-1-linearly-dependent-variables.html#cb96-1" aria-hidden="true" tabindex="-1"></a>RSS_OLS <span class="ot">&lt;-</span> <span class="cf">function</span>(b_vec){</span>
+<span id="cb96-2"><a href="case-1-linearly-dependent-variables.html#cb96-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb96-3"><a href="case-1-linearly-dependent-variables.html#cb96-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(y) <span class="sc">%*%</span> y <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">t</span>(b_vec) <span class="sc">%*%</span> <span class="fu">t</span>(design_matrix) <span class="sc">%*%</span> y <span class="sc">+</span> <span class="fu">t</span>(b_vec) <span class="sc">%*%</span> <span class="fu">t</span>(design_matrix) <span class="sc">%*%</span> design_matrix <span class="sc">%*%</span> b_vec</span>
+<span id="cb96-4"><a href="case-1-linearly-dependent-variables.html#cb96-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb96-5"><a href="case-1-linearly-dependent-variables.html#cb96-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Then we can create a dataset of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> combinations and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/apply" target="_blank"><code>apply</code></a> our function to it in order to evaluate the log likelihood functions for those <span class="math inline">\(\beta\)</span> values.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="case-1-linearly-dependent-variables.html#cb97-1" aria-hidden="true" tabindex="-1"></a>b1_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, .<span class="dv">25</span>)</span>
+<span id="cb97-2"><a href="case-1-linearly-dependent-variables.html#cb97-2" aria-hidden="true" tabindex="-1"></a>b2_vec <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, .<span class="dv">25</span>)</span>
+<span id="cb97-3"><a href="case-1-linearly-dependent-variables.html#cb97-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-4"><a href="case-1-linearly-dependent-variables.html#cb97-4" aria-hidden="true" tabindex="-1"></a>surface <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(<span class="fu">mean</span>(y), <span class="fu">expand_grid</span>(b1_vec, b2_vec))</span>
+<span id="cb97-5"><a href="case-1-linearly-dependent-variables.html#cb97-5" aria-hidden="true" tabindex="-1"></a>design_matrix <span class="ot">&lt;-</span> <span class="fu">model.matrix</span>(y <span class="sc">~</span> X1_std <span class="sc">+</span> X2_std)</span>
+<span id="cb97-6"><a href="case-1-linearly-dependent-variables.html#cb97-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb97-7"><a href="case-1-linearly-dependent-variables.html#cb97-7" aria-hidden="true" tabindex="-1"></a>surface<span class="sc">$</span>rss_ols <span class="ot">&lt;-</span> <span class="fu">apply</span>(surface, <span class="at">MARGIN =</span> <span class="dv">1</span>, RSS_OLS)</span></code></pre></div>
+<p>So what does our log-likelihood surface look like in this case?</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="case-1-linearly-dependent-variables.html#cb98-1" aria-hidden="true" tabindex="-1"></a>rss_ols_surface_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(surface, <span class="fu">aes</span>(<span class="at">x =</span> b1_vec, <span class="at">y =</span> b2_vec, <span class="at">fill =</span> rss_ols)) <span class="sc">+</span></span>
+<span id="cb98-2"><a href="case-1-linearly-dependent-variables.html#cb98-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(<span class="at">interpolate =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb98-3"><a href="case-1-linearly-dependent-variables.html#cb98-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_fill_gradient(name = &quot;RSS&quot;, high = &#39;red&#39;, low = &#39;blue&#39;) +</span></span>
+<span id="cb98-4"><a href="case-1-linearly-dependent-variables.html#cb98-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">name =</span> <span class="st">&quot;RSS: OLS&quot;</span>) <span class="sc">+</span></span>
+<span id="cb98-5"><a href="case-1-linearly-dependent-variables.html#cb98-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Surface Plot of RSS Function: OLS&quot;</span>,</span>
+<span id="cb98-6"><a href="case-1-linearly-dependent-variables.html#cb98-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Evaluated Across Range of Beta Coefficients&quot;</span>,</span>
+<span id="cb98-7"><a href="case-1-linearly-dependent-variables.html#cb98-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">beta_1$&quot;</span>),</span>
+<span id="cb98-8"><a href="case-1-linearly-dependent-variables.html#cb98-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">beta_2$&quot;</span>))</span></code></pre></div>
+<p><img src="ridge_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>There’s a long <strong>valley</strong>! Clearly there’s not a unique minimum here: there are many combinations of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> that could minimize RSS, so there is no unique solution with OLS! The <em>valley</em> in the RSS function corresponds to a <em>ridge</em> in the maximum likelihood surface.</p>
+</div>
+<div id="a-solution-ridge-regression" class="section level3">
+<h3>A Solution: Ridge Regression</h3>
+<p>So how does ridge regression fix this optimization problem? By penalizing (or regularizing) our function!</p>
+<p>Ideally we would choose our penalty term, <span class="math inline">\(\lambda\)</span>, optimally by cross-validating but we’ll arbitrarily set <span class="math inline">\(\lambda = 1,000\)</span> here to illustrate how ridge regression changes the RSS surface. Following the steps for evaluating the OLS RSS, we’ll create our ridge RSS function.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="case-1-linearly-dependent-variables.html#cb99-1" aria-hidden="true" tabindex="-1"></a>RSS_ridge <span class="ot">&lt;-</span> <span class="cf">function</span>(b_vec){</span>
+<span id="cb99-2"><a href="case-1-linearly-dependent-variables.html#cb99-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb99-3"><a href="case-1-linearly-dependent-variables.html#cb99-3" aria-hidden="true" tabindex="-1"></a>  lambda <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb99-4"><a href="case-1-linearly-dependent-variables.html#cb99-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb99-5"><a href="case-1-linearly-dependent-variables.html#cb99-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(y) <span class="sc">%*%</span> y <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">t</span>(b_vec) <span class="sc">%*%</span> <span class="fu">t</span>(input_matrix) <span class="sc">%*%</span> y <span class="sc">+</span> <span class="fu">t</span>(b_vec) <span class="sc">%*%</span> <span class="fu">t</span>(input_matrix) <span class="sc">%*%</span> input_matrix <span class="sc">%*%</span> b_vec <span class="sc">+</span> lambda <span class="sc">*</span> <span class="fu">t</span>(b_vec) <span class="sc">%*%</span> b_vec</span>
+<span id="cb99-6"><a href="case-1-linearly-dependent-variables.html#cb99-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb99-7"><a href="case-1-linearly-dependent-variables.html#cb99-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>As noted in the theory section, we do not penalize the intercept. So we will create an input matrix that only has our X1 and X2 variable values.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="case-1-linearly-dependent-variables.html#cb100-1" aria-hidden="true" tabindex="-1"></a>input_matrix <span class="ot">&lt;-</span> <span class="fu">cbind</span>(X1_std, X2_std)</span>
+<span id="cb100-2"><a href="case-1-linearly-dependent-variables.html#cb100-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb100-3"><a href="case-1-linearly-dependent-variables.html#cb100-3" aria-hidden="true" tabindex="-1"></a>surface<span class="sc">$</span>rss_ridge <span class="ot">&lt;-</span> <span class="fu">apply</span>(surface[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">MARGIN =</span> <span class="dv">1</span>, RSS_ridge)</span></code></pre></div>
+<p>So what does our log-likelihood surface look like now?</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="case-1-linearly-dependent-variables.html#cb101-1" aria-hidden="true" tabindex="-1"></a>rss_ridge_surface_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(surface, <span class="fu">aes</span>(<span class="at">x =</span> b1_vec, <span class="at">y =</span> b2_vec, <span class="at">fill =</span> rss_ridge)) <span class="sc">+</span></span>
+<span id="cb101-2"><a href="case-1-linearly-dependent-variables.html#cb101-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_raster</span>(<span class="at">interpolate =</span> <span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb101-3"><a href="case-1-linearly-dependent-variables.html#cb101-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">name =</span> <span class="st">&quot;RSS: Ridge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb101-4"><a href="case-1-linearly-dependent-variables.html#cb101-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Surface Plot of RSS Function: Ridge&quot;</span>,</span>
+<span id="cb101-5"><a href="case-1-linearly-dependent-variables.html#cb101-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Evaluated Across Range of Beta Coefficients&quot;</span>,</span>
+<span id="cb101-6"><a href="case-1-linearly-dependent-variables.html#cb101-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">beta_1$&quot;</span>),</span>
+<span id="cb101-7"><a href="case-1-linearly-dependent-variables.html#cb101-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="fu">TeX</span>(<span class="st">&quot;$</span><span class="sc">\\</span><span class="st">beta_2$&quot;</span>))</span></code></pre></div>
+<p><img src="ridge_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>This looks much more like a surface with a unique minimum! Adding the <a href="https://mathworld.wolfram.com/L2-Norm.html" target="_blank">L2</a> penalty “lifts” up the ends of the long valley in the RSS surface to create a bowl, for which we can easily identify and solve for a unique minimum. This also makes it easy to see how this penalization pushes or shrinks our coefficients toward zero.</p>
+<p>With OLS, we allow the least-squares solving process infinite space within which to find a unique solution, but this fails when we have a canyon in the RSS surface without a unique minimum. By applying the L2 constraint in the ridge regression definition of the problem we are restricting the solution space and forcing the solving process to find the best <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> that minimize RSS <em>within that space</em>. Residuals are a function of our <span class="math inline">\(\beta\)</span>s, so this allows for residuals to be higher for some observations than they would be under OLS, which is evidenced by the “lifting” of the RSS surface above.</p>
+<p>Choosing how much much space to allow (i.e., which value to use for <span class="math inline">\(\lambda\)</span>) is another optimization problem that is context-dependent and usually addressed with cross-validation.</p>
+</div>
+<div id="solving-for-hatbetaridge" class="section level3">
+<h3>Solving for <span class="math inline">\(\hat{\beta}^{Ridge}\)</span></h3>
+<p>We can easily implement the <span class="math inline">\(\hat{\beta}^{Ridge}\)</span> solution derived in the theory section. Let’s write a function, <code>ridge</code>, to solve for the ridge regression coefficients and use it to solve our ridge regression problem.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="case-1-linearly-dependent-variables.html#cb102-1" aria-hidden="true" tabindex="-1"></a>input_matrix <span class="ot">&lt;-</span> <span class="fu">cbind</span>(X1_std, X2_std)</span>
+<span id="cb102-2"><a href="case-1-linearly-dependent-variables.html#cb102-2" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb102-3"><a href="case-1-linearly-dependent-variables.html#cb102-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-4"><a href="case-1-linearly-dependent-variables.html#cb102-4" aria-hidden="true" tabindex="-1"></a>ridge <span class="ot">&lt;-</span> <span class="cf">function</span>(y_vec, X_matrix, lambda){</span>
+<span id="cb102-5"><a href="case-1-linearly-dependent-variables.html#cb102-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb102-6"><a href="case-1-linearly-dependent-variables.html#cb102-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Arguments:</span></span>
+<span id="cb102-7"><a href="case-1-linearly-dependent-variables.html#cb102-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># y_vec - a continuous outcome vector</span></span>
+<span id="cb102-8"><a href="case-1-linearly-dependent-variables.html#cb102-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># X_matrix - a standardized input vector</span></span>
+<span id="cb102-9"><a href="case-1-linearly-dependent-variables.html#cb102-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># lambda - a &gt; 0 penalty term</span></span>
+<span id="cb102-10"><a href="case-1-linearly-dependent-variables.html#cb102-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb102-11"><a href="case-1-linearly-dependent-variables.html#cb102-11" aria-hidden="true" tabindex="-1"></a>  penalty <span class="ot">&lt;-</span> lambda <span class="sc">*</span> <span class="fu">diag</span>(<span class="dv">1</span>, <span class="fu">ncol</span>(X_matrix))</span>
+<span id="cb102-12"><a href="case-1-linearly-dependent-variables.html#cb102-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb102-13"><a href="case-1-linearly-dependent-variables.html#cb102-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">solve</span>(<span class="fu">t</span>(X_matrix) <span class="sc">%*%</span> X_matrix <span class="sc">+</span> penalty) <span class="sc">%*%</span> <span class="fu">t</span>(X_matrix) <span class="sc">%*%</span> y_vec</span>
+<span id="cb102-14"><a href="case-1-linearly-dependent-variables.html#cb102-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb102-15"><a href="case-1-linearly-dependent-variables.html#cb102-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb102-16"><a href="case-1-linearly-dependent-variables.html#cb102-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-17"><a href="case-1-linearly-dependent-variables.html#cb102-17" aria-hidden="true" tabindex="-1"></a>b_vec_ridge <span class="ot">&lt;-</span> <span class="fu">ridge</span>(<span class="at">y_vec =</span> y, <span class="at">X_matrix =</span> input_matrix, <span class="at">lambda =</span> lambda)</span></code></pre></div>
+<pre><code>##              [,1]
+## X1_std 0.03517166
+## X2_std 0.03517166</code></pre>
+<p>In this case, because our standardized variables are identical, our ridge regression coefficients are identical.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="9">
+<li id="fn9"><p>Why not use <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/scale" target="_blank"><code>scale</code></a>? Both <code>scale</code> and <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/sd" target="_blank"><code>sd</code></a> use <a href="https://en.wikipedia.org/wiki/Bessel%27s_correction" target="_blank">Bessel’s correction</a> to calculate the <em>sample</em> standard deviation. We instead use the <a href="https://glmnet.stanford.edu/articles/glmnet.html" target="_blank"><em>population</em> standard deviation</a>. <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"><code>glmnet</code></a>, the primary ridge regression implementation in R, uses the population standard deviation when standardizing variables.<a href="case-1-linearly-dependent-variables.html#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>This is almost identical to what we do in the <a href="univariate_binary_logistic.html" target="_blank">univariate binary logistic case</a> with the maximum likelihood function.<a href="case-1-linearly-dependent-variables.html#fnref10" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="theory-3.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="case-2-correlated-independent-variables.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"],
+"google": false,
+"instapper": false
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"df_print": "kable"
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
