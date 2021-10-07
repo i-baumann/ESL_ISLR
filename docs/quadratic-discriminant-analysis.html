@@ -257,15 +257,15 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span class="math display">\[\begin{align}
 \log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log \frac{\pi_k f_k(x)}{\pi_l f_l(x)} \\
 &amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{f_k(x)}{f_l(x)}} \\
-&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}}
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}}
 \end{align}\]</span>
 </center>
 <p>Just as in the univariate and multivariate LDA examples, <span class="math inline">\(\color{red}{\pi}\)</span> in the PDF is the literal value pi, not a prior probability. <span class="math inline">\(p\)</span> is the number of variables.</p>
 <p>Remembering our log rules, we can easily break this down:</p>
 <center>
 <span class="math display">\[\scriptsize \begin{align}
-\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
-&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}}}} + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}}}} + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
 &amp;= \log{\frac{\pi_k}{\pi_l}} + \log{1} - \log{2\color{red}{\pi}^\frac{p}{2} \det(\Sigma_k)^\frac{1}{2}} - \log{1} + \log{2\color{red}{\pi}^\frac{p}{2} \det(\Sigma_l)^\frac{1}{2}}
 + \log{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_l^{-1} (x - \mu_k)}} - \log{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}} \\
 &amp;= \log{\frac{\pi_k}{\pi_l}} - \log{2\color{red}{\pi}^\frac{p}{2}} + \log{\det(\Sigma_k)^\frac{1}{2}} + \log{2\color{red}{\pi}^\frac{p}{2}} + \log{\det(\Sigma_l)^\frac{1}{2}}

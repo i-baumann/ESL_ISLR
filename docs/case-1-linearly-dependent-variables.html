@@ -279,19 +279,19 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -12.2228  -2.0556  -0.0106   2.2580   9.9584 
+## -26.8522  -4.9137  -0.2605   4.9228  23.3034 
 ## 
 ## Coefficients: (1 not defined because of singularities)
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  -8.1638     0.1028 -79.451   &lt;2e-16 ***
-## X1_std       -0.1607     0.1028  -1.564    0.118    
+## (Intercept)   2.3193     0.2367   9.797   &lt;2e-16 ***
+## X1_std       -0.1831     0.2367  -0.773     0.44    
 ## X2_std            NA         NA      NA       NA    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 3.249 on 998 degrees of freedom
-## Multiple R-squared:  0.002444,   Adjusted R-squared:  0.001444 
-## F-statistic: 2.445 on 1 and 998 DF,  p-value: 0.1182</code></pre>
+## Residual standard error: 7.486 on 998 degrees of freedom
+## Multiple R-squared:  0.0005989,  Adjusted R-squared:  -0.0004025 
+## F-statistic: 0.598 on 1 and 998 DF,  p-value: 0.4395</code></pre>
 <p>As expected, R notes that our matrix is singular and returns <code>NA</code> for the X2 estimate.</p>
 <p>But why is this? The objective of OLS is to minimize RSS, but clearly that’s not happening here. So let’s start there: we can evaluate the RSS function from the theory section over combinations of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> values to take a look at the RSS surface.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a>.</p>
 <p>Let’s build our RSS function.</p>
@@ -369,8 +369,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb102-16"><a href="case-1-linearly-dependent-variables.html#cb102-16" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb102-17"><a href="case-1-linearly-dependent-variables.html#cb102-17" aria-hidden="true" tabindex="-1"></a>b_vec_ridge <span class="ot">&lt;-</span> <span class="fu">ridge</span>(<span class="at">y_vec =</span> y, <span class="at">X_matrix =</span> input_matrix, <span class="at">lambda =</span> lambda)</span></code></pre></div>
 <pre><code>##               [,1]
-## X1_std -0.05355626
-## X2_std -0.05355626</code></pre>
+## X1_std -0.06102517
+## X2_std -0.06102517</code></pre>
 <p>In this case, because our standardized variables are identical, our ridge regression coefficients are identical.</p>
 </div>
 </div>

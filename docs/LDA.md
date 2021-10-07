@@ -313,7 +313,7 @@ LDA_misclass_rate * 100
 ```
 
 ```
-## [1] 37.65
+## [1] 0.35
 ```
 
 It's certainly not perfect! But how imperfect is it? Since we're using Bayes' classifier on the population data as our standard, we can apply its decision rule to the test data and calculate its misclassification rate.
@@ -331,7 +331,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 31.65
+## [1] 0.35
 ```
 
 Of course, it is possible for LDA to "outperform" the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here in a sense represents the "true" optimal classifier since it is coming from population data.
@@ -748,8 +748,8 @@ pop_sigma
 
 ```
 ##           [,1]      [,2]
-## [1,] 6.6055997 0.1812358
-## [2,] 0.1812358 6.6055997
+## [1,] 3.6228982 0.8000072
+## [2,] 0.8000072 3.6228982
 ```
 
 ```r
@@ -758,8 +758,8 @@ train_sigma_LDA
 
 ```
 ##           [,1]      [,2]
-## [1,] 6.3337870 0.2558044
-## [2,] 0.2558044 6.6158289
+## [1,] 3.5945229 0.9970572
+## [2,] 0.9970572 3.5915687
 ```
 
 Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and `apply` them via a decision rule function to our training sample:
@@ -868,7 +868,7 @@ LDA_misclass_rate * 100
 ```
 
 ```
-## [1] 27.11111
+## [1] 6.444444
 ```
 
 How about the misclassification rate for our (optimal) Bayes classifier?
@@ -883,7 +883,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 26.33333
+## [1] 6
 ```
 
 It's of course possible for LDA to "outperform" the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the "true" optimal classifier in a sense since its classifying based on population parameters.

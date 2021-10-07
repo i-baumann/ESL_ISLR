@@ -21,7 +21,7 @@ Just like in the [multivariate LDA example](multivariate-lda.html#theory){target
 $$\begin{align}
 \log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log \frac{\pi_k f_k(x)}{\pi_l f_l(x)} \\
 &= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{f_k(x)}{f_l(x)}} \\
-&= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}}
+&= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}}
 \end{align}$$
 </center>
 
@@ -31,8 +31,8 @@ Remembering our log rules, we can easily break this down:
 
 <center>
 $$\scriptsize \begin{align}
-\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
-&= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}}}} + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
+&= \log{\frac{\pi_k}{\pi_l}} + \log{\frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_k)^\frac{1}{2}}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma_l)^\frac{1}{2}}}} + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_k^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}}} \\
 &= \log{\frac{\pi_k}{\pi_l}} + \log{1} - \log{2\color{red}{\pi}^\frac{p}{2} \det(\Sigma_k)^\frac{1}{2}} - \log{1} + \log{2\color{red}{\pi}^\frac{p}{2} \det(\Sigma_l)^\frac{1}{2}}
 + \log{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma_l^{-1} (x - \mu_k)}} - \log{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma_l^{-1} (x - \mu_l)}} \\
 &= \log{\frac{\pi_k}{\pi_l}} - \log{2\color{red}{\pi}^\frac{p}{2}} + \log{\det(\Sigma_k)^\frac{1}{2}} + \log{2\color{red}{\pi}^\frac{p}{2}} + \log{\det(\Sigma_l)^\frac{1}{2}}
@@ -387,7 +387,7 @@ QDA_misclass_rate * 100
 ```
 
 ```
-## [1] 5.111111
+## [1] 19.22222
 ```
 
 And what does the misclassification rate for our (optimal) Bayes classifier look like?
@@ -402,7 +402,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 5
+## [1] 19.33333
 ```
 
 ### Visualization

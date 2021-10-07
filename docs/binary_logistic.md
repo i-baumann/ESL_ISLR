@@ -196,8 +196,8 @@ Our $\vec{\hat{\beta}}$ for this example from IRLS is:
 
 ```
 ##          [,1]
-## Int 12.925375
-## X1  -2.874321
+## Int -6.872162
+## X1   2.696987
 ```
 
 ### Method 2: Modified IRLS
@@ -257,8 +257,8 @@ Our $\vec{\hat{\beta}}$ for this example from the modified algorithm is:
 
 ```
 ##          [,1]
-## Int 12.925375
-## X1  -2.874321
+## Int -6.872162
+## X1   2.696987
 ```
 
 ## Testing
@@ -279,8 +279,8 @@ beta_vec_irls
 
 ```
 ##          [,1]
-## Int 12.925375
-## X1  -2.874321
+## Int -6.872162
+## X1   2.696987
 ```
 
 ```r
@@ -289,8 +289,8 @@ beta_vec_mod
 
 ```
 ##          [,1]
-## Int 12.925375
-## X1  -2.874321
+## Int -6.872162
+## X1   2.696987
 ```
 
 ```r
@@ -299,7 +299,7 @@ glm_model$coefficients
 
 ```
 ## (Intercept)          X1 
-##   12.925375   -2.874321
+##   -6.872162    2.696987
 ```
 
 ### The Log-Likelihood Surface
