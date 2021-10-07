@@ -1,7 +1,7 @@
 # Logistic Regression
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, cache = TRUE)
 library(xaringanExtra) # If needed: devtools::install_github("gadenbuie/xaringanExtra")
 ```
 

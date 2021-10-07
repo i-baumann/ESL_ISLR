@@ -15,26 +15,6 @@ This example uses the [`tidyverse`](https://cran.r-project.org/web/packages/tidy
 
 ```r
 library(tidyverse)
-```
-
-```
-## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-```
-
-```
-## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.5     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   1.4.0     ✓ forcats 0.5.1
-```
-
-```
-## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()
-```
-
-```r
 library(latex2exp)
 ```
 
@@ -196,8 +176,8 @@ Our $\vec{\hat{\beta}}$ for this example from IRLS is:
 
 ```
 ##          [,1]
-## Int -6.872162
-## X1   2.696987
+## Int  2.589805
+## X1  -1.038948
 ```
 
 ### Method 2: Modified IRLS
@@ -245,11 +225,11 @@ This will sometimes converge a little more quickly. The number of iterations for
 
 
 ```
-## [1] "IRLS iterations: 9"
+## [1] "IRLS iterations: 6"
 ```
 
 ```
-## [1] "Modified IRLS iterations: 9"
+## [1] "Modified IRLS iterations: 6"
 ```
 
 Our $\vec{\hat{\beta}}$ for this example from the modified algorithm is:
@@ -257,8 +237,8 @@ Our $\vec{\hat{\beta}}$ for this example from the modified algorithm is:
 
 ```
 ##          [,1]
-## Int -6.872162
-## X1   2.696987
+## Int  2.589805
+## X1  -1.038948
 ```
 
 ## Testing
@@ -279,8 +259,8 @@ beta_vec_irls
 
 ```
 ##          [,1]
-## Int -6.872162
-## X1   2.696987
+## Int  2.589805
+## X1  -1.038948
 ```
 
 ```r
@@ -289,8 +269,8 @@ beta_vec_mod
 
 ```
 ##          [,1]
-## Int -6.872162
-## X1   2.696987
+## Int  2.589805
+## X1  -1.038948
 ```
 
 ```r
@@ -299,7 +279,7 @@ glm_model$coefficients
 
 ```
 ## (Intercept)          X1 
-##   -6.872162    2.696987
+##    2.589805   -1.038948
 ```
 
 ### The Log-Likelihood Surface
