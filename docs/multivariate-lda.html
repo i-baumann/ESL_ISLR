@@ -275,8 +275,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Plugging in the multivariate normal PDF for <span class="math inline">\(f(\cdot)\)</span>, like in the univariate case, allows for a lot of simplification but with some twists:</p>
 <center>
 <span class="math display">\[\small \begin{align}
-\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
-&amp;= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &amp;= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
+&amp;= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
 &amp;= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
 \end{align}\]</span>
 </center>
@@ -554,12 +554,12 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>How close is our <span class="math inline">\(\hat{\Sigma}\)</span> to <span class="math inline">\(\Sigma\)</span>?</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="multivariate-lda.html#cb31-1" aria-hidden="true" tabindex="-1"></a>pop_sigma</span></code></pre></div>
 <pre><code>##           [,1]      [,2]
-## [1,] 0.9881612 0.4093630
-## [2,] 0.4093630 0.9881612</code></pre>
+## [1,] 6.6055997 0.1812358
+## [2,] 0.1812358 6.6055997</code></pre>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="multivariate-lda.html#cb33-1" aria-hidden="true" tabindex="-1"></a>train_sigma_LDA</span></code></pre></div>
-<pre><code>##          [,1]     [,2]
-## [1,] 1.035851 0.454914
-## [2,] 0.454914 1.098046</code></pre>
+<pre><code>##           [,1]      [,2]
+## [1,] 6.3337870 0.2558044
+## [2,] 0.2558044 6.6158289</code></pre>
 <p>Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and <code>apply</code> them via a decision rule function to our training sample:</p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="multivariate-lda.html#cb35-1" aria-hidden="true" tabindex="-1"></a>d0_LDA <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
 <span id="cb35-2"><a href="multivariate-lda.html#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> sample_c0_mean_vec <span class="sc">-</span></span>
@@ -646,14 +646,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb38-3"><a href="multivariate-lda.html#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(test_sample_df)</span>
 <span id="cb38-4"><a href="multivariate-lda.html#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-5"><a href="multivariate-lda.html#cb38-5" aria-hidden="true" tabindex="-1"></a>LDA_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>## [1] 0.2222222</code></pre>
+<pre><code>## [1] 27.11111</code></pre>
 <p>How about the misclassification rate for our (optimal) Bayes classifier?</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multivariate-lda.html#cb40-1" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="ot">&lt;-</span> <span class="fu">nrow</span>(test_sample_df[test_sample_df<span class="sc">$</span>y <span class="sc">!=</span> </span>
 <span id="cb40-2"><a href="multivariate-lda.html#cb40-2" aria-hidden="true" tabindex="-1"></a>                                           test_sample_df<span class="sc">$</span>bayes_predicted_y,]) <span class="sc">/</span></span>
 <span id="cb40-3"><a href="multivariate-lda.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(test_sample_df)</span>
 <span id="cb40-4"><a href="multivariate-lda.html#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-5"><a href="multivariate-lda.html#cb40-5" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>## [1] 0.2222222</code></pre>
+<pre><code>## [1] 26.33333</code></pre>
 <p>It’s of course possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the “true” optimal classifier in a sense since its classifying based on population parameters.</p>
 
 </div>

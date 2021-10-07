@@ -313,7 +313,7 @@ LDA_misclass_rate * 100
 ```
 
 ```
-## [1] 1.25
+## [1] 37.65
 ```
 
 It's certainly not perfect! But how imperfect is it? Since we're using Bayes' classifier on the population data as our standard, we can apply its decision rule to the test data and calculate its misclassification rate.
@@ -331,7 +331,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 0.75
+## [1] 31.65
 ```
 
 Of course, it is possible for LDA to "outperform" the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here in a sense represents the "true" optimal classifier since it is coming from population data.
@@ -384,8 +384,8 @@ Plugging in the multivariate normal PDF for $f(\cdot)$, like in the univariate c
 
 <center>
 $$\small \begin{align}
-\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
-&= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
+\log\frac{\Pr(Y = k|X = x)}{\Pr(Y = l|X = x)} &= \log{\frac{\pi_k}{\pi_l}} + \log \frac{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}} \\
+&= \log{\frac{\pi_k}{\pi_l}} + \log \left( \frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} \bigg/ \frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}}  \right) + \log{\frac{e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}}{e^{\frac{-1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l)}}} \\
 &= \log{\frac{\pi_k}{\pi_l}} - \frac{1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k) + \frac{1}{2} (x - \mu_l)^T \Sigma^{-1} (x - \mu_l) \\
 \end{align}$$
 </center>
@@ -748,8 +748,8 @@ pop_sigma
 
 ```
 ##           [,1]      [,2]
-## [1,] 0.9881612 0.4093630
-## [2,] 0.4093630 0.9881612
+## [1,] 6.6055997 0.1812358
+## [2,] 0.1812358 6.6055997
 ```
 
 ```r
@@ -757,9 +757,9 @@ train_sigma_LDA
 ```
 
 ```
-##          [,1]     [,2]
-## [1,] 1.035851 0.454914
-## [2,] 0.454914 1.098046
+##           [,1]      [,2]
+## [1,] 6.3337870 0.2558044
+## [2,] 0.2558044 6.6158289
 ```
 
 Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and `apply` them via a decision rule function to our training sample:
@@ -868,7 +868,7 @@ LDA_misclass_rate * 100
 ```
 
 ```
-## [1] 0.2222222
+## [1] 27.11111
 ```
 
 How about the misclassification rate for our (optimal) Bayes classifier?
@@ -883,7 +883,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 0.2222222
+## [1] 26.33333
 ```
 
 It's of course possible for LDA to "outperform" the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the "true" optimal classifier in a sense since its classifying based on population parameters.
