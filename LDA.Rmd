@@ -333,7 +333,7 @@ where
 In this case we use the [multivariate normal PDF](https://en.wikipedia.org/wiki/Multivariate_normal_distribution){target="_blank"}
 
 <center>
-$$\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}$$
+$$\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}$$
 </center>
 
 where, in this idealized example, $\Sigma_k, \Sigma_l, \ldots, \Sigma_K = \Sigma$ since we are assuming (and in fact generating data from a distribution in which) all classes have the same covariance matrix. As noted in the univariate example, $\color{red}{\pi}$ in the PDF is the literal value pi, not a prior probability.

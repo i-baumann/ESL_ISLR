@@ -313,7 +313,7 @@ LDA_misclass_rate * 100
 ```
 
 ```
-## [1] 15.45
+## [1] 1.25
 ```
 
 It's certainly not perfect! But how imperfect is it? Since we're using Bayes' classifier on the population data as our standard, we can apply its decision rule to the test data and calculate its misclassification rate.
@@ -331,7 +331,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 15.45
+## [1] 0.75
 ```
 
 Of course, it is possible for LDA to "outperform" the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here in a sense represents the "true" optimal classifier since it is coming from population data.
@@ -364,7 +364,7 @@ where
 In this case we use the [multivariate normal PDF](https://en.wikipedia.org/wiki/Multivariate_normal_distribution){target="_blank"}
 
 <center>
-$$\frac{1}{{(2\color{red}{\pi}})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}$$
+$$\frac{1}{(2\color{red}{\pi})^{\frac{p}{2}} \det(\Sigma)^\frac{1}{2}} e^{\frac{-1}{2} (x - \mu_k)^T \Sigma^{-1} (x - \mu_k)}$$
 </center>
 
 where, in this idealized example, $\Sigma_k, \Sigma_l, \ldots, \Sigma_K = \Sigma$ since we are assuming (and in fact generating data from a distribution in which) all classes have the same covariance matrix. As noted in the univariate example, $\color{red}{\pi}$ in the PDF is the literal value pi, not a prior probability.
@@ -748,8 +748,8 @@ pop_sigma
 
 ```
 ##           [,1]      [,2]
-## [1,] 6.4655085 0.1096973
-## [2,] 0.1096973 6.4655085
+## [1,] 0.9881612 0.4093630
+## [2,] 0.4093630 0.9881612
 ```
 
 ```r
@@ -757,9 +757,9 @@ train_sigma_LDA
 ```
 
 ```
-##            [,1]       [,2]
-## [1,] 7.02165067 0.08882736
-## [2,] 0.08882736 6.38926768
+##          [,1]     [,2]
+## [1,] 1.035851 0.454914
+## [2,] 0.454914 1.098046
 ```
 
 Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and `apply` them via a decision rule function to our training sample:
@@ -868,7 +868,7 @@ LDA_misclass_rate * 100
 ```
 
 ```
-## [1] 48.44444
+## [1] 0.2222222
 ```
 
 How about the misclassification rate for our (optimal) Bayes classifier?
@@ -883,7 +883,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 48.11111
+## [1] 0.2222222
 ```
 
 It's of course possible for LDA to "outperform" the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the "true" optimal classifier in a sense since its classifying based on population parameters.
