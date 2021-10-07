@@ -253,19 +253,19 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Fitting a simple linear model, we can easily see that the model produces a scaled version of the non-scaled fit using the scaled data.</p>
 <div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="standardization.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> X1 <span class="sc">+</span> X2)<span class="sc">$</span>coefficients</span></code></pre></div>
 <pre><code>##  (Intercept)           X1           X2 
-## -0.043579690  0.003784569 -0.006813352</code></pre>
+## -0.048134836  0.004086616  0.005806883</code></pre>
 <div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="standardization.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(y <span class="sc">~</span> X1_scaled <span class="sc">+</span> X2_scaled)<span class="sc">$</span>coefficients</span></code></pre></div>
 <pre><code>##   (Intercept)     X1_scaled     X2_scaled 
-## -4.357969e-02  3.784569e-06 -6.813352e-06</code></pre>
+## -4.813484e-02  4.086616e-06  5.806883e-06</code></pre>
 <p>But we won’t get identical solutions if we fit both versions of the data using ridge regression for any <span class="math inline">\(\lambda &gt; 0\)</span>. The estimated effects of the independent variables on the outcome fundamentally change, not simply by the magnitude of the change in scale.</p>
 <div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="standardization.html#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ridge</span>(<span class="at">y =</span> y, <span class="at">X =</span> <span class="fu">cbind</span>(X1, X2), <span class="at">lambda =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>##            [,1]
-## X1 -0.002406805
-## X2 -0.007975358</code></pre>
+## X1 0.0008755921
+## X2 0.0041171312</code></pre>
 <div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="standardization.html#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ridge</span>(<span class="at">y =</span> y, <span class="at">X =</span> <span class="fu">cbind</span>(X1_scaled, X2_scaled), <span class="at">lambda =</span> <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>##                    [,1]
-## X1_scaled -2.406919e-06
-## X2_scaled -7.975494e-06</code></pre>
+<pre><code>##                   [,1]
+## X1_scaled 8.755491e-07
+## X2_scaled 4.117222e-06</code></pre>
 <p>In other words, OLS solutions are <em>equivariant</em> to scaling but ridge solutions aren’t. Standardizing the data removes scaling for comparability.</p>
 <p>Of course, we lose some interpretability in the need to standardize our data and it means that we must input standardized test data into our ridge model for prediction (rather than raw data). <a href="https://cran.r-project.org/web/packages/glmnet/index.html" target="_blank"><code>glmnet</code></a>, the most prominent implementation of ridge regression in R, implements ridge regression in a different way than presented here: it standardizes the data within the function (so that data don’t need to be standardized prior to the call) and then produces de-standardized regression coefficients that can be used with raw, non-standardized test data for prediction. See the <a href="https://glmnet.stanford.edu/articles/glmnet.html" target="_blank"><code>glmnet</code> vignette</a> for details. <a href="https://parsnip.tidymodels.org/reference/details_linear_reg_glmnet.html" target="_blank"><code>tidymodels</code> and <code>parsnip</code></a> use <code>glmnet</code> to implement regularized regression.</p>
 

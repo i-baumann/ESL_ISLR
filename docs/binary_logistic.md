@@ -4,7 +4,7 @@
 
 
 
-This example walks through fitting a univariate logistic regression model to (idealized) generated data. It should be easy to see how this generalizes to multivariate cases. It assumes some prior knowledge of [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression){target="_blank"} and [log-odds](https://en.wikipedia.org/wiki/Logit){target="_blank"} (or see [Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf#%5B%7B%22num%22%3A212%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22Fit%22%7D%5D){target="_blank"}).
+This example walks through fitting a univariate logistic regression model to (idealized) generated data. It should be easy to see how this generalizes to multivariate cases. It assumes some prior knowledge of [logistic regression](https://en.wikipedia.org/wiki/Logistic_regression){target="_blank"} and [log-odds](https://en.wikipedia.org/wiki/Logit){target="_blank"} (or see [Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf#%5B%7B%22num%22%3A212%2C%22gen%22%3A0%7D%2C%7B%22name%22%3A%22Fit%22%7D%5D){target="_blank"}) and will be light on theory.
 
 We'll skip doing a train/test split and comparison in this example and focus solely on implementing logistic regression from scratch.
 
@@ -195,9 +195,9 @@ Our $\vec{\hat{\beta}}$ for this example from IRLS is:
 
 
 ```
-##           [,1]
-## Int -3.4211427
-## X1   0.9826713
+##          [,1]
+## Int 12.925375
+## X1  -2.874321
 ```
 
 ### Method 2: Modified IRLS
@@ -245,20 +245,20 @@ This will sometimes converge a little more quickly. The number of iterations for
 
 
 ```
-## [1] "IRLS iterations: 6"
+## [1] "IRLS iterations: 9"
 ```
 
 ```
-## [1] "Modified IRLS iterations: 6"
+## [1] "Modified IRLS iterations: 9"
 ```
 
 Our $\vec{\hat{\beta}}$ for this example from the modified algorithm is:
 
 
 ```
-##           [,1]
-## Int -3.4211427
-## X1   0.9826713
+##          [,1]
+## Int 12.925375
+## X1  -2.874321
 ```
 
 ## Testing
@@ -278,9 +278,9 @@ beta_vec_irls
 ```
 
 ```
-##           [,1]
-## Int -3.4211427
-## X1   0.9826713
+##          [,1]
+## Int 12.925375
+## X1  -2.874321
 ```
 
 ```r
@@ -288,9 +288,9 @@ beta_vec_mod
 ```
 
 ```
-##           [,1]
-## Int -3.4211427
-## X1   0.9826713
+##          [,1]
+## Int 12.925375
+## X1  -2.874321
 ```
 
 ```r
@@ -299,7 +299,7 @@ glm_model$coefficients
 
 ```
 ## (Intercept)          X1 
-##  -3.4211427   0.9826713
+##   12.925375   -2.874321
 ```
 
 ### The Log-Likelihood Surface

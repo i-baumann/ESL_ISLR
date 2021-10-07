@@ -324,7 +324,7 @@ train_sample_df$QDA_predicted_y <- apply(train_sample_df[, c("X1", "X2")],
 
 ### Visualizing the Decision Boundaries
 
-The nice non-linear decision boundaries shown in [Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf){target="_blank"} were created through an extensive contouring process, which is way outside the scope of this working example.^[This is clearly a longer way of saying "I don't know how to do it and don't want to learn it for this."] While we won't plot the decision boundaries directly, we can pretty easily plot the decision areas using an approach similar to that we use for plotting a maximum likelihood surface in the [univariate logistic regression](univariate-binary-logistic.html){target="_blank"} example. This is a hacky approach in this example in a way that it's not in the logistic regression example, but if it works it should do the trick well enough.
+The nice non-linear decision boundaries shown in [Elements of Statistical Learning](https://web.stanford.edu/~hastie/ElemStatLearn/printings/ESLII_print12_toc.pdf){target="_blank"} were created through an extensive contouring process, which is way outside the scope of this working example.^[This is clearly a longer way of saying "I don't know how to do it and don't want to learn it for this."] While we won't plot the decision boundaries directly, we can pretty easily plot the decision areas using an approach similar to that we use for plotting a maximum likelihood surface in the [logistic regression](logistic-regression.html){target="_blank"} example. This is a hacky approach in this example in a way that it's not in the logistic regression example, but if it works it should do the trick well enough.
 
 The basic idea is that we should be able to apply the QDA classifier to a set of Cartesian coordinates for our X1 and X2 variables and then show the approximate areas in which the QDA classifier would choose one class or another. This obviously gives us the approximate decision boundaries between classes as well.
 
@@ -387,7 +387,7 @@ QDA_misclass_rate * 100
 ```
 
 ```
-## [1] 8.333333
+## [1] 5.111111
 ```
 
 And what does the misclassification rate for our (optimal) Bayes classifier look like?
@@ -402,7 +402,7 @@ bayes_misclass_rate * 100
 ```
 
 ```
-## [1] 10.11111
+## [1] 5
 ```
 
 ### Visualization

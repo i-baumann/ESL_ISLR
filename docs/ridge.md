@@ -201,20 +201,20 @@ summary(lm(y ~ X1_std + X2_std))
 ## lm(formula = y ~ X1_std + X2_std)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -6.2579 -1.2354 -0.0098  1.1402  6.1318 
+##      Min       1Q   Median       3Q      Max 
+## -12.2228  -2.0556  -0.0106   2.2580   9.9584 
 ## 
 ## Coefficients: (1 not defined because of singularities)
 ##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept) -0.33836    0.05455  -6.203 8.09e-10 ***
-## X1_std       0.10551    0.05455   1.934   0.0533 .  
+## (Intercept)  -8.1638     0.1028 -79.451   <2e-16 ***
+## X1_std       -0.1607     0.1028  -1.564    0.118    
 ## X2_std            NA         NA      NA       NA    
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 1.725 on 998 degrees of freedom
-## Multiple R-squared:  0.003735,	Adjusted R-squared:  0.002737 
-## F-statistic: 3.742 on 1 and 998 DF,  p-value: 0.05334
+## Residual standard error: 3.249 on 998 degrees of freedom
+## Multiple R-squared:  0.002444,	Adjusted R-squared:  0.001444 
+## F-statistic: 2.445 on 1 and 998 DF,  p-value: 0.1182
 ```
 
 As expected, R notes that our matrix is singular and returns `NA` for the X2 estimate. 
@@ -337,9 +337,9 @@ b_vec_ridge <- ridge(y_vec = y, X_matrix = input_matrix, lambda = lambda)
 
 
 ```
-##              [,1]
-## X1_std 0.03517166
-## X2_std 0.03517166
+##               [,1]
+## X1_std -0.05355626
+## X2_std -0.05355626
 ```
 
 In this case, because our standardized variables are identical, our ridge regression coefficients are identical.
@@ -407,20 +407,20 @@ boston_pcomps <- prcomp(X_train)$rotation[,1:5]
 ```
 
 ```
-##                 PC1        PC2         PC3         PC4           PC5
-## crim     0.24723382 -0.2511045  0.32667740 -0.05176398  0.0115208738
-## zn      -0.25663683 -0.2949816  0.34809979  0.18933832 -0.2393946151
-## indus    0.34672495  0.1184171 -0.05263250 -0.02367901 -0.0564490554
-## chas    -0.01199561  0.5009851  0.25771830 -0.44547852 -0.6803669783
-## nox      0.34539496  0.2109929  0.04747682  0.21510231  0.0005181504
-## rm      -0.17494602  0.2982463  0.52407021 -0.11258859  0.5417159930
-## age      0.31669117  0.3050543 -0.10973424  0.16707139  0.0979389787
-## dis     -0.32017540 -0.3591163  0.04200562 -0.05483417 -0.2306089451
-## rad      0.32352458 -0.2095725  0.30789728 -0.21403644  0.0560045383
-## tax      0.33749996 -0.2005586  0.25100970 -0.14875406 -0.0015581921
-## ptratio  0.20651028 -0.3128254 -0.25092106 -0.64907762  0.1514701909
-## black   -0.20783511  0.1352615 -0.39138198 -0.32773507  0.1171877432
-## lstat    0.30907152 -0.1706826 -0.19560668  0.27557840 -0.2835976550
+##                 PC1        PC2         PC3          PC4          PC5
+## crim     0.24437063 -0.2786372 -0.25465726 -0.052885750  0.065830708
+## zn      -0.25965070 -0.2941742 -0.35993109  0.317130862  0.066032541
+## indus    0.34983220  0.1006674  0.05084538  0.003244504  0.033720704
+## chas     0.02685274  0.4741509 -0.26204786  0.171451801  0.792673155
+## nox      0.34883907  0.2354614 -0.09386065  0.147654793 -0.089084588
+## rm      -0.17756160  0.2614322 -0.53989051 -0.437880697 -0.307150409
+## age      0.31607359  0.2965783  0.08002533 -0.008398502 -0.200120444
+## dis     -0.32368999 -0.3504378 -0.02885051  0.123218318  0.198668117
+## rad      0.31768856 -0.2521616 -0.35645766 -0.197940933  0.099323053
+## tax      0.33363215 -0.2298872 -0.30404235 -0.104153486  0.086589650
+## ptratio  0.20500345 -0.3289140  0.26866589 -0.501447441  0.306997323
+## black   -0.20595465  0.1374812  0.27273029 -0.463675325  0.261467512
+## lstat    0.30852254 -0.1509853  0.24647512  0.349223756  0.008252411
 ```
 
 The `rotation` matrix from `prcomp` contains the [loadings](https://en.wikipedia.org/wiki/Principal_component_analysis#Further_components), which are the correlations between the input variables and the directions represented by the principal components when the input variables are standardized.^[If this is unfamiliar, for now just think of this as a measure of how much a direction of a principal component is associated with the existing directions of the variables in the hyperplanar space occupied by the data.] To find how much each variable "contributes" to the direction of each principal component we simply take the column-wise absolute values as a percentage of the totals. We'll do this using a combination of [`sweep`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sweep){target="_blank"} to divide within columns and [`colSums`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/colSums){target="_blank"} to get column totals.
@@ -432,20 +432,20 @@ boston_pcomps <- sweep(abs(boston_pcomps), 2, colSums(abs(boston_pcomps)), "/") 
 ```
 
 ```
-##                PC1       PC2       PC3        PC4         PC5
-## crim     7.2625258  7.456042 10.520227  1.8004627  0.46674735
-## zn       7.5387405  8.758884 11.210107  6.5855940  9.69863956
-## indus   10.1850907  3.516158  1.694962  0.8236069  2.28693132
-## chas     0.3523725 14.875744  8.299487 15.4947008 27.56383676
-## nox     10.1460221  6.265009  1.528930  7.4817209  0.02099192
-## rm       5.1390620  8.855824 16.877009  3.9160733 21.94664303
-## age      9.3028444  9.057973  3.533850  5.8111022  3.96782047
-## dis      9.4051942 10.663235  1.352737  1.9072503  9.34270404
-## rad      9.5035767  6.222833  9.915437  7.4446478  2.26892251
-## tax      9.9141054  5.955185  8.083445  5.1739861  0.06312733
-## ptratio  6.0662663  9.288720  8.080591 22.5763152  6.13654065
-## black    6.1051834  4.016318 12.603955 11.3993306  4.74764932
-## lstat    9.0790161  5.068075  6.299262  9.5852092 11.48944572
+##                PC1       PC2        PC3        PC4        PC5
+## crim     7.1502076  8.217038  8.1660702  1.8373914  2.6165758
+## zn       7.5972976  8.675227 11.5418763 11.0179683  2.6245981
+## indus   10.2359796  2.968692  1.6304541  0.1127227  1.3402982
+## chas     0.7857027 13.982757  8.4030640  5.9566909 31.5064117
+## nox     10.2069211  6.943781  3.0098204  5.1299196  3.5408487
+## rm       5.1953964  7.709661 17.3126179 15.2131383 12.2083196
+## age      9.2482134  8.746122  2.5661648  0.2917863  7.9541953
+## dis      9.4710669 10.334447  0.9251465  4.2809316  7.8964696
+## rad      9.2954670  7.436269 11.4304940  6.8769937  3.9477974
+## tax      9.7619714  6.779396  9.7496974  3.6185687  3.4416823
+## ptratio  5.9983361  9.699705  8.6152836 17.4216158 12.2022349
+## black    6.0261680  4.054334  8.7456164 16.1093121 10.3925597
+## lstat    9.0272721  4.452571  7.9036944 12.1329607  0.3280089
 ```
 
 Scanning across the principal components (columns) it's relatively easy to see which variables contribute the most to the first five principal components. This is analogous to the discussion in the theory section about variables being associated with singular values: we should expect that the variables that contribute the most to the these first few principal components will be among the slowest to shrink to zero as $\lambda$ increases.
@@ -542,7 +542,7 @@ lm(y ~ X1 + X2)$coefficients
 
 ```
 ##  (Intercept)           X1           X2 
-## -0.043579690  0.003784569 -0.006813352
+## -0.048134836  0.004086616  0.005806883
 ```
 
 ```r
@@ -551,7 +551,7 @@ lm(y ~ X1_scaled + X2_scaled)$coefficients
 
 ```
 ##   (Intercept)     X1_scaled     X2_scaled 
-## -4.357969e-02  3.784569e-06 -6.813352e-06
+## -4.813484e-02  4.086616e-06  5.806883e-06
 ```
 
 But we won't get identical solutions if we fit both versions of the data using ridge regression for any $\lambda > 0$. The estimated effects of the independent variables on the outcome fundamentally change, not simply by the magnitude of the change in scale.
@@ -563,8 +563,8 @@ ridge(y = y, X = cbind(X1, X2), lambda = 1)
 
 ```
 ##            [,1]
-## X1 -0.002406805
-## X2 -0.007975358
+## X1 0.0008755921
+## X2 0.0041171312
 ```
 
 ```r
@@ -572,9 +572,9 @@ ridge(y = y, X = cbind(X1_scaled, X2_scaled), lambda = 1)
 ```
 
 ```
-##                    [,1]
-## X1_scaled -2.406919e-06
-## X2_scaled -7.975494e-06
+##                   [,1]
+## X1_scaled 8.755491e-07
+## X2_scaled 4.117222e-06
 ```
 
 In other words, OLS solutions are *equivariant* to scaling but ridge solutions aren't. Standardizing the data removes scaling for comparability.

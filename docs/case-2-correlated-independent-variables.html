@@ -276,37 +276,37 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Several variables are highly correlated with one another. <code>indus</code> (a measure of town industrial concentration), <code>nox</code> (air pollution), and <code>age</code> (average home age) are all highly negatively correlated with <code>dis</code> (distance to employment centers). It’s probably not a surprise that some towns in more industrial areas would have more exposure to air pollution and that development might be more common (and so home ages would be lower) in high-employment suburbs far away from job centers. But how much, together, are these variables contributing to prediction? In other words, do we need all of these variables that are highly related to one another or will one or two be enough to capture the “action” contained in all of them?</p>
 <p>To explore this further, we can quickly perform a <a href="https://en.wikipedia.org/wiki/Principal_component_analysis" target="_blank">principal component analysis</a><a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a> of our input matrix. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/prcomp" target="_blank"><code>prcomp</code></a> is R’s built-in PCA function. We’ll look only at the first five principal components.</p>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="case-2-correlated-independent-variables.html#cb107-1" aria-hidden="true" tabindex="-1"></a>boston_pcomps <span class="ot">&lt;-</span> <span class="fu">prcomp</span>(X_train)<span class="sc">$</span>rotation[,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
-<pre><code>##                 PC1        PC2         PC3         PC4           PC5
-## crim     0.24723382 -0.2511045  0.32667740 -0.05176398  0.0115208738
-## zn      -0.25663683 -0.2949816  0.34809979  0.18933832 -0.2393946151
-## indus    0.34672495  0.1184171 -0.05263250 -0.02367901 -0.0564490554
-## chas    -0.01199561  0.5009851  0.25771830 -0.44547852 -0.6803669783
-## nox      0.34539496  0.2109929  0.04747682  0.21510231  0.0005181504
-## rm      -0.17494602  0.2982463  0.52407021 -0.11258859  0.5417159930
-## age      0.31669117  0.3050543 -0.10973424  0.16707139  0.0979389787
-## dis     -0.32017540 -0.3591163  0.04200562 -0.05483417 -0.2306089451
-## rad      0.32352458 -0.2095725  0.30789728 -0.21403644  0.0560045383
-## tax      0.33749996 -0.2005586  0.25100970 -0.14875406 -0.0015581921
-## ptratio  0.20651028 -0.3128254 -0.25092106 -0.64907762  0.1514701909
-## black   -0.20783511  0.1352615 -0.39138198 -0.32773507  0.1171877432
-## lstat    0.30907152 -0.1706826 -0.19560668  0.27557840 -0.2835976550</code></pre>
+<pre><code>##                 PC1        PC2         PC3          PC4          PC5
+## crim     0.24437063 -0.2786372 -0.25465726 -0.052885750  0.065830708
+## zn      -0.25965070 -0.2941742 -0.35993109  0.317130862  0.066032541
+## indus    0.34983220  0.1006674  0.05084538  0.003244504  0.033720704
+## chas     0.02685274  0.4741509 -0.26204786  0.171451801  0.792673155
+## nox      0.34883907  0.2354614 -0.09386065  0.147654793 -0.089084588
+## rm      -0.17756160  0.2614322 -0.53989051 -0.437880697 -0.307150409
+## age      0.31607359  0.2965783  0.08002533 -0.008398502 -0.200120444
+## dis     -0.32368999 -0.3504378 -0.02885051  0.123218318  0.198668117
+## rad      0.31768856 -0.2521616 -0.35645766 -0.197940933  0.099323053
+## tax      0.33363215 -0.2298872 -0.30404235 -0.104153486  0.086589650
+## ptratio  0.20500345 -0.3289140  0.26866589 -0.501447441  0.306997323
+## black   -0.20595465  0.1374812  0.27273029 -0.463675325  0.261467512
+## lstat    0.30852254 -0.1509853  0.24647512  0.349223756  0.008252411</code></pre>
 <p>The <code>rotation</code> matrix from <code>prcomp</code> contains the <a href="https://en.wikipedia.org/wiki/Principal_component_analysis#Further_components">loadings</a>, which are the correlations between the input variables and the directions represented by the principal components when the input variables are standardized.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a> To find how much each variable “contributes” to the direction of each principal component we simply take the column-wise absolute values as a percentage of the totals. We’ll do this using a combination of <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/sweep" target="_blank"><code>sweep</code></a> to divide within columns and <a href="https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/colSums" target="_blank"><code>colSums</code></a> to get column totals.</p>
 <div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="case-2-correlated-independent-variables.html#cb109-1" aria-hidden="true" tabindex="-1"></a>boston_pcomps <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">abs</span>(boston_pcomps))</span>
 <span id="cb109-2"><a href="case-2-correlated-independent-variables.html#cb109-2" aria-hidden="true" tabindex="-1"></a>boston_pcomps <span class="ot">&lt;-</span> <span class="fu">sweep</span>(<span class="fu">abs</span>(boston_pcomps), <span class="dv">2</span>, <span class="fu">colSums</span>(<span class="fu">abs</span>(boston_pcomps)), <span class="st">&quot;/&quot;</span>) <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>##                PC1       PC2       PC3        PC4         PC5
-## crim     7.2625258  7.456042 10.520227  1.8004627  0.46674735
-## zn       7.5387405  8.758884 11.210107  6.5855940  9.69863956
-## indus   10.1850907  3.516158  1.694962  0.8236069  2.28693132
-## chas     0.3523725 14.875744  8.299487 15.4947008 27.56383676
-## nox     10.1460221  6.265009  1.528930  7.4817209  0.02099192
-## rm       5.1390620  8.855824 16.877009  3.9160733 21.94664303
-## age      9.3028444  9.057973  3.533850  5.8111022  3.96782047
-## dis      9.4051942 10.663235  1.352737  1.9072503  9.34270404
-## rad      9.5035767  6.222833  9.915437  7.4446478  2.26892251
-## tax      9.9141054  5.955185  8.083445  5.1739861  0.06312733
-## ptratio  6.0662663  9.288720  8.080591 22.5763152  6.13654065
-## black    6.1051834  4.016318 12.603955 11.3993306  4.74764932
-## lstat    9.0790161  5.068075  6.299262  9.5852092 11.48944572</code></pre>
+<pre><code>##                PC1       PC2        PC3        PC4        PC5
+## crim     7.1502076  8.217038  8.1660702  1.8373914  2.6165758
+## zn       7.5972976  8.675227 11.5418763 11.0179683  2.6245981
+## indus   10.2359796  2.968692  1.6304541  0.1127227  1.3402982
+## chas     0.7857027 13.982757  8.4030640  5.9566909 31.5064117
+## nox     10.2069211  6.943781  3.0098204  5.1299196  3.5408487
+## rm       5.1953964  7.709661 17.3126179 15.2131383 12.2083196
+## age      9.2482134  8.746122  2.5661648  0.2917863  7.9541953
+## dis      9.4710669 10.334447  0.9251465  4.2809316  7.8964696
+## rad      9.2954670  7.436269 11.4304940  6.8769937  3.9477974
+## tax      9.7619714  6.779396  9.7496974  3.6185687  3.4416823
+## ptratio  5.9983361  9.699705  8.6152836 17.4216158 12.2022349
+## black    6.0261680  4.054334  8.7456164 16.1093121 10.3925597
+## lstat    9.0272721  4.452571  7.9036944 12.1329607  0.3280089</code></pre>
 <p>Scanning across the principal components (columns) it’s relatively easy to see which variables contribute the most to the first five principal components. This is analogous to the discussion in the theory section about variables being associated with singular values: we should expect that the variables that contribute the most to the these first few principal components will be among the slowest to shrink to zero as <span class="math inline">\(\lambda\)</span> increases.</p>
 </div>
 <div id="implementation-4" class="section level3">

@@ -14,4 +14,6 @@ Packages used extensively throughout this book include:
 - [`patchwork`](https://patchwork.data-imaginist.com/){target="_blank"}
 - the [`tidyverse`](https://www.tidyverse.org/){target="_blank"} family of packages
 
+These packages may not be used in every example, but typically are. Other packages used in specific examples will be noted within those examples.
+
 This book also uses [xaringanExtra](https://github.com/gadenbuie/xaringanExtra){target="_blank"} to enable snippet copying.

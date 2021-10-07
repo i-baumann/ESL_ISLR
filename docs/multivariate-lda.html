@@ -554,12 +554,12 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>How close is our <span class="math inline">\(\hat{\Sigma}\)</span> to <span class="math inline">\(\Sigma\)</span>?</p>
 <div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="multivariate-lda.html#cb58-1" aria-hidden="true" tabindex="-1"></a>pop_sigma</span></code></pre></div>
 <pre><code>##           [,1]      [,2]
-## [1,] 6.2345077 0.2674444
-## [2,] 0.2674444 6.2345077</code></pre>
+## [1,] 6.4655085 0.1096973
+## [2,] 0.1096973 6.4655085</code></pre>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="multivariate-lda.html#cb60-1" aria-hidden="true" tabindex="-1"></a>train_sigma_LDA</span></code></pre></div>
-<pre><code>##           [,1]      [,2]
-## [1,] 6.2618598 0.1127193
-## [2,] 0.1127193 5.9705306</code></pre>
+<pre><code>##            [,1]       [,2]
+## [1,] 7.02165067 0.08882736
+## [2,] 0.08882736 6.38926768</code></pre>
 <p>Then, exactly like we did with the Bayes classifier, we build the LDA classifier by creating our discriminant functions and <code>apply</code> them via a decision rule function to our training sample:</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="multivariate-lda.html#cb62-1" aria-hidden="true" tabindex="-1"></a>d0_LDA <span class="ot">&lt;-</span> <span class="cf">function</span>(x_vec){</span>
 <span id="cb62-2"><a href="multivariate-lda.html#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t</span>(x_vec) <span class="sc">%*%</span> <span class="fu">solve</span>(train_sigma_LDA) <span class="sc">%*%</span> sample_c0_mean_vec <span class="sc">-</span></span>
@@ -646,14 +646,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb65-3"><a href="multivariate-lda.html#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(test_sample_df)</span>
 <span id="cb65-4"><a href="multivariate-lda.html#cb65-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb65-5"><a href="multivariate-lda.html#cb65-5" aria-hidden="true" tabindex="-1"></a>LDA_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>## [1] 20.33333</code></pre>
+<pre><code>## [1] 48.44444</code></pre>
 <p>How about the misclassification rate for our (optimal) Bayes classifier?</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="multivariate-lda.html#cb67-1" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="ot">&lt;-</span> <span class="fu">nrow</span>(test_sample_df[test_sample_df<span class="sc">$</span>y <span class="sc">!=</span> </span>
 <span id="cb67-2"><a href="multivariate-lda.html#cb67-2" aria-hidden="true" tabindex="-1"></a>                                           test_sample_df<span class="sc">$</span>bayes_predicted_y,]) <span class="sc">/</span></span>
 <span id="cb67-3"><a href="multivariate-lda.html#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>(test_sample_df)</span>
 <span id="cb67-4"><a href="multivariate-lda.html#cb67-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb67-5"><a href="multivariate-lda.html#cb67-5" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>## [1] 20.44444</code></pre>
+<pre><code>## [1] 48.11111</code></pre>
 <p>It’s of course possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here represents the “true” optimal classifier in a sense since its classifying based on population parameters.</p>
 
 </div>

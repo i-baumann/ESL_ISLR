@@ -246,16 +246,16 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>We can easily check the coefficients we’ve calculated against those produced by R’s <code>glm</code>. By default <code>glm</code> <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/glm" target="_blank">uses IRLS</a> to fit models.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="testing.html#cb19-1" aria-hidden="true" tabindex="-1"></a>glm_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(y <span class="sc">~</span> X1, <span class="at">data =</span> <span class="fu">as.data.frame</span>(data_matrix), <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="testing.html#cb20-1" aria-hidden="true" tabindex="-1"></a>beta_vec_irls</span></code></pre></div>
-<pre><code>##           [,1]
-## Int -3.4211427
-## X1   0.9826713</code></pre>
+<pre><code>##          [,1]
+## Int 12.925375
+## X1  -2.874321</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="testing.html#cb22-1" aria-hidden="true" tabindex="-1"></a>beta_vec_mod</span></code></pre></div>
-<pre><code>##           [,1]
-## Int -3.4211427
-## X1   0.9826713</code></pre>
+<pre><code>##          [,1]
+## Int 12.925375
+## X1  -2.874321</code></pre>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="testing.html#cb24-1" aria-hidden="true" tabindex="-1"></a>glm_model<span class="sc">$</span>coefficients</span></code></pre></div>
 <pre><code>## (Intercept)          X1 
-##  -3.4211427   0.9826713</code></pre>
+##   12.925375   -2.874321</code></pre>
 </div>
 <div id="the-log-likelihood-surface-1" class="section level3">
 <h3>The Log-Likelihood Surface</h3>

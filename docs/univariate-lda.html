@@ -453,7 +453,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb42-3"><a href="univariate-lda.html#cb42-3" aria-hidden="true" tabindex="-1"></a>                     <span class="fu">nrow</span>(test_sample_df)</span>
 <span id="cb42-4"><a href="univariate-lda.html#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-5"><a href="univariate-lda.html#cb42-5" aria-hidden="true" tabindex="-1"></a>LDA_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>## [1] 18.35</code></pre>
+<pre><code>## [1] 15.45</code></pre>
 <p>It’s certainly not perfect! But how imperfect is it? Since we’re using Bayes’ classifier on the population data as our standard, we can apply its decision rule to the test data and calculate its misclassification rate.</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="univariate-lda.html#cb44-1" aria-hidden="true" tabindex="-1"></a>test_sample_df<span class="sc">$</span>bayes_predicted_y <span class="ot">&lt;-</span> <span class="fu">if_else</span>(test_sample_df<span class="sc">$</span>x <span class="sc">&lt;</span> bayes_decision,</span>
 <span id="cb44-2"><a href="univariate-lda.html#cb44-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="dv">0</span>, <span class="dv">1</span>)</span>
@@ -463,7 +463,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb44-6"><a href="univariate-lda.html#cb44-6" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">nrow</span>(test_sample_df)</span>
 <span id="cb44-7"><a href="univariate-lda.html#cb44-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-8"><a href="univariate-lda.html#cb44-8" aria-hidden="true" tabindex="-1"></a>bayes_misclass_rate <span class="sc">*</span> <span class="dv">100</span></span></code></pre></div>
-<pre><code>## [1] 17.25</code></pre>
+<pre><code>## [1] 15.45</code></pre>
 <p>Of course, it is possible for LDA to “outperform” the optimal Bayes classifier depending on the train and test samples, but the Bayes classifier here in a sense represents the “true” optimal classifier since it is coming from population data.</p>
 </div>
 </div>
