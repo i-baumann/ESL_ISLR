@@ -104,8 +104,7 @@ likelihood_surface_plot <- ggplot(surface, aes(x = b0_vec, y = b1_vec, z = l, fi
   labs(title = "Surface Plot of Log-Likelihood Function",
        subtitle = "Evaluated Across Range of Beta Coefficients",
        x = TeX("$\\beta_0$"),
-       y = TeX("$\\beta_1$")) # +
-  # theme(legend.position = "none")
+       y = TeX("$\\beta_1$"))
 ```
 
 <img src="binary_logistic_files/figure-html/unnamed-chunk-9-1.png" width="672" />
@@ -198,8 +197,6 @@ while (max_check != TRUE) {
     (1 + exp(x %*% beta_vec_mod))
   
   p_mat <- matrix(p * (1 - p), length(p * (1 - p)), ncol(x))
-  
-  # Use `sweep` to multiply each row of x by scalar vector
   
   x_tilde <- x * p_mat
   
